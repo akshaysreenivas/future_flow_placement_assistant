@@ -1,0 +1,36 @@
+.submitButton {
+  width: 150px !important;
+  height: 50px !important;
+  background-color: black !important;
+}
+.form_div {
+  padding: 50px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  border: solid 1px;
+  border-radius: 25px;
+}
+
+@media only screen and (max-width: 600px) {
+  .form_div {
+    padding: 30px;
+    border-radius: 15px;
+
+  }
+  .submitButton{
+    width: 120px !important;
+    height:45px !important;
+    background-color: black !important;
+}
+}
+@media only screen and (max-width: 400px) {
+  .form_div {
+    padding: 20px;
+    border-radius: 10px;
+
+  }
+  .submitButton {
+    width: 100px !important;
+    height: 40px !important;
+    background-color: black !important;
+  }
+}
