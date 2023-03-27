@@ -120,7 +120,7 @@ function Login({ role }) {
     }
   };
   return (
-    <>
+   
       <div className="loginParentDiv">
         <div className="loginDiv bg-light m-4">
           <h2 className="text-center">{role} Login</h2>
@@ -161,7 +161,7 @@ function Login({ role }) {
           </form>
         </div>
       </div>
-    </>
+  
   );
 }
 

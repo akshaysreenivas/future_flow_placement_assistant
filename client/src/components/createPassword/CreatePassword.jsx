@@ -8,7 +8,7 @@ import axiosInstance from "../../api/axios";
 import LoadingButton from "../loadingButton/LoadingButton";
 import "./CreatePassword.css";
 
-function CreatePassword() {
+function CreatePassword({ role }) {
   const [password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [passwordType, setPasswordType] = useState(true);
@@ -33,20 +33,42 @@ function CreatePassword() {
     if (password !== ConfirmPassword)
       return toast.error("Passwords Doesn't Match", { position: "top-center" });
     setLoading(true);
-    try {
-      const { data } = await axiosInstance.post(
-        "/createPassword",
-        { password },
-        { withCredentials: true }
-      );
-      if (data.status) {
-        return navigate("/login");
+
+    // calling api for student
+    if (role === "Student") {
+      try {
+        const { data } = await axiosInstance.post(
+          "/createPassword",
+          { password },
+          { withCredentials: true }
+        );
+        if (data.status) {
+          return navigate("/login");
+        }
+        setLoading(false);
+        toast.error(data.message, { position: "top-center" });
+      } catch (error) {
+        setLoading(false);
+        toast.error(error, { position: "top-center" });
       }
-      setLoading(false);
-      toast.error(data.message, { position: "top-center" });
-    } catch (error) {
-      setLoading(false);
-      toast.error(error, { position: "top-center" });
+    }
+    // calling api for HR
+    else if (role === "HR") {
+      try {
+        const { data } = await axiosInstance.post(
+          "/hr/createPassword",
+          { password },
+          { withCredentials: true }
+        );
+        if (data.status) {
+          return navigate("/hr/login");
+        }
+        setLoading(false);
+        toast.error(data.message, { position: "top-center" });
+      } catch (error) {
+        setLoading(false);
+        toast.error(error, { position: "top-center" });
+      }
     }
   };
   return (

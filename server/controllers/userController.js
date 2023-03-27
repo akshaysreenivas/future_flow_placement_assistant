@@ -60,16 +60,11 @@ module.exports.signup = async (req, res) => {
             return res.json({ status: false, message: "Student ID already registered" });
         }
 
-        // checking if email already exists
-        const emailExists = await userModel.exists({ email });
-        if (emailExists) {
-            return res.json({ status: false, message: "Email already exists" });
-        }
         // creating otp  
         const OTP = createOTP();
         // sending otp via email   
         const mailOptions = `Hello,  <b>${OTP}</b>  is your future flow verification code`;
-        const otpSend = await sendEmail(email, "Otp", mailOptions);
+        const otpSend = await sendEmail(email, "OTP", mailOptions);
         if (!otpSend.status) throw new Error("server error");
         req.session.otp = OTP;
         req.session.email = email;
@@ -102,10 +97,7 @@ module.exports.createAccount = async (req, res) => {
     try {
         const { password } = req.body;
         const email = req.session.email;
-        console.log(email);
-        // req.session.destroy();
         const studentID = req.session.studentID;
-        console.log(studentID);
         if (!email || !password || !studentID) throw new Error("email and password required");
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);

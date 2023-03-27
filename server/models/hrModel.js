@@ -14,17 +14,18 @@ const hrSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    active:{
-        type:Boolean,
-        default:false
-    }
+    active: {
+        type: Boolean,
+        default: false
+    },
+   
 });
 
 
 hrSchema.pre("save", async function (next) {
     const user = this;
 
-    if (!user.isModified("password"))return next(); 
+    if (!user.isModified("password")) return next();
     try {
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(user.password, salt);

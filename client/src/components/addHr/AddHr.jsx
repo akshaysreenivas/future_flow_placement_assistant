@@ -52,7 +52,7 @@ function AddHr() {
       setLoading(false);
       const newValues = {
         name: "",
-        studentId: "",
+        email: "",
       };
       if (data.status) {
         swal.fire("Success", "Successfully added HR Manager", "success");
@@ -105,6 +105,6 @@ function AddHr() {
       </div>
     </>
   );
-}; 
+}
 
 export default AddHr;

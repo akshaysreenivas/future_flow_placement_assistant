@@ -1,9 +1,9 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import CreatePassword from '../components/createPassword/CreatePassword'
-import Otp from '../components/otp/Otp'
 import LandingPage from '../pages/LandingPage'
+import CreatePasswordPage from '../pages/users/CreatePasswordPage'
 import HomePage from '../pages/users/HomePage'
+import OtpPage from '../pages/users/OtpPage'
 import SignupPage from '../pages/users/SignupPage'
 import UserLogin from '../pages/users/UserLogin'
 
@@ -15,8 +15,8 @@ function UserRouter() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<UserLogin />} />
         <Route path="/signUp" element={<SignupPage />} />
-        <Route path="/verifyOTP" element={<Otp />} />
-        <Route path="/createPassword" element={<CreatePassword />} />
+        <Route path="/verifyOTP" element={<OtpPage/>} />
+        <Route path="/createPassword" element={<CreatePasswordPage />} />
       </Routes>
     </>
   )

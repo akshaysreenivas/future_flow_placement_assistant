@@ -2,7 +2,7 @@ import React from 'react'
 
 function HrDashboard() {
   return (
-    <div>HrDashboard</div>
+    <div><h1>HR Dashboard</h1></div>
   )
 }
 

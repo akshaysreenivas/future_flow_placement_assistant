@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 function SignupForm() {
   const [loading, setLoading] = useState(false);
   const [studentId, setStudentId] = useState("");
-  const [email, setEmail] = useState("akshaypvkeerakkal@gmail.com");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,9 +46,9 @@ function SignupForm() {
   return (
     <div className="formParentDiv">
       <div className="formDiv">
-      <h2 className="text-center mb-4">Verify Student ID</h2>
+      <h2 className="text-center mb-4"> Student Signup</h2>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3" >
             <Form.Label>Student ID</Form.Label>
             <Form.Control
               type="text"
@@ -60,7 +60,7 @@ function SignupForm() {
               Enter your Admission ID or Student ID
             </Form.Text>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3" >
             <Form.Label>Email address</Form.Label>
             <Form.Control
               type="email"

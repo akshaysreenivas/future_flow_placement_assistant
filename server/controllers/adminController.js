@@ -24,7 +24,7 @@ const handleErrors = (errors) => {
     } else if (errors.message.includes("already exists")) {
         err.message = "Already Exists";
         return err;
-    } else{
+    } else {
         errors.message = "server error";
         return err;
     }
@@ -34,12 +34,15 @@ const handleErrors = (errors) => {
 module.exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
+        // checking if the values are null
         if (!email || !password) throw Error("All Fields required");
+        // matching the account with email  
         const admin = await adminModel.findOne({ email: email });
+        // checking if the account  exists
         if (!admin) throw Error("incorrect email or password");
         const auth = await bcrypt.compare(password, admin.password);
-
         if (!auth) throw Error("incorrect email or password");
+        // creating the jwt token 
         const token = createToken(admin._id);
         res
             .status(200)
@@ -54,7 +57,9 @@ module.exports.login = async (req, res) => {
 module.exports.addUsers = async (req, res) => {
     try {
         const { username, studentID } = req.body;
+        // checking if the values are null
         if (!username || !studentID) throw Error("all fields required");
+        // checking if the student  already has account
         const alreadyExist = await userModel.findOne({ studentID });
         if (alreadyExist !== null) throw new Error("already exists");
         const newStudent = new userModel({
@@ -74,7 +79,8 @@ module.exports.addHrManager = async (req, res) => {
     try {
         const { username, email } = req.body;
         if (!username || !email) throw Error("all fields required");
-        const alreadyExist = await hrModel.findOne({ email });
+        const alreadyExist = await hrModel.findOne({ email: email });
+        console.log("hiii", alreadyExist);
         if (alreadyExist !== null) throw new Error("already exists");
         const newHr = new hrModel({
             name: username,
@@ -83,6 +89,7 @@ module.exports.addHrManager = async (req, res) => {
         await newHr.save();
         res.status(200).json({ status: true, message: "successfully added user" });
     } catch (error) {
+        console.error(error);
         const errors = handleErrors(error);
         res.json(errors);
     }
