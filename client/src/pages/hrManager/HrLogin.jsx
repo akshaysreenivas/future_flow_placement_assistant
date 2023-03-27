@@ -6,7 +6,7 @@ function HrLogin() {
     const navigate=useNavigate();
     useEffect(() => {
     const token = localStorage.getItem('hrAuthToken');
-    if (token) return  navigate("/admin/dashboard");
+    if (token) return  navigate("/hr/dashboard");
   }, [navigate]);
   return (
     <Login role={"HR"} />

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 function SignupForm() {
   const [loading, setLoading] = useState(false);
-  const [studentId, setStudentId] = useState("1262235sss");
+  const [studentId, setStudentId] = useState("");
   const [email, setEmail] = useState("akshaypvkeerakkal@gmail.com");
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
