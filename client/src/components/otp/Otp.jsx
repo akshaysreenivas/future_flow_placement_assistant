@@ -5,10 +5,12 @@ import axiosInstance from "../../api/axios";
 import { useState } from "react";
 import LoadingButton from "../loadingButton/LoadingButton";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Otp() {
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
+  const navigate=useNavigate()
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -21,7 +23,7 @@ function Otp() {
       setLoading(false);
       if (data.status) {
         toast(data.message, { position: "top-center" });
-        return;
+        return navigate("/createPassword") ;
       }
       toast.error(data.message, { position: "top-center" });
     } catch (error) {

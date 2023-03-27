@@ -2,6 +2,7 @@ const adminModel = require("../models/adminModel");
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const hrModel = require("../models/hrModel");
 
 const maxAge = 3 * 24 * 60 * 1000;
 const createToken = (id) => {
@@ -17,13 +18,13 @@ const handleErrors = (errors) => {
     } else if (errors.message.includes("All Fields required")) {
         err.message = "All Fields required";
         return err;
-    } else if (errors.message.includes("incorrect username or password")) {
-        err.message = "Incorrect username or password";
+    } else if (errors.message.includes("incorrect email or password")) {
+        err.message = "Incorrect email or password";
         return err;
     } else if (errors.message.includes("already exists")) {
-        err.message = "Student Already Exists";
+        err.message = "Already Exists";
         return err;
-    } else if (err) {
+    } else{
         errors.message = "server error";
         return err;
     }
@@ -32,12 +33,13 @@ const handleErrors = (errors) => {
 //  Admin login
 module.exports.login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        if (!username || !password) throw Error("All Fields required");
-        const admin = await adminModel.findOne({ username: username });
-        if (!admin) throw Error("incorrect username or password");
+        const { email, password } = req.body;
+        if (!email || !password) throw Error("All Fields required");
+        const admin = await adminModel.findOne({ email: email });
+        if (!admin) throw Error("incorrect email or password");
         const auth = await bcrypt.compare(password, admin.password);
-        if (!auth) throw Error("incorrect username or password");
+
+        if (!auth) throw Error("incorrect email or password");
         const token = createToken(admin._id);
         res
             .status(200)
@@ -68,3 +70,20 @@ module.exports.addUsers = async (req, res) => {
 };
 
 // Admin adding hr managers
+module.exports.addHrManager = async (req, res) => {
+    try {
+        const { username, email } = req.body;
+        if (!username || !email) throw Error("all fields required");
+        const alreadyExist = await hrModel.findOne({ email });
+        if (alreadyExist !== null) throw new Error("already exists");
+        const newHr = new hrModel({
+            name: username,
+            email: email,
+        });
+        await newHr.save();
+        res.status(200).json({ status: true, message: "successfully added user" });
+    } catch (error) {
+        const errors = handleErrors(error);
+        res.json(errors);
+    }
+};
