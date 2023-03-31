@@ -14,7 +14,7 @@ function AdminDashboard() {
     <div className="page">
       <Topbar />
       <Sidebar />
-      <div className="admin_component">
+      <div className="component">
         <h1>Dashboard</h1>
       </div>
     </div>

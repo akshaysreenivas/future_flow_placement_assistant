@@ -9,7 +9,7 @@ function UserLogin() {
     if (token) return  navigate("/home");
   }, [navigate]);
   return (
-    <Login role={"Student"}/>
+    <Login role={"Student"} url={"https://img.freepik.com/premium-vector/register-access-login-password-internet-online-website-concept-flat-illustration_385073-108.jpg?size=626&ext=jpg&ga=GA1.2.1478787354.1678959639&semt=ais"} />
   )
 }
 

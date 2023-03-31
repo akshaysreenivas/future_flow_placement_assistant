@@ -11,7 +11,7 @@ function HrDashboard() {
   return (
     <div className="page">
     <HrSidebar />
-    <div className="admin_component">
+    <div className="component">
       <h1>Dashboard</h1>
     </div>
   </div>
