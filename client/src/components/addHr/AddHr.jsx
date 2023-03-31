@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import axiosInstance from "../../api/axios";
 import LoadingButton from "../loadingButton/LoadingButton";
 import { Button } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import swal from "sweetalert2";
+import { addHrManager } from "../../services/adminServices";
 function AddHr() {
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
     name: "",
     email: "",
+    company: "",
   });
 
   const handleInputChange = (event) => {
@@ -20,9 +21,17 @@ function AddHr() {
   };
   const handlesubmit = async (e) => {
     e.preventDefault();
-    // validation
+    // validations
+
+    // name validation
     if (!state.name || state.name.match(/^\s*$/) || state.name.length < 3)
       return toast.error("Valid student name required minimum 3 characters", {
+        position: "top-center",
+      });
+
+    // company name validation
+    if (!state.company || state.company.match(/^\s*$/))
+      return toast.error("Valid company name required ", {
         position: "top-center",
       });
     // email validation
@@ -32,39 +41,27 @@ function AddHr() {
       return toast.error(" enter a valid email", { position: "top-center" });
 
     setLoading(true);
-    try {
-      // checking for auth token
-      const token = localStorage.getItem("adminAuthToken");
-
-      //   calling api
-      const { data } = await axiosInstance.post(
-        "/admin/addHrManagers",
-        {
-          username: state.name,
-          email: state.email,
-        },
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
+    // calling api
+    addHrManager(state)
+      .then((data) => {
+        setLoading(false);
+        const newValues = {
+          name: "",
+          email: "",
+          company: "",
+        };
+        if (data.status) {
+          swal.fire("Success", "Successfully added HR Manager", "success");
+          setState(newValues);
+          return;
         }
-      );
-      setLoading(false);
-      const newValues = {
-        name: "",
-        email: "",
-      };
-      if (data.status) {
-        swal.fire("Success", "Successfully added HR Manager", "success");
-        setState(newValues);
-        return;
-      }
-      toast.error(data.message, { position: "top-center" });
-    } catch (err) {
-      setLoading(false);
-      const { data } = err.response;
-      toast.error(data.message, { position: "top-center" });
-    }
+        toast.error(data.message, { position: "top-center" });
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+        toast.error("Something went Wrong", { position: "top-center" });
+      });
   };
 
   return (
@@ -80,6 +77,17 @@ function AddHr() {
               placeholder="Enter the name of HR"
               id="name"
               value={state.name}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Company Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="company"
+              placeholder="Enter the eompany name"
+              value={state.company}
+              id="company"
               onChange={handleInputChange}
             />
           </Form.Group>

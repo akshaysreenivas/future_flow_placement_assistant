@@ -8,10 +8,10 @@ function AdminDashboard() {
   useEffect(() => {
     // checking for token if not redirecting to login page
     const token = localStorage.getItem("adminAuthToken");
-    if (!token) return navigate("/admin");
+    if (!token || token ==="undefined") return navigate("/admin");
   }, [navigate]);
   return (
-    <div className="admin_page">
+    <div className="page">
       <Topbar />
       <Sidebar />
       <div className="admin_component">

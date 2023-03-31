@@ -1,0 +1,26 @@
+table{
+border: 1px solid black !important;
+
+}
+.table_div{
+    padding:20px 50px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 5px;
+    background-color: whitesmoke;
+}
+.table_div h2{
+    margin-top:0;
+}
+th,
+td {
+  margin: 0 !important;
+  padding: 0.5rem !important;
+  border-bottom: 1px solid rgb(137 135 135)!important;
+  border-right: 1px solid rgb(137 135 135) !important;
+}
+
+table Button {
+  padding: 0.5rem !important;
+  border: transparent 1px !important;
+  width: 93px !important;
+}

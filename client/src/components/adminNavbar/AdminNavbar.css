@@ -17,13 +17,8 @@
     justify-content: space-between;
   }
   
-  .logo {
-    font-weight: bold;
-    font-size: 30px;
-    color: darkblue;
-    cursor: pointer;
-  }
   
+ 
   .topRight{
       display: flex;
       align-items: center;
@@ -38,12 +33,7 @@
       border-radius: 50%;
       cursor: pointer;
   }
-  .logo {
-    background-image: linear-gradient(to right, blue, rgb(89, 210, 232));
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+ 
 
   .topbarIconContainer{
     color: red;

@@ -1,12 +1,12 @@
 import React from "react";
 import "./AdminNavbar.css";
 import { RiLogoutCircleRLine } from "react-icons/ri";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 function Topbar() {
-    const navigate=useNavigate()
+  const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("adminAuthToken");
-    navigate("/admin")
+    navigate("/admin");
   };
   return (
     <div className="topbar">

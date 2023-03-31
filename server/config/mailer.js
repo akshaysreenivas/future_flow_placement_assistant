@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 
 
-module.exports = (email, subject, text) => {
+module.exports = (email, subject, content) => {
     return new Promise((resolve, reject) => {
 
         // Set the email options
@@ -10,7 +10,7 @@ module.exports = (email, subject, text) => {
             from: process.env.USER,
             to: email,
             subject: subject,
-            html: text
+            html: content
         };
         const transporter = nodemailer.createTransport({
             service: process.env.NODEMAILER_SERVICE,

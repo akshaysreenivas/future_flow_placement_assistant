@@ -4,58 +4,50 @@ import { FcManager } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import SideNav, { NavItem, NavIcon, NavText } from "@trendmicro/react-sidenav";
 import "@trendmicro/react-sidenav/dist/react-sidenav.css";
-import "./Sidebar.css";
+import "./HrSidenav.css"
 
-function Sidebar() {
+function HrSidebar() {
   const navigate = useNavigate();
   return (
-    <div>
+  
       <SideNav
-        className="sidenav"
+        className="hrsidenav"
         onSelect={(selected) => {
           navigate(selected);
         }}
       >
         <SideNav.Toggle className="toggle" />
         <SideNav.Nav defaultSelected="DashBoard">
-          <NavItem eventKey="/admin/dashboard">
+          <NavItem eventKey="/hr/dashboard">
             <NavIcon>
               <MdDashboard size={20} className="sidebarIcon" />
             </NavIcon>
             <NavText>Home</NavText>
           </NavItem>
-          <NavItem eventKey="/">
+          <NavItem eventKey="/hr/studentsList">
             <NavIcon>
               <HiUsers size={20} className="sidebarIcon" />
             </NavIcon>
             <NavText>Students</NavText>
-            <NavItem eventKey="/admin/userList">
-              <NavIcon></NavIcon>
-              <NavText>Users List</NavText>
-            </NavItem>
-            <NavItem eventKey="/admin/addStudents">
-              <NavIcon></NavIcon>
-              <NavText>Add Students</NavText>
-            </NavItem>
           </NavItem>
           <NavItem eventKey="/">
             <NavIcon>
               <FcManager size={20} className="sidebarIcon" />
             </NavIcon>
-            <NavText>HR Managers</NavText>
-            <NavItem eventKey="/admin/hrList">
+            <NavText>Jobs</NavText>
+            <NavItem eventKey="/hr/jobs">
               <NavIcon></NavIcon>
-              <NavText>HR List</NavText>
+              <NavText>Uploaded Jobs</NavText>
             </NavItem>
-            <NavItem eventKey="/admin/addHrManagers">
+            <NavItem eventKey="/hr/addJobs">
               <NavIcon></NavIcon>
-              <NavText>Add HR</NavText>
+              <NavText>Add Jobs</NavText>
             </NavItem>
           </NavItem>
         </SideNav.Nav>
       </SideNav>
-    </div>
+   
   );
 }
 
-export default Sidebar;
+export default HrSidebar;

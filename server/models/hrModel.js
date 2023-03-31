@@ -14,11 +14,17 @@ const hrSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    company: {
+        type: String
+    },
     active: {
         type: Boolean,
         default: false
     },
-   
+    blocked: {
+        type: Boolean,
+        default: false
+    }
 });
 
 

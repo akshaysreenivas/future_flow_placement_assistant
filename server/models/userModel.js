@@ -17,7 +17,11 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
     },
-    active:{
+    status:{
+        type:String,
+        default:"Inactive"
+    },
+    blocked:{
         type:Boolean,
         default:false
     },
