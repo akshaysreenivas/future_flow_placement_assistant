@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import LoadingButton from "../loadingButton/LoadingButton";
 import { Button } from "react-bootstrap";
@@ -8,8 +7,9 @@ import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import { adminLogin } from "../../services/adminServices";
 import { userLogin } from "../../services/userServices";
 import { hrLogin } from "../../services/hrServices";
+import "./Login.css";
 
-function Login({ role }) {
+function Login({ role,url }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,7 +67,6 @@ function Login({ role }) {
       setLoading(true);
       try {
         const { data } = await userLogin(email, password);
-        console.log(data);
         setLoading(false);
         if (data.status) {
           localStorage.setItem("userAuthToken", data.token);
@@ -75,7 +74,6 @@ function Login({ role }) {
         }
         toast.error(data.message, { position: "top-center" });
       } catch (err) {
-        console.log("try catch", err);
         setLoading(false);
         toast.error(err, { position: "top-center" });
       }
@@ -86,27 +84,19 @@ function Login({ role }) {
     e.preventDefault();
     if (validations()) {
       setLoading(true);
-      try {
         hrLogin(email, password)
           .then((data) => {
             setLoading(false);
-            console.log("pro");
             if (data.status) {
               localStorage.setItem("hrAuthToken", data.token);
               return navigate("/hr/dashboard");
             }
-            console.log("hiiii", data);
             toast.error(data.message, { position: "top-center" });
           })
           .catch((error) => {
             setLoading(false);
-            console.log("hiiiillll");
-
             toast.error("Something went wrong", { position: "top-center" });
           });
-      } catch (err) {
-        console.log("try catch");
-      }
     }
   };
 
@@ -126,43 +116,53 @@ function Login({ role }) {
   };
   return (
     <div className="loginParentDiv">
-      <div className="loginDiv bg-light m-4">
-        <h2 className="text-center">{role} Login</h2>
-        <form onSubmit={handlesubmit}>
-          <label htmlFor="fname">User Name</label>
-          <input
-            className="input"
-            type="email"
-            id="fname"
-            name="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+      <div className="loginDiv">
+        <div >
+          <img className="img-fluid"
+            src={url}
+            alt="login"
+            width={500}
+            height={475}
           />
-          <label htmlFor="lname">Password</label>
-          <div className="password_div">
+        </div>
+        <div className="loginformDiv">
+          <h1 className="text-center">{role} Login</h1>
+          <form onSubmit={handlesubmit}>
+            <label htmlFor="fname">User Name</label>
             <input
-              className="input "
-              type={passwordType ? "password" : "text"}
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              name="password"
+              className="input"
+              type="email"
+              id="fname"
+              name="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
+            <label htmlFor="lname">Password</label>
+            <div className="password_div">
+              <input
+                className="input "
+                type={passwordType ? "password" : "text"}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+              />
 
-            <i className="Eye_icon link" onClick={togglePassword}>
-              {passwordType ? (
-                <MdVisibilityOff size={23} />
-              ) : (
-                <MdVisibility size={23} />
-              )}
-            </i>
-          </div>
-          {loading ? (
-            <LoadingButton size={"sm"} />
-          ) : (
-            <Button type="submit">login</Button>
-          )}
-        </form>
+              <i className="Eye_icon" onClick={togglePassword}>
+                {passwordType ? (
+                  <MdVisibilityOff size={23} />
+                ) : (
+                  <MdVisibility size={23} />
+                )}
+              </i>
+            </div>
+            {loading ? (
+              <LoadingButton size={"sm"} />
+            ) : (
+              <Button type="submit">login</Button>
+            )}
+          </form>
+        </div>
       </div>
     </div>
   );

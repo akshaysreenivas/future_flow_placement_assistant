@@ -15,7 +15,7 @@ function AdminHrList() {
     <div className="page">
       <Topbar />
       <Sidebar />
-      <div className="admin_component">
+      <div className="component">
         <HRList />
       </div>
     </div>

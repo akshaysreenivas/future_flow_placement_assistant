@@ -10,7 +10,7 @@ export async function createPasswordHr(password) {
     return data
 }
 export async function hrLogin(email, password) {
-    const { data } = await hrInstance.post("/hr/login", {
+    const { data } = await hrInstance.post("/login", {
         email,
         password,
     });

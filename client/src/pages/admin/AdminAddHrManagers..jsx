@@ -15,7 +15,7 @@ function AdminAddHrManagers() {
     <div className="page">
       <Topbar />
       <Sidebar />
-      <div className="admin_component">
+      <div className="component">
         <AddHr />
       </div>
     </div>

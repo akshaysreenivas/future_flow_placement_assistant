@@ -15,7 +15,7 @@ function AdminUsersList() {
     <div className="page">
       <Topbar />
       <Sidebar />
-      <div className="admin_component">
+      <div className="component">
           <UserList />
       </div>
     </div>
