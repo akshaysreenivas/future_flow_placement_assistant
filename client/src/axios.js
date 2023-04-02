@@ -3,7 +3,6 @@ import axios from 'axios'
 // instance for user making apis
 const userInstance = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
-    timeout: 5000,
     headers: {
         "Content-Type": "application/json"
     }
@@ -13,7 +12,6 @@ const userInstance = axios.create({
 // instance for admin making apis
 const adminInstance = axios.create({
     baseURL: `${process.env.REACT_APP_BASE_URL}/admin`,
-    timeout: 5000,
     headers: {
         "Content-Type": "application/json"
     }
@@ -22,7 +20,6 @@ const adminInstance = axios.create({
 // instance for HR making apis
 const hrInstance = axios.create({
     baseURL: `${process.env.REACT_APP_BASE_URL}/hr`,
-    timeout: 5000,
     headers: {
         "Content-Type": "application/json"
     }
@@ -38,7 +35,7 @@ adminInstance.interceptors.request.use((request) => {
 
 // admin instance response interceptor 
 adminInstance.interceptors.response.use(response => response.data,
-    error => error.response
+    error => error.response.data
 )
 
 
@@ -52,7 +49,7 @@ userInstance.interceptors.request.use((request) => {
 
 // user instance response interceptor 
 userInstance.interceptors.response.use(response => response.data,
-    error => error.response
+    error => error.response.data
 )
 
 
@@ -66,7 +63,7 @@ hrInstance.interceptors.request.use((request) => {
 
 // HR instance response interceptor 
 hrInstance.interceptors.response.use(response => response.data,
-    error => error.response
+    error => error.response.data
 )
 
 

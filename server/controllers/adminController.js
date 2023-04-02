@@ -83,9 +83,11 @@ module.exports.addStudents = async (req, res) => {
             email: email,
             password: password
         });
+        
         await newStudent.save();
         res.status(200).json({ status: true, message: "successfully added user" });
     } catch (error) {
+        console.log("hiiiiii");
         console.error(error);
         handleErrors(error, req, res);
     }

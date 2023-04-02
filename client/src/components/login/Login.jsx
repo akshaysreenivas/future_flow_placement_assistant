@@ -66,7 +66,7 @@ function Login({ role,url }) {
     if (validations()) {
       setLoading(true);
       try {
-        const { data } = await userLogin(email, password);
+        const  data  = await userLogin(email, password);
         setLoading(false);
         if (data.status) {
           localStorage.setItem("userAuthToken", data.token);

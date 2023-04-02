@@ -44,6 +44,7 @@ function AddUsers() {
     // calling api
     addUsers(state)
       .then((data) => {
+        console.log("data",data)
         setLoading(false);
         const newValues = {
           name: "",
@@ -58,8 +59,9 @@ function AddUsers() {
         toast.error(data.message, { position: "top-center" });
       })
       .catch((err) => {
+        console.log("err",err)
         setLoading(false);
-        const { data } = err.response;
+        const  data  = err;
         toast.error(data.message, { position: "top-center" });
       });
   };
@@ -103,7 +105,7 @@ function AddUsers() {
             />
           </Form.Group>
           {loading ? (
-            <LoadingButton size={"sm"} className={"submitButton"} />
+            <LoadingButton size={"sm"} variant={"white"} className={"submitButton"} />
           ) : (
             <Button type="submit" className="submitButton">
               Submit
