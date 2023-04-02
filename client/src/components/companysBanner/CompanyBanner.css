@@ -1,0 +1,25 @@
+.companyBannerdiv{
+    margin-bottom: 50px;
+}
+
+.bannercompaniesbtn {
+    color: rgb(255, 255, 255);
+    background-image: linear-gradient(to right, #ff7270, rgb(253 170 186));
+    border: 1px;
+    padding: 8px 24px;
+    border-radius: 20px;
+    margin: 29px auto;
+    display: block;
+    margin: 0 0;
+    border-radius: 28px;
+  }    
+  .companyBannerdiv span {
+    color: #4574bc !important;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .companyBannerdiv {
+        margin-bottom: 0px;
+    }
+  }
