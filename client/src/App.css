@@ -16,17 +16,9 @@
   height:100vh;
   width:100%;
   padding: 40px 50px 30px 100px;
- 
 }
-.logo {
-  font-weight: bold;
-  font-size: 30px !important;
-  cursor: pointer;
-  background-image: linear-gradient(to right, blue, rgb(89, 210, 232));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+
+
 .logout_btn{
   display: flex;
   margin: 15px;
@@ -44,3 +36,4 @@
     padding: 15px 7px 8px 69px;
   }
 }
+
