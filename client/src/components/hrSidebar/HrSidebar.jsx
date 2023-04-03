@@ -1,6 +1,5 @@
-import { HiUsers } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
-import { FcManager } from "react-icons/fc";
+import { GiSuitcase } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 import SideNav, { NavItem, NavIcon, NavText } from "@trendmicro/react-sidenav";
 import "@trendmicro/react-sidenav/dist/react-sidenav.css";
@@ -24,15 +23,10 @@ function HrSidebar() {
             </NavIcon>
             <NavText>Home</NavText>
           </NavItem>
-          <NavItem eventKey="/hr/studentsList">
-            <NavIcon>
-              <HiUsers size={20} className="sidebarIcon" />
-            </NavIcon>
-            <NavText>Students</NavText>
-          </NavItem>
+         
           <NavItem eventKey="/">
             <NavIcon>
-              <FcManager size={20} className="sidebarIcon" />
+              <GiSuitcase size={30} className="sidebarIcon" />
             </NavIcon>
             <NavText>Jobs</NavText>
             <NavItem eventKey="/hr/jobs">

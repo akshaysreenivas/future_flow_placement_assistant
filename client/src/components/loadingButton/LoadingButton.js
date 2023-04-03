@@ -1,9 +1,10 @@
 import React from 'react'
+import { Button } from 'react-bootstrap';
 import Spinner from "react-bootstrap/esm/Spinner";
 
 function LoadingButton({size,className,variant}) {
   return (
-    <button type="button" className={className}>
+    <Button type="button" className={className}>
     <Spinner
       as="span"
       animation="border"
@@ -12,7 +13,7 @@ function LoadingButton({size,className,variant}) {
       aria-hidden="true"
       variant={variant}
     />
-  </button>
+  </Button>
   )
 }
 

@@ -9,7 +9,7 @@ import { userLogin } from "../../services/userServices";
 import { hrLogin } from "../../services/hrServices";
 import "./Login.css";
 
-function Login({ role,url }) {
+function Login({ role, url }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,6 +47,8 @@ function Login({ role,url }) {
       adminLogin(email, password)
         .then((data) => {
           setLoading(false);
+          console.log("data", data);
+
           if (data.status) {
             localStorage.setItem("adminAuthToken", data.token);
             return navigate("/admin/dashboard");
@@ -55,6 +57,7 @@ function Login({ role,url }) {
         })
         .catch((error) => {
           setLoading(false);
+          console.log("err", error);
           toast.error(error, { position: "top-center" });
         });
     }
@@ -66,7 +69,7 @@ function Login({ role,url }) {
     if (validations()) {
       setLoading(true);
       try {
-        const { data } = await userLogin(email, password);
+        const data = await userLogin(email, password);
         setLoading(false);
         if (data.status) {
           localStorage.setItem("userAuthToken", data.token);
@@ -84,19 +87,21 @@ function Login({ role,url }) {
     e.preventDefault();
     if (validations()) {
       setLoading(true);
-        hrLogin(email, password)
-          .then((data) => {
-            setLoading(false);
-            if (data.status) {
-              localStorage.setItem("hrAuthToken", data.token);
-              return navigate("/hr/dashboard");
-            }
-            toast.error(data.message, { position: "top-center" });
-          })
-          .catch((error) => {
-            setLoading(false);
-            toast.error("Something went wrong", { position: "top-center" });
-          });
+      try {
+        const data = await hrLogin(email, password);
+        setLoading(false);
+        console.log("data", data);
+        if (data.status) {
+          localStorage.setItem("hrAuthToken", data.token);
+          return navigate("/hr/dashboard");
+        }
+        toast.error(data.message, { position: "top-center" });
+      } catch (err) {
+        setLoading(false);
+        console.log("err", err);
+
+        toast.error(err, { position: "top-center" });
+      }
     }
   };
 
@@ -117,8 +122,9 @@ function Login({ role,url }) {
   return (
     <div className="loginParentDiv">
       <div className="loginDiv">
-        <div >
-          <img className="img-fluid"
+        <div>
+          <img
+            className="img-fluid"
             src={url}
             alt="login"
             width={500}

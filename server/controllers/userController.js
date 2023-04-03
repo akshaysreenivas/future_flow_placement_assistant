@@ -24,14 +24,11 @@ module.exports.login = async (req, res) => {
         if (!user) return res.status(401).json({ status: false, message: "incorrect email or password" });
         const auth = await bcrypt.compare(password, user.password);
         if (!auth) return res.status(401).json({ status: false, message: "incorrect email or password" });
+        if (user.status === "Blocked")  return res .status(200).json({ status: false, message: "You have been blocked by the Admin" });
         if (user.status === "Inactive") {
             await userModel.updateOne({ email: email }, { status: "Active" });
         }
-        if (user.status === "Blocked") {
-            res
-                .status(200)
-                .json({ status: false, message: "You have been blocked by the Admin" });
-        }
+      
         const token = createToken(user._id);
         res
             .status(200)

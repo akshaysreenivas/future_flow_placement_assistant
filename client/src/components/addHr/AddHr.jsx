@@ -103,7 +103,7 @@ function AddHr() {
             />
           </Form.Group>
           {loading ? (
-            <LoadingButton size={"sm"} className={"submitButton"} />
+            <LoadingButton size={"sm"} variant={"white"}  className={"submitButton"} />
           ) : (
             <Button type="submit" className="submitButton">
               Submit
