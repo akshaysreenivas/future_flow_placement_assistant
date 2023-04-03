@@ -6,7 +6,7 @@ function HomePage() {
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("userAuthToken");
-    if (!token  || token ==="undefined") return navigate("/login");
+    if (!token  || token ==="undefined") return navigate("/");
   }, [navigate]);
   const handleLogout = () => {
     localStorage.removeItem("userAuthToken");

@@ -1,19 +1,24 @@
 import { hrInstance } from "../axios";
 
 
-export async function createPasswordHr(password) {
-    const { data } = await hrInstance.post(
-        "/hr/createPassword",
-        { password },
-        { withCredentials: true }
-    );
-    return data
-}
-export async function hrLogin(email, password) {
-    const { data } = await hrInstance.post("/login", {
+
+export function hrLogin(email, password) {
+    return hrInstance.post("/login", {
         email,
         password,
     });
-    return data
+
+}
+export function addJob(values) {
+    return hrInstance.post("/addJob", values);
+}
+
+export function getJobPosts() {
+    return hrInstance.post("/getJobs");
+}
+
+export function changeJobStatus(status ,id) {
+    return hrInstance.post("/changeJobStatus",{status,id});
+
 }
 

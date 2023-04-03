@@ -38,9 +38,9 @@ module.exports.login = async (req, res) => {
         // matching the account with email  
         const admin = await adminModel.findOne({ email: email });
         // checking if the account  exists
-        if (!admin) throw Error("incorrect email or password");
+        if (!admin)  return res.status(401).json({ status: false, message: "incorrect email or password" });
         const auth = await bcrypt.compare(password, admin.password);
-        if (!auth) throw Error("incorrect email or password");
+        if (!auth)  return res.status(401).json({ status: false, message: "incorrect email or password" });
         // creating the jwt token 
         const token = createToken(admin._id);
         res.status(200).json({ status: true, message: "Login Success", token: token });

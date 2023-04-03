@@ -53,6 +53,7 @@ userInstance.interceptors.response.use(response => response.data,
 )
 
 
+
 // HR instance request interceptor 
 hrInstance.interceptors.request.use((request) => {
     const token = localStorage.getItem("hrAuthToken");
@@ -61,9 +62,10 @@ hrInstance.interceptors.request.use((request) => {
 })
 
 
+
 // HR instance response interceptor 
-hrInstance.interceptors.response.use(response => response.data,
-    error => error.response.data
+hrInstance.interceptors.response.use((response) => response.data,
+    (error) => error.response.data
 )
 
 

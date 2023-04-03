@@ -20,7 +20,7 @@ function ChallengesBanner() {
           <button  className="bannerChellengesbtn">View Challenges</button>
         
         </div>
-        <div data-aos="zoom-in-left">
+        <div data-aos="fade-up">
           <img
             className="img-fluid"
             src="./banner2.avif"

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Topbar from "../../components/hrNavbar/HRNavbar";
 import HrSidebar from "../../components/hrSidebar/HrSidebar";
 
 function HrDashboard() {
@@ -10,6 +11,7 @@ function HrDashboard() {
   }, [navigate]);
   return (
     <div className="page">
+    <Topbar/>
     <HrSidebar />
     <div className="component">
       <h1>Dashboard</h1>
