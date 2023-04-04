@@ -1,21 +1,36 @@
 const router = require("express").Router();
 
 // import controllers 
-const { login,addStudents, addHrManager, getAllStudents, getHRManagers ,changeUserStatus,changeHRStatus} = require("../controllers/adminController");
+const { login, addStudents, addHrManager, getAllStudents, getHRManagers, changeUserStatus, changeHRStatus } = require("../controllers/adminController");
 
 // import middlewares 
-const verifyAdmin=require("../middlewares/adminAuth");
+const verifyAdmin = require("../middlewares/adminAuth");
 
-// api routes   
+
+// API MIDDLEWARES..
+
+// login 
 router.post("/login", login);
-router.post("/",verifyAdmin, login);
-router.post("/addUsers",verifyAdmin, addStudents);
-router.post("/addHrManagers",verifyAdmin,addHrManager);
-router.get("/allStudents",verifyAdmin,getAllStudents);
-router.get("/allHRManagers",verifyAdmin,getHRManagers);
-router.patch("/ChangeUserStatus",verifyAdmin,changeUserStatus);
-router.patch("/ChangeHRStatus",verifyAdmin,changeHRStatus);
 
- 
+// adding users 
+router.post("/addUsers", verifyAdmin, addStudents);
+
+// adding HR managers 
+router.post("/addHrManagers", verifyAdmin, addHrManager);
+
+// fetch all students 
+router.get("/allStudents", verifyAdmin, getAllStudents);
+
+// fetch all HR managers
+router.get("/allHRManagers", verifyAdmin, getHRManagers);
+
+// Changeing User status 
+router.patch("/ChangeUserStatus", verifyAdmin, changeUserStatus);
+
+// changing HR Status 
+router.patch("/ChangeHRStatus", verifyAdmin, changeHRStatus);
+
+
+
 
 module.exports = router;

@@ -17,13 +17,13 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
     },
-    status:{
-        type:String,
-        default:"Inactive"
+    status: {
+        type: String,
+        default: "Inactive"
     },
-    blocked:{
-        type:Boolean,
-        default:false
+    blocked: {
+        type: Boolean,
+        default: false
     },
     skills: {
         type: Array
@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function (next) {
     const user = this;
 
-    if (!user.isModified("password"))return next(); 
+    if (!user.isModified("password")) return next();
     try {
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(user.password, salt);

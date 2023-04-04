@@ -11,14 +11,19 @@ function ListJobs() {
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
+    // fetching the datas 
     getJobPosts()
       .then((data) => {
-        const d = data.result;
-        console.log("jobs", d);
-        setJobs(d.map((job) => ({ ...job, loading: false })));
+          if(data.status){
+            const d = data.result;
+            setJobs(d.map((job) => ({ ...job, loading: false })));
+            return
+        }
+        toast.error(data.message, { position: "top-left" });
+
       })
       .catch((error) => {
-        toast.error("Something Went Wrong", { position: "top-center" });
+        toast.error(error.message, { position: "top-center" });
       });
     // eslint-disable-next-line
   }, []);

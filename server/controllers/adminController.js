@@ -23,14 +23,10 @@ function generatePassword() {
 
 
 // handling errors      
-const handleErrors = (error, req, res) => {
-    const statusCode = error.status || 500;
-    let message = error.message || "Something went Wrong";
-    res.status(statusCode).json({ status: false, message: message });
-};
+
 
 //  Admin login
-module.exports.login = async (req, res) => {
+module.exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         // checking if the values are null
@@ -38,19 +34,20 @@ module.exports.login = async (req, res) => {
         // matching the account with email  
         const admin = await adminModel.findOne({ email: email });
         // checking if the account  exists
-        if (!admin)  return res.status(401).json({ status: false, message: "incorrect email or password" });
+        if (!admin) throw new Error("incorrect email");
+        //   return res.status(401).json({ status: false, message: "incorrect email or password" });
         const auth = await bcrypt.compare(password, admin.password);
-        if (!auth)  return res.status(401).json({ status: false, message: "incorrect email or password" });
+        if (!auth) return res.status(401).json({ status: false, message: "incorrect email or password" });
         // creating the jwt token 
         const token = createToken(admin._id);
         res.status(200).json({ status: true, message: "Login Success", token: token });
-    } catch (error) {
-        handleErrors(error, req, res);
+    } catch (err) {
+        next(err);
     }
 };
 
 // admin adding users
-module.exports.addStudents = async (req, res) => {
+module.exports.addStudents = async (req, res, next) => {
     try {
         const { username, studentID, email } = req.body;
         // checking if the values are null
@@ -83,22 +80,20 @@ module.exports.addStudents = async (req, res) => {
             email: email,
             password: password
         });
-        
+
         await newStudent.save();
         res.status(200).json({ status: true, message: "successfully added user" });
     } catch (error) {
-        console.log("hiiiiii");
-        console.error(error);
-        handleErrors(error, req, res);
+        next(error);
     }
 
 
 };
 
 // Admin adding hr managers
-module.exports.addHrManager = async (req, res) => {
+module.exports.addHrManager = async (req, res, next) => {
     try {
-        const { username, email,company } = req.body;
+        const { username, email, company } = req.body;
         if (!username || !email || !company) throw new Error("All fields required");
         const alreadyExist = await hrModel.findOne({ email: email });
         if (alreadyExist !== null) throw new Error("already exists");
@@ -117,57 +112,52 @@ module.exports.addHrManager = async (req, res) => {
         const newHr = new hrModel({
             name: username,
             email: email,
-            company:company,
+            company: company,
             password: password
         });
         await newHr.save();
         res.status(200).json({ status: true, message: "successfully added user" });
     } catch (error) {
-        console.error(error);
-        handleErrors(error, req, res);
+        next(error);
     }
 };
 
-module.exports.getAllStudents = async (req, res) => {
+module.exports.getAllStudents = async (req, res, next) => {
     try {
         const students = await userModel.find({}, { password: 0 }).lean();
         res.status(200).json({ status: true, result: students });
     } catch (error) {
-        console.error(error);
-        handleErrors(error, req, res);
+        next(error);
     }
 
 };
-module.exports.getHRManagers = async (req, res) => {
+module.exports.getHRManagers = async (req, res, next) => {
     try {
         const hrManagers = await hrModel.find({}, { password: 0 }).lean();
         res.status(200).json({ status: true, result: hrManagers });
     } catch (error) {
-        console.error(error);
-        handleErrors(error, req, res);
+        next(error);
     }
 
 };
-module.exports.changeUserStatus = async (req, res) => {
+module.exports.changeUserStatus = async (req, res, next) => {
     try {
         const { status, id } = req.body;
         const result = await userModel.findByIdAndUpdate({ _id: id }, { $set: { blocked: status } }).exec();
-        if (result == null) throw new Error("Can't Find a matching Entry" );
+        if (result == null) throw new Error("Can't Find a matching Entry");
         res.status(200).json({ status: true, message: "Successfully updated" });
     } catch (error) {
-        console.error(error);
-        handleErrors(error, req, res);
+        next(error);
     }
 
 };
-module.exports.changeHRStatus = async (req, res) => {
+module.exports.changeHRStatus = async (req, res, next) => {
     try {
         const { status, id } = req.body;
         const result = await hrModel.findByIdAndUpdate({ _id: id }, { $set: { blocked: status } }).exec();
-        if (result == null) throw new Error("Can't Find a matching Entry" );
+        if (result == null) throw new Error("Can't Find a matching Entry");
         res.status(200).json({ status: true, message: "Successfully updated" });
     } catch (error) {
-        console.error(error);
-        handleErrors(error, req, res);
+        next(error);
     }
 };

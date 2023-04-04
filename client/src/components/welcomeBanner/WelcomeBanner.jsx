@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import "./WelcomeBanner.css";
+
 function WelcomeBanner() {
+  const navigate = useNavigate()
   return (
     <>
       <div className="bannerDiv">
@@ -13,7 +16,7 @@ function WelcomeBanner() {
             Get your dream job with our networking and modern career tools.
             Achieve your goals with us
           </p>
-          <button className="bannerGetStartedbtn">Get Started</button>
+          <button onClick={()=> navigate("/login")} className="bannerGetStartedbtn">Get Started</button>
         </div>
        <div>
        <img
@@ -27,5 +30,3 @@ function WelcomeBanner() {
   );
 }
 export default WelcomeBanner;
-// {/ https://img.freepik.com/free-vector/online-job-interview-concept_23-2148626346.jpg?size=626&ext=jpg&ga=GA1.1.1478787354.1678959639&semt=ais
-//https://img.freepik.com/free-vector/man-having-online-job-interview_52683-43379.jpg?size=626&ext=jpg&ga=GA1.1.1478787354.1678959639&semt=sph}
