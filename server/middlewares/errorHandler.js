@@ -3,7 +3,7 @@
 
 // ErrorHandler
 const errorHandler = (err, req, res, next) => {
-    console.log("Middleware Error Handling", err.stack);
+    console.log("Middleware Error Handling -- ", err);
     // assigning a 500 status if no err status 
     const errStatus = err.statusCode || 500;
     // assigning a message if no err message

@@ -1,3 +1,25 @@
-/* .form_div{
-    margin: 50 100px;
-} */
+.imgUploadDiv {
+  display: flex;
+  width: 270px;
+  gap: 15px;
+  padding: 10px 9px;
+  cursor: pointer;
+  align-items: center;
+  border-radius: 25px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+.imgUploadDiv:hover {
+  box-shadow: rgba(2, 7, 73, 0.25) 0px -2px 30px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+.imgpreviewdiv {
+  width: 270px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 2px dotted;
+}

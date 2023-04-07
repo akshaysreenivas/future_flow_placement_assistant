@@ -14,7 +14,7 @@ function HrRoutes() {
       <Route path="/dashboard" element={<HrDashboard />} />
       <Route path="/addJobs" element={<HRAddJobPost />} />
       <Route path="/jobs" element={<HRListJobs/>} />
-      <Route path="/jobs/JobDeatils" element={<HrJobDetails/>} />
+      <Route path="/jobs/JobDeatils/:id" element={<HrJobDetails/>} />
     </Routes>
   );
 }

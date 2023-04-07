@@ -1,10 +1,11 @@
 const router = require("express").Router();
 
 // import controllers 
-const { login, addjob, getAllJobPosts, changeJobStatus } = require("../controllers/hrController");
+const { login, addjob, getAllJobPosts, changeJobStatus, JobDetails } = require("../controllers/hrController");
 
 // import middlewares 
 const hrAuth = require("../middlewares/hrAuth");
+const upload = require("../middlewares/multer");
 
 // API MIDDLEWARES..
 
@@ -12,12 +13,15 @@ const hrAuth = require("../middlewares/hrAuth");
 router.post("/login", login);
 
 // adding jobs 
-router.post("/addJob", hrAuth, addjob);
+router.post("/addJob", hrAuth,upload.single("image"), addjob);
 
-// fetch  jobs 
-router.post("/getJobs", hrAuth, getAllJobPosts);
+// fetch all jobs 
+router.get("/getJobs", hrAuth, getAllJobPosts);
+
+// fetch single job details 
+router.get("/getJobs/getdetails/:id", hrAuth, JobDetails);
 
 // changing job status 
-router.post("/changeJobStatus", hrAuth, changeJobStatus);
+router.put("/changeJobStatus", hrAuth, changeJobStatus);
 
 module.exports = router;

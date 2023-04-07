@@ -1,3 +1,28 @@
-.link{
-    text-decoration: none;
+.link {
+  text-decoration: none;
+}
+.filter_div {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 20px;
+}
+.filter_div select {
+  cursor: pointer;
+  min-width: 220px;
+  max-width: 280px;
+}
+.arrow_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  outline: none;
+  border: 1px solid black;
+  margin-left: 5px;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
 }

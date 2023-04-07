@@ -3,26 +3,19 @@ import axios from 'axios'
 // instance for user making apis
 const userInstance = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
-    headers: {
-        "Content-Type": "application/json"
-    }
+    
 })
 
 
 // instance for admin making apis
 const adminInstance = axios.create({
     baseURL: `${process.env.REACT_APP_BASE_URL}/admin`,
-    headers: {
-        "Content-Type": "application/json"
-    }
 })
 
 // instance for HR making apis
 const hrInstance = axios.create({
     baseURL: `${process.env.REACT_APP_BASE_URL}/hr`,
-    headers: {
-        "Content-Type": "application/json"
-    }
+    
 })
 
 

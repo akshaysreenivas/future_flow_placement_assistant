@@ -1,0 +1,36 @@
+.page_btn{
+    border: 1px solid black;
+    border-radius: 4px;
+    margin: 1px;
+    font-weight: 600;
+    color: black;
+    padding: 3px 10px;
+}
+.navPage_btn{
+    display: flex;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 4px;
+    margin: 1px;
+    font-weight: 600;
+    color: black;
+    padding:  7px;
+}
+.pagination_buttons {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+.pagination_buttons::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
+  .pagination_buttons {
+    display: flex;
+    max-width: 105px;
+    height: 32px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+  /* .active_btn{
+    off
+  } */

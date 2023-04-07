@@ -8,6 +8,7 @@ import "./AddJob.css";
 function AddJob() {
   const [loading, setLoading] = useState();
   const [requiredSkills, setRequiredSkills] = useState([]);
+  const [poster, setPoster] = useState();
   const [state, setState] = useState({
     department: "",
     job_type: "",
@@ -49,11 +50,26 @@ function AddJob() {
   const handlesubmit = (e) => {
     e.preventDefault();
     state.skills = requiredSkills;
+    state.image = poster;
+    console.log(poster);
     // validations
+    // image validation
+    if (!state.image)
+      return toast.error("Poster image required", {
+        position: "top-center",
+      });
+    // checking for the correct image type
+    if (!/^image\/(jpe?g|png|gif|webp)$/.test(state.image.type)) {
+      return toast.error("Please Provide a valid image extension", {
+        position: "top-center",
+      });
+    }
+
     if (!state.department || state.department.match(/^\s*$/))
       return toast.error("Department field required", {
         position: "top-center",
       });
+
     if (!state.job_type || state.job_type.match(/^\s*$/))
       return toast.error("Job Type field required", {
         position: "top-center",
@@ -80,6 +96,7 @@ function AddJob() {
         position: "top-center",
       });
     }
+
     if (!state.description || state.description.match(/^\s*$/))
       return toast.error("Please Provide a job Description", {
         position: "top-center",
@@ -103,6 +120,7 @@ function AddJob() {
           };
           setRequiredSkills([""]);
           setState(newState);
+          setPoster(null)
           return Swal.fire(
             "Success",
             "Successfully Added Job Vacancy",
@@ -166,30 +184,32 @@ function AddJob() {
             />
             <Form.Text>Leave Blank If no Experience is needed</Form.Text>
           </Form.Group>
+
           <Form.Group className="mb-3" as={Row} controlId="requiredSkills">
             <Form.Label>Required Skills</Form.Label>
             <Col sm={5}>
-              {requiredSkills &&  requiredSkills.map((skill, index) => (
-                <Row key={index} className="mb-2">
-                  <Col sm={9}>
-                    <Form.Control
-                      type="text"
-                      name="skills"
-                      value={skill}
-                      onChange={(e) => handleSkillChange(index, e)}
-                      onBlur={(e) => handleSkillBlur(index, e)}
-                    />
-                  </Col>
-                  <Col sm={3}>
-                    <Button
-                      variant="danger"
-                      onClick={() => handleRemoveSkill(index)}
-                    >
-                      Remove
-                    </Button>
-                  </Col>
-                </Row>
-              ))}
+              {requiredSkills &&
+                requiredSkills.map((skill, index) => (
+                  <Row key={index} className="mb-2">
+                    <Col sm={9}>
+                      <Form.Control
+                        type="text"
+                        name="skills"
+                        value={skill}
+                        onChange={(e) => handleSkillChange(index, e)}
+                        onBlur={(e) => handleSkillBlur(index, e)}
+                      />
+                    </Col>
+                    <Col sm={3}>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleRemoveSkill(index)}
+                      >
+                        Remove
+                      </Button>
+                    </Col>
+                  </Row>
+                ))}
               <Button variant="success" onClick={handleAddSkill}>
                 Add Skill
               </Button>
@@ -223,6 +243,30 @@ function AddJob() {
               />
             </Form.Group>
           </Row>
+          {/*image upload */}
+          <div className="imgpreviewdiv">
+            <img
+              src={poster ? URL.createObjectURL(poster) : "/upload_Icon.png"}
+              width={poster ? 270 : 50}
+              alt=""
+            />
+          </div>
+          <Form.Group controlId="Poster" className="mb-3">
+            <Form.Label>
+              <div className="imgUploadDiv">
+                <img width={50} src="/upload.png" alt="upload_icon" />
+                <h4>Upload a Poster</h4>
+              </div>
+            </Form.Label>
+            <Form.Control
+              className="d-none"
+              onChange={(e) => setPoster(e.target.files[0])}
+              name="poster"
+              type="file"
+              size="sm"
+            />
+          </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label>Job Description</Form.Label>
             <Form.Control

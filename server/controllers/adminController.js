@@ -90,6 +90,7 @@ module.exports.addStudents = async (req, res, next) => {
 
 };
 
+
 // Admin adding hr managers
 module.exports.addHrManager = async (req, res, next) => {
     try {

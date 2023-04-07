@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+
+
+
 // Declare the Schema of the Mongo model
 const jobSchema = new mongoose.Schema({
     department: { type: String },
@@ -9,13 +12,14 @@ const jobSchema = new mongoose.Schema({
     min_salary: { type: Number },
     max_salary: { type: Number },
     description: { type: String },
+    poster: { type: Object },
     hrID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "hrManager"
     },
     date: {
         type: Date,
-        default: new Date()
+        default: Date.now()
     },
     active: {
         type: Boolean,

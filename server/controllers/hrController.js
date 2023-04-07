@@ -42,6 +42,7 @@ module.exports.login = async (req, res, next) => {
 // adding jobs
 module.exports.addjob = async (req, res, next) => {
     try {
+        if (!req.body.fileupload) throw new Error("can't upload image");
         const hrID = req.user.id;
         let { department, job_type, location, skills, experience, min_salary, max_salary, description } = req.body;
         // checking if the values are null
@@ -49,7 +50,8 @@ module.exports.addjob = async (req, res, next) => {
             experience = "No Prior Experience Needed";
         }
 
-        if (!department || !job_type || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
+        if (!department || !req.file || !job_type || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
+        const imgUrl = "/images/" + req.file.filename;
         const newJob = new jobModel({
             department: department,
             job_type: job_type,
@@ -59,10 +61,9 @@ module.exports.addjob = async (req, res, next) => {
             min_salary: min_salary,
             max_salary: max_salary,
             description: description,
-            hrID: hrID
-
+            hrID: hrID,
+            poster: imgUrl
         });
-
         await newJob.save();
         res.status(200).json({ status: true, message: "Successfully Added Job" });
     } catch (error) {
@@ -72,10 +73,87 @@ module.exports.addjob = async (req, res, next) => {
 
 module.exports.getAllJobPosts = async (req, res, next) => {
     try {
+        // taking the values from the request  
         const hrID = req.user.id;
+        const page = parseInt(req.query.page);
+        const limit = parseInt(req.query.limit);
+        const search = req.query.search;
+        const department = req.query.department;
+        const order = parseInt(req.query.order) || -1;
+        const sort = req.query.sort || "date";
+        const status = req.query.status;
+        // query         
+        const query = { hrID: hrID };
 
-        const jobs = await jobModel.find({ hrID: hrID });
-        res.status(200).json({ status: true, result: jobs });
+        // search option setup    
+        if (search) {
+            query.$or = [
+                { department: { $regex: search, $options: "i" } },
+                { job_type: { $regex: search, $options: "i" } },
+                { skills: { $regex: search, $options: "i" } },
+            ];
+        }
+
+        //  filter by department  
+        if (department) {
+            query.department = department;
+        }
+        // filter by status
+        if (status) {
+            query.active = status;
+        }
+        // page setup      
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        // sorting setup   
+        let sortObject = {};
+        sortObject[sort] = order;
+
+        // quering the job based on the FileSystemEntry,sort,search  
+        const jobs = await jobModel.find(query).sort(sortObject).skip(startIndex).limit(limit);
+
+        // quering all the distinct departments  
+        const dep = await jobModel.find({ hrID: hrID }).distinct("department");
+
+        // counting the total no of documentes available based on the filerstions   
+        const total = await jobModel.countDocuments(query);
+        // constructing the response   
+        const response = { status: true, total, page, limit, department: dep, result: jobs };
+
+        // finding if a next page is available  
+        if (endIndex < total)
+            response.next = {
+                page: page + 1,
+                limit: limit
+            };
+
+        // finding if previous page exists  
+        if (startIndex > 0) {
+            response.previous = {
+                page: page - 1,
+                limit: limit
+            };
+        }
+
+        // finally sending the response  
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+
+};
+module.exports.JobDetails = async (req, res, next) => {
+    try {
+        const result = await jobModel.findOne({ _id: req.params.id }).lean();
+        if (result == null) throw new Error("Can't Find a matching Entry");
+        result.date = result.date.toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+        console.log(result);
+        res.status(200).json({ status: true, result });
     } catch (error) {
         next(error);
     }
