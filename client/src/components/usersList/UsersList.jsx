@@ -24,7 +24,7 @@ function UserList() {
     <div className="table_div">
       <h2>Students</h2>
       {users.length ? (
-        <Table hover>
+        <Table responsive hover>
           <thead>
             <tr>
               <th>Student ID</th>

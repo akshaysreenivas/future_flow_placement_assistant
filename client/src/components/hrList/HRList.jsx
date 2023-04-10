@@ -24,7 +24,7 @@ function HRList() {
     <div className="table_div">
       <h2>HR Managers</h2>
       {users.length ? (
-        <Table hover>
+        <Table responsive hover>
           <thead>
             <tr>
               <th>Name</th>

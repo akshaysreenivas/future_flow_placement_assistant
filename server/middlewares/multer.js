@@ -21,11 +21,11 @@ const upload = multer({
             file.mimetype == "image/gif" ||
             file.mimetype == "image/webp"
         ) {
-            req.body.fileupload = true;
+            req.body.fileuploaded = true;
             cb(null, true);
         }
         else {
-            req.body.fileupload = false;
+            req.body.fileuploaded = false;
             cb(null, false);
         }
     }

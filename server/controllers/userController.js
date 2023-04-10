@@ -26,15 +26,16 @@ module.exports.login = async (req, res, next) => {
         // checking whether the user is bolcked or not 
         if (user.blocked) return res.status(200).json({ status: false, message: "Your Account is Temporarly Suspended" });
         // if login success and the if the user is inactive  changing the status to active 
-        if (user.status === "Inactive") {
-            await userModel.updateOne({ email: email }, { status: "Active" });
+        if (user.firstLogin ) {
+            await userModel.updateOne({ email: email }, { status: "Active",firstLogin:false });
         }
         // calling function to create jwt token 
         const token = createToken(user._id);
+        const userData = await userModel.findOne({ email: email });
 
         res
             .status(200)
-            .json({ status: true, message: "Login Success", token: token });
+            .json({ status: true, message: "For security reasons please change your password",user:userData,  token: token });
     } catch (error) {
         next(error);
     }

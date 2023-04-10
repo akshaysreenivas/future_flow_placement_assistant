@@ -1,0 +1,56 @@
+.jobDetailsDiv {
+  /* background-color: rgb(245, 245, 245); */
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.Poster_div {
+  flex: 1 0 30%;
+}
+.details_div {
+  flex: 1 0 60%;
+}
+
+.edit_btn {
+  background-color: blueviolet !important;
+  border: none;
+  margin-left: auto;
+  display: block;
+}
+.edit_btn:hover{
+  background-color: rgb(176, 106, 242) !important;
+}
+.edit_btn .link{
+    text-decoration: none;
+    color: white;
+}
+@media only screen and (max-width: 900px) {
+  .details_div {
+    max-width: 600px;
+  }
+}
+@media only screen and (max-width: 465px) {
+  .Poster_div {
+    max-width: 315px !important;
+  }
+  .Poster_div img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.jobDetailsDiv span {
+  color: rgb(86, 85, 85);
+  font-size: 16px;
+  font-weight: bold;
+}
+.skills_div span {
+  color: blue;
+  background-color: #fdfdfd;
+  border: 1px blue solid;
+  border-radius: 4px;
+}
+.experience_div {
+  max-width: 400px;
+}

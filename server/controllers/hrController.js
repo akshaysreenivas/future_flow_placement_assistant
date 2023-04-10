@@ -3,7 +3,7 @@ const hrModel = require("../models/hrModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jobModel = require("../models/jobModel");
-
+const Fs = require("fs");
 
 // creating jwt token
 const maxAge = 3 * 24 * 60 * 1000;
@@ -42,30 +42,73 @@ module.exports.login = async (req, res, next) => {
 // adding jobs
 module.exports.addjob = async (req, res, next) => {
     try {
-        if (!req.body.fileupload) throw new Error("can't upload image");
+        if (!req.file) throw new Error("can't upload image");
         const hrID = req.user.id;
         let { department, job_type, location, skills, experience, min_salary, max_salary, description } = req.body;
         // checking if the values are null
         if (!experience) {
             experience = "No Prior Experience Needed";
         }
-
+        console.log("location", location);
         if (!department || !req.file || !job_type || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
         const imgUrl = "/images/" + req.file.filename;
         const newJob = new jobModel({
             department: department,
             job_type: job_type,
-            location: location,
             skills: skills,
             experience: experience,
             min_salary: min_salary,
             max_salary: max_salary,
             description: description,
+            location: location,
             hrID: hrID,
             poster: imgUrl
         });
         await newJob.save();
         res.status(200).json({ status: true, message: "Successfully Added Job" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Editing Jobs    
+module.exports.editJob = async (req, res, next) => {
+    try {
+
+        const { id } = req.params;
+        let { department, job_type, location, skills, experience, min_salary, max_salary, description } = req.body;
+        // checking if the values are null
+        if (!experience) {
+            experience = "No Prior Experience Needed";
+        }
+
+        if (!department || !job_type || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
+        let imgUrl;
+        if (req.file) {
+            imgUrl = "/images/" + req.file.filename;
+            Fs.unlinkSync("public" + req.body.poster, (err => {
+                if (err) throw Error(err);
+            }));
+        } else {
+            imgUrl = req.body.poster;
+
+        }
+
+
+        await jobModel.findByIdAndUpdate({ _id: id }, {
+            $set: {
+                department: department,
+                job_type: job_type,
+                location: location,
+                skills: skills,
+                experience: experience,
+                min_salary: min_salary,
+                max_salary: max_salary,
+                description: description,
+                poster: imgUrl
+            }
+        });
+        res.status(200).json({ status: true, message: "Successfully edited Job" });
     } catch (error) {
         next(error);
     }
@@ -145,14 +188,16 @@ module.exports.getAllJobPosts = async (req, res, next) => {
 };
 module.exports.JobDetails = async (req, res, next) => {
     try {
-        const result = await jobModel.findOne({ _id: req.params.id }).lean();
+        const result = await jobModel.findOne({ _id: req.params.id }).populate({
+            path: "hrID",
+            select: "company",
+        }).lean();
         if (result == null) throw new Error("Can't Find a matching Entry");
         result.date = result.date.toLocaleDateString("en-US", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric"
         });
-        console.log(result);
         res.status(200).json({ status: true, result });
     } catch (error) {
         next(error);

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 // import controllers 
-const { login, addjob, getAllJobPosts, changeJobStatus, JobDetails } = require("../controllers/hrController");
+const { login, addjob, getAllJobPosts,editJob, changeJobStatus, JobDetails } = require("../controllers/hrController");
 
 // import middlewares 
 const hrAuth = require("../middlewares/hrAuth");
@@ -21,7 +21,10 @@ router.get("/getJobs", hrAuth, getAllJobPosts);
 // fetch single job details 
 router.get("/getJobs/getdetails/:id", hrAuth, JobDetails);
 
+// edit job details 
+router.put("/editJobdetails/:id", hrAuth,upload.single("image"), editJob);
+
 // changing job status 
-router.put("/changeJobStatus", hrAuth, changeJobStatus);
+router.patch("/changeJobStatus", hrAuth, changeJobStatus);
 
 module.exports = router;
