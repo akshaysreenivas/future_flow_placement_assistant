@@ -8,6 +8,8 @@ import { adminLogin } from "../../services/adminServices";
 import { userLogin } from "../../services/userServices";
 import { hrLogin } from "../../services/hrServices";
 import "./Login.css";
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "../../store/store";
 
 function Login({ role, url }) {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ function Login({ role, url }) {
   const [password, setPassword] = useState("");
   const [passwordType, setPasswordType] = useState(true);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const togglePassword = () => {
     setPasswordType(!passwordType);
@@ -47,8 +50,6 @@ function Login({ role, url }) {
       adminLogin(email, password)
         .then((data) => {
           setLoading(false);
-          console.log("data", data);
-
           if (data.status) {
             localStorage.setItem("adminAuthToken", data.token);
             return navigate("/admin/dashboard");
@@ -73,7 +74,10 @@ function Login({ role, url }) {
         setLoading(false);
         if (data.status) {
           localStorage.setItem("userAuthToken", data.token);
-         
+          console.log("loginuser",data.user)
+            dispatch(
+              setUserDetails( data.user )
+            );
           return navigate("/home");
         }
         toast.error(data.message, { position: "top-center" });

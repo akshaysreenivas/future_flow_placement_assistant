@@ -26,8 +26,8 @@ function TopNavbar() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className=" nav-items">
             <Link to={"/"} className='Link'>Home</Link>
-            <Link to={"/"} className='Link'>Jobs</Link>
-            <Link to={"/"} className='Link'>Challenges</Link>
+            <Link to={"/login"} className='Link'>Jobs</Link>
+            <Link to={"/login"} className='Link'>Challenges</Link>
             <Link to={"/"} className='Link'>Contact</Link>
             <Link to={"/"} className='Link'>About</Link>
           </Nav>

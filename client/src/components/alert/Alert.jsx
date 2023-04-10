@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Alert from "react-bootstrap/Alert";
 
-function Alerts() {
+function Alerts({data}) {
   const [show, setShow] = useState(true);
 
   if (show) {
     return (
       <Alert variant="success" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>Hey, nice to see you</Alert.Heading>
+        <Alert.Heading>Hey, {data}</Alert.Heading>
         <p>
           "Welcome to Futureflow! To help keep your account and personal data
           secure, we kindly ask all new users to choose a strong, unique

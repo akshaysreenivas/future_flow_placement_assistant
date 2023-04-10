@@ -1,0 +1,11 @@
+.logout_btn{
+    cursor:pointer;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin:auto;
+}
+
+.logout_btn:hover{
+    color: blue;
+}

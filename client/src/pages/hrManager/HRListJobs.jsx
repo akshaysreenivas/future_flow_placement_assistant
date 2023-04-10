@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import Topbar from "../../components/hrNavbar/HRNavbar";
 import HrSidebar from "../../components/hrSidebar/HrSidebar";
