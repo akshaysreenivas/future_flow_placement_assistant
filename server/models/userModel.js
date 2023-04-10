@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     skills: {
         type: Array
     },
+    firstLogin: {
+        type: Boolean,
+        default: true
+    },
     projects: {
         type: Array
     }

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import Alerts from "../../components/alert/Alert";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ function HomePage() {
   };
   return (
     <div>
+    
       <nav>
         <RiLogoutCircleRLine
           className="logout_btn"
@@ -21,6 +23,7 @@ function HomePage() {
           onClick={handleLogout}
         />
       </nav>
+
       <h1>Home Page</h1>
     </div>
   );

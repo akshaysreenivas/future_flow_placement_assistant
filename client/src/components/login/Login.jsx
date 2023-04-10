@@ -73,6 +73,7 @@ function Login({ role, url }) {
         setLoading(false);
         if (data.status) {
           localStorage.setItem("userAuthToken", data.token);
+         
           return navigate("/home");
         }
         toast.error(data.message, { position: "top-center" });

@@ -3,7 +3,7 @@ const hrModel = require("../models/hrModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jobModel = require("../models/jobModel");
-
+const Fs = require("fs");
 
 // creating jwt token
 const maxAge = 3 * 24 * 60 * 1000;
@@ -74,12 +74,8 @@ module.exports.addjob = async (req, res, next) => {
 // Editing Jobs    
 module.exports.editJob = async (req, res, next) => {
     try {
-        console.log("hi", req.body);
 
         const { id } = req.params;
-        const hrID = req.user.id;
-        console.log("hikjbkhg", hrID);
-
         let { department, job_type, location, skills, experience, min_salary, max_salary, description } = req.body;
         // checking if the values are null
         if (!experience) {
@@ -90,13 +86,16 @@ module.exports.editJob = async (req, res, next) => {
         let imgUrl;
         if (req.file) {
             imgUrl = "/images/" + req.file.filename;
+            Fs.unlinkSync("public" + req.body.poster, (err => {
+                if (err) throw Error(err);
+            }));
         } else {
             imgUrl = req.body.poster;
 
         }
 
 
-        await jobModel.findByIdAndUpdate({ _id: id}, {
+        await jobModel.findByIdAndUpdate({ _id: id }, {
             $set: {
                 department: department,
                 job_type: job_type,
@@ -109,8 +108,6 @@ module.exports.editJob = async (req, res, next) => {
                 poster: imgUrl
             }
         });
-
-
         res.status(200).json({ status: true, message: "Successfully edited Job" });
     } catch (error) {
         next(error);
