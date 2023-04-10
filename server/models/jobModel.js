@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const jobSchema = new mongoose.Schema({
     department: { type: String },
     job_type: { type: String },
-    location: { Type: Object },
+    location: { type: String },
     skills: { type: Array },
     experience: { type: String },
     min_salary: { type: Number },

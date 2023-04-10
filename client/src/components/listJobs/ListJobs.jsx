@@ -28,14 +28,14 @@ function ListJobs() {
 
   // useeffect for calling api
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     const token = localStorage.getItem("hrAuthToken");
     if (!token || token === "undefined") return navigate("/hr/login");
 
     // fetching the datas
     getJobPosts(page, sort, search, limit, filter, status)
       .then((data) => {
-        setLoading(false)
+        setLoading(false);
         if (data.status) {
           setPage(data.page);
           setLimit(data.limit);
@@ -50,10 +50,9 @@ function ListJobs() {
         toast.error(data.message, { position: "top-left" });
       })
       .catch((error) => {
-        setLoading(false)
+        setLoading(false);
         toast.error("Something Went Wrong", { position: "top-center" });
       });
-    console.log(status);
   }, [page, search, sort, navigate, filter, limit, status]);
 
   const handleSortChange = (e) => {
@@ -62,6 +61,9 @@ function ListJobs() {
 
   const handleArrowChange = () => {
     setSort((prev) => ({ ...prev, order: prev.order === -1 ? 1 : -1 }));
+  };
+  const handleLimitChange = (e) => {
+    setLimit(e.target.value);
   };
   const handleStatusChange = (e) => {
     setStatus(e.target.value);
@@ -74,37 +76,53 @@ function ListJobs() {
     setFilter("");
     setSearch("");
     setStatus("");
+    setLimit(3);
   };
 
   return (
     <div className="table_div">
       <h2 className="mb-3"> Job Posts</h2>
       <div>
-        <SearchBar value={search} setSearch={setSearch} />
-        <div className="filter_div mb-3">
-            <Form.Select
-              size="sm"
-              value={sort.sort}
-              name="sort"
-              onChange={(e) => handleSortChange(e)}
-              className=""
-            >
-              <option value={""} defaultChecked disabled>
-                Sort By
-              </option>
-              <option value="department">Department</option>
-              <option value="job_type">Job Type</option>
-              <option value="min_salary">Salary</option>
-              <option value="date">Posted Date</option>
-            </Form.Select>
-            <button
-              name="sort"
-              value={sort.order}
-              className="arrow_btn"
-              onClick={handleArrowChange}
-            >
-              {sort.order === -1 ? <FaSortAmountDown /> : <FaSortAmountUp />}
-            </button>
+        <div className="first_div ">
+          <Form.Select
+            size="sm"
+            value={limit}
+            name="limit"
+            onChange={(e) => handleLimitChange(e)}
+            className="limit"
+          >
+            <option value="3" defaultChecked>
+              showing first 3 datas
+            </option>
+            <option value="5">Show 5</option>
+            <option value="10">Show 10</option>
+          </Form.Select>
+          <SearchBar value={search} setSearch={setSearch} />
+        </div>
+        <div className="filter_div my-3">
+          <Form.Select
+            size="sm"
+            value={sort.sort}
+            name="sort"
+            onChange={(e) => handleSortChange(e)}
+            className=""
+          >
+            <option value={""} defaultChecked disabled>
+              Sort By
+            </option>
+            <option value="department">Department</option>
+            <option value="job_type">Job Type</option>
+            <option value="min_salary">Salary</option>
+            <option value="date">Posted Date</option>
+          </Form.Select>
+          <button
+            name="sort"
+            value={sort.order}
+            className="arrow_btn"
+            onClick={handleArrowChange}
+          >
+            {sort.order === -1 ? <FaSortAmountDown /> : <FaSortAmountUp />}
+          </button>
           <Form.Select
             size="sm"
             value={status}
@@ -142,7 +160,11 @@ function ListJobs() {
         </div>
       </div>
 
-     {loading ?<div className="d-flex justify-content-center mx-auto my-5"><Loading/></div>: jobs.length ? (
+      {loading ? (
+        <div className="d-flex justify-content-center mx-auto my-5">
+          <Loading />
+        </div>
+      ) : jobs.length ? (
         <Table hover responsive>
           <thead>
             <tr>

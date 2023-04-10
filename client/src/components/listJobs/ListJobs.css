@@ -7,12 +7,17 @@
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 20px;
+  margin: 50px 10px;
+
 }
-.filter_div select {
+ select {
   cursor: pointer;
   min-width: 220px;
   max-width: 280px;
+}
+.first_div{
+display: flex;
+justify-content: space-between;
 }
 .arrow_btn {
   display: flex;
