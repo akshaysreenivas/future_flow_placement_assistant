@@ -9,7 +9,7 @@ function HRAddJobPost() {
     useEffect(() => {
       // checking for token if not redirecting to login page
       const token = localStorage.getItem("hrAuthToken");
-      if (!token || token ==="undefined") return navigate("/admin");
+      if (!token || token ==="undefined") return navigate("/hr");
     }, [navigate]);
   return (
     <div className="page">

@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import UserNavBar from "../../components/userNavbar/UserNavBar";
-import Jobs from "../../components/jobs/Jobs";
-
-function JobsPage() {
+import JobVIew from "../../components/jobView/JobVIew";
+function JobDetails() {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   useEffect(() => {
@@ -13,13 +12,13 @@ function JobsPage() {
   }, [navigate, user]);
 
   return (
-    <div className='user_page'>
+    <div className="user_page">
     <UserNavBar user={true}/>
-      <div className="user_page  d-flex  justify-content-center">  
-          <Jobs />
+      <div className="  d-flex  justify-content-center">
+        <JobVIew />
       </div>
     </div>
   );
 }
 
-export default JobsPage;
+export default JobDetails;

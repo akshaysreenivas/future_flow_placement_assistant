@@ -49,7 +49,6 @@ export function getHRManagers() {
     //   calling api
     return adminInstance.get(
         "/allHRManagers",
-
     );
 
 }

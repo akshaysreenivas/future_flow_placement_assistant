@@ -25,6 +25,10 @@
   margin-left: auto;
 }
 
+.user_page{
+  background-color: #f3f2ef;
+}
+
 @media only screen and (max-width: 768px) {
   .admin_component{
     padding: 33px 22px 29px 85px;

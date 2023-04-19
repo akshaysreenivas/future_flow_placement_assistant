@@ -42,7 +42,7 @@ function JobDetails({ job }) {
   }, [navigate, job, id]);
   return (
     <>
-    <Button className="edit_btn my-4 py-2 px-5"> <Link className="link" to={`/hr/jobs/editJobDetails/${jobs._id}`}><TbEdit/>  Edit </Link></Button>
+    <Link className="link" to={`/hr/jobs/editJobDetails/${jobs._id}`}><Button className="edit_btn my-4 py-2 px-5"><TbEdit/> Edit</Button> </Link>
       <div className="jobDetailsDiv">
         <div className="Poster_div">
           <img
@@ -64,27 +64,25 @@ function JobDetails({ job }) {
           </p>
 
           <h4 className="mt-4 mb-3">Job Description</h4>
-          <p className="lh-lg">{jobs.description}</p>
-          <p>
+          <p className="">{jobs.description}</p>
+          <p className="highlight_div">
             <VscLocation size={30} /> Location - {jobs.location}
           </p>
-          <p>
+          <p className="highlight_div">
             <MdOutlineDateRange size={30} /> Posted Date- {jobs.date}
           </p>
           
           <div className="requirements_div pb-5">
-          <h2 className="my-3">Requirements</h2>
+          <h3 className="my-3">Requirements</h3>
 
-          <h5 className="mb-4">Required Skills</h5>
-          <div className="skills_div">
-          <ul>
+          <h6 className="mb-4">Required Skills</h6>
+          <div className="skills_div m-2 p-2 mb-4">
               {skill.map((item) => (
-                <li className="p-2 m-2">{item}</li>
+                <span className="p-2 px-5 m-2">{item}</span>
               ))}
-            </ul>
             </div>
             <div className="mb-4 experience_div">
-            <h5 className="mb-4 ">Experience</h5>
+            <h6 className="mb-4 ">Experience</h6>
             <p>{jobs.experience}</p>
             </div>
             </div>

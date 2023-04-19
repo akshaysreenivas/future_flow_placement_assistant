@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
+        required: String,
     },
     studentID: {
         type: String,
@@ -13,9 +14,26 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
+        required: true
     },
     email: {
         type: String,
+        required: true
+    },
+    gender: {
+        type: String,
+    },
+    phone: {
+        type: Number
+    },
+    website: {
+        type: String
+    },
+    profilePicUrl: {
+        type: String
+    },
+    coverPicUrl: {
+        type: String
     },
     status: {
         type: String,
@@ -25,16 +43,52 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    skills: {
-        type: Array
-    },
+
     firstLogin: {
         type: Boolean,
         default: true
     },
-    projects: {
-        type: Array
-    }
+
+    appliedJobs: {
+        type: [mongoose.Types.ObjectId],
+        ref: "jobs"
+    },
+    experiences: [{
+        company: String,
+        title: String,
+        startDate: Date,
+        endDate: Date,
+        description: String
+    }],
+    skills: [{
+        name: String,
+        level: String
+    }],
+    education: [{
+        institution: String,
+        degree: String,
+        fieldofStudy: String,
+        startDate: Date,
+        endDate: Date,
+    }],
+    certifications: [{
+        name: String,
+        issuingOrganization: String,
+        date: Date
+    }],
+    projects: [{
+        name: String,
+        startDate: Date,
+        endDate: Date,
+        description: String,
+        url: String
+    }],
+    attachments: [{
+        name: String,
+        url: String,
+        file: String,
+    }]
+
 });
 
 

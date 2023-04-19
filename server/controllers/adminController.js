@@ -139,7 +139,6 @@ module.exports.getHRManagers = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-
 };
 module.exports.changeUserStatus = async (req, res, next) => {
     try {

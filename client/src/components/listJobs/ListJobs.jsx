@@ -97,7 +97,7 @@ function ListJobs() {
             <option value="5">Show 5</option>
             <option value="10">Show 10</option>
           </Form.Select>
-          <SearchBar value={search} setSearch={setSearch} />
+          <SearchBar value={search} placeholder={"Search"} setSearch={setSearch} />
         </div>
         <div className="filter_div my-3">
           <Form.Select
@@ -108,7 +108,7 @@ function ListJobs() {
             className=""
           >
             <option value={""} defaultChecked disabled>
-              Sort By
+              filter By
             </option>
             <option value="department">Department</option>
             <option value="job_type">Job Type</option>
