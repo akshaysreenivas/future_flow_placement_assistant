@@ -1,0 +1,50 @@
+.jobs_parent_div {
+  width: 720px;
+  background-color: white;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.job_div {
+  border: 1px solid rgb(0 139 139);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.apply_btn {
+  background: #0d6efd;
+  border: 1px solid #0d6efd;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  outline: 2px solid #0d6efd;
+}
+.view_btn {
+  color: #0d6efd;
+  border: 2px #0d6efd solid;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  transform-origin: center center;
+
+}
+.action_btn_div {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+
+.apply_btn:is(:hover, :focus){
+ outline-offset: 3px;
+}
+.view_btn:is(:hover, :focus){
+  transform: scale(105%);
+}
+
+@media only screen and (max-width: 765px) {
+  .jobs_parent_div {
+    max-width: 650px;
+  }
+}

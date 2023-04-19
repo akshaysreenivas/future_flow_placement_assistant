@@ -1,7 +1,8 @@
 const router = require("express").Router();
 
 // import controllers 
-const { login, addjob, getAllJobPosts,editJob, changeJobStatus, JobDetails } = require("../controllers/hrController");
+const { login, addjob, getAllJobPosts,editJob, changeJobStatus } = require("../controllers/hrController");
+const { JobDetails } = require("../controllers/jobsController");
 
 // import middlewares 
 const hrAuth = require("../middlewares/hrAuth");

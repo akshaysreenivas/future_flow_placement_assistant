@@ -25,6 +25,7 @@ const jobSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    applicants: { type: [mongoose.Types.ObjectId], ref: "users" }
 
 });
 

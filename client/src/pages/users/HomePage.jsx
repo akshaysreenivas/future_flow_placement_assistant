@@ -6,22 +6,20 @@ import UserNavBar from "../../components/userNavbar/UserNavBar";
 
 function HomePage() {
   const navigate = useNavigate();
-  const {user} = useSelector(state => state.user)
+  const { user } = useSelector((state) => state.user);
   useEffect(() => {
     const token = localStorage.getItem("userAuthToken");
-    if (!token  || token ==="undefined") return navigate("/");
-  }, [navigate,user]);
- 
-  return (
-    <>
-    {user?.firstLogin && <Alerts data={user.name} />}
-    <nav>
-    <UserNavBar/>
-        
-      </nav>
+    if (!token || token === "undefined") return navigate("/");
+  }, [navigate, user]);
 
-      <h1>Home Page</h1>
-    </>
+  return (
+    <div className="user_page">
+      {user?.firstLogin && <Alerts data={user.name} />}
+
+      <UserNavBar user={true} />
+
+      <h1 className="px-5">Home Page</h1>
+    </div>
   );
 }
 

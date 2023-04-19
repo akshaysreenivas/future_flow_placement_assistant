@@ -1,12 +1,12 @@
 import React,{useEffect} from "react";
 import { useNavigate } from "react-router";
 // importing aos
-import TopNavbar from "../components/landingpageNavbar/Navbar";
 import WelcomeBanner from "../components/welcomeBanner/WelcomeBanner";
 import CompanyBanner from "../components/companysBanner/CompanyBanner";
 import ChallengesBanner from "../components/challengesBanner/ChallengesBanner";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import UserNavBar from "../components/userNavbar/UserNavBar";
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function LandingPage() {
   }, [navigate])
   return (
     <>
-      <TopNavbar />
+     <UserNavBar/>
       <WelcomeBanner />
       <CompanyBanner />
       <ChallengesBanner  />

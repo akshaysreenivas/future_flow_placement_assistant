@@ -7,9 +7,31 @@
 
 .Poster_div {
   flex: 1 0 30%;
+  padding: 15px;
+  /* max-width: 430px; */
+  height: fit-content;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 .details_div {
   flex: 1 0 60%;
+}
+h1{
+  color: darkcyan;
+}
+p{
+  color: #414040;
+}
+
+.highlight_div{
+  width: fit-content;
+  padding: 10px;
+  background-color: #e1e7f2;
+  border-radius: 8px;
 }
 
 .edit_btn {
@@ -18,12 +40,12 @@
   margin-left: auto;
   display: block;
 }
-.edit_btn:hover{
+.edit_btn:hover {
   background-color: rgb(176, 106, 242) !important;
 }
-.edit_btn .link{
-    text-decoration: none;
-    color: white;
+.edit_btn .link {
+  text-decoration: none;
+  color: white;
 }
 @media only screen and (max-width: 900px) {
   .details_div {
@@ -46,9 +68,9 @@
   font-weight: bold;
 }
 .skills_div span {
-  color: blue;
+  color: #5d84ff;
   background-color: #fdfdfd;
-  border: 1px blue solid;
+  border: 1px #8686fd solid;
   border-radius: 4px;
 }
 .experience_div {
