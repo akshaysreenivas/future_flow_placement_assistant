@@ -30,7 +30,6 @@ function EditJob() {
         if (data.status) {
           const d = data.result;
           setState(d);
-          console.log(data);
           let { company } = d.hrID;
           d.company = company;
           const { skills } = d;
@@ -77,7 +76,6 @@ function EditJob() {
     e.preventDefault();
     state.skills = requiredSkills;
     state.image = poster;
-    console.log(poster);
     // validations
     // image validation
    

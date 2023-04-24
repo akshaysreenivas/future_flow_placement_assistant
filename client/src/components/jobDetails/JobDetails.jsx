@@ -15,7 +15,6 @@ function JobDetails({ job }) {
   const [jobs, setJob] = useState({});
   const [skill, setSkills] = useState([]);
   const { id } = useParams();
-  console.log(id);
 
   useEffect(() => {
     const token = localStorage.getItem("hrAuthToken");
@@ -26,7 +25,6 @@ function JobDetails({ job }) {
       .then((data) => {
         if (data.status) {
           const d = data.result;
-          console.log(data);
           let { company } = d.hrID;
           d.company = company;
           const { skills } = d;

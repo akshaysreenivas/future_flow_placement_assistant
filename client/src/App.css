@@ -3,41 +3,93 @@
   margin: 0;
   box-sizing: border-box;
 }
-.link{
+.link {
   cursor: pointer;
 }
-.page{
-  height:100vh;
-  width:100%;
-  position:relative;
+.page {
+  height: 100vh;
+  width: 100%;
+  position: relative;
 }
 
-.component{
-  height:100vh;
-  width:100%;
+.component {
+  height: 100vh;
+  width: 100%;
   padding: 40px 50px 30px 100px;
 }
 
-
-.logout_btn{
+.logout_btn {
   display: flex;
   margin: 15px;
   margin-left: auto;
 }
 
-.user_page{
+.user_page {
   background-color: #f3f2ef;
 }
+.user_profile_page {
+  background-color: #ffffff;
+  max-width: 800px;
+  margin: auto;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
 
+.profile_img {
+  height: 150px;
+  width: 150px;
+  border: 4px solid rgb(255, 255, 255);
+  border-radius: 50%;
+  position: relative;
+  bottom: 88px;
+}
+.cover_img_div {
+  position: relative;
+  height: 250px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.contents_profile {
+  position: relative;
+  top: -50px;
+}
+.profile_pic_dropdown {
+  background-color: rgb(0 159 255 / 12%) !important;
+  color: black !important;
+}
+.profile_pic_dropdown::after {
+  display: none !important;
+}
+
+.modal {
+  z-index: 1000; /* or any other value higher than other elements on the page */
+}
+
+.edit_cover {
+  padding: 10px 23px;
+  display: flex;
+  justify-content: flex-end;
+}
+.edit_cover span {
+  cursor: pointer;
+}
 @media only screen and (max-width: 768px) {
-  .admin_component{
+  .admin_component {
     padding: 33px 22px 29px 85px;
   }
-}
-
-@media only screen and (max-width: 460px) {
-  .admin_component{
-    padding: 15px 7px 8px 69px;
+  .profile_img {
+    height: 130px;
+    width: 130px;
   }
 }
 
+@media only screen and (max-width: 470px) {
+  .admin_component {
+    padding: 15px 7px 8px 69px;
+  }
+  .profile_img {
+    height: 100px;
+    width: 100px;
+    bottom: 65px;
+  }
+}

@@ -4,20 +4,22 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
 import { MdOutlineDateRange } from "react-icons/md";
 import { VscLocation } from "react-icons/vsc";
-import { getJob } from "../../services/userServices";
-import "./JobView.css"
-
+import {
+  applyJob,
+  cancelJobApplication,
+  getJob,
+} from "../../services/userServices";
+import "./JobView.css";
+import LoadingButton from "../loadingButton/LoadingButton";
 
 function JobVIew() {
   const navigate = useNavigate();
   const [job, setJob] = useState({});
   const [skill, setSkills] = useState([]);
+  const [applyLoading, setapplyLoading] = useState(false);
   const { id } = useParams();
-  console.log(id);
 
   useEffect(() => {
     const token = localStorage.getItem("userAuthToken");
@@ -28,70 +30,135 @@ function JobVIew() {
       .then((data) => {
         if (data.status) {
           const d = data.result;
-          console.log(data);
-          let { company } = d.hrID;
+          let { company ,name,email } = d.hrID;
           d.company = company;
+          d.name = name;
+          d.email = email;
           const { skills } = d;
           setSkills(skills);
+          d.applyloading = false;
           setJob(d);
           return;
         }
-        toast.error(data.message, { position: "top-left" });
+        toast.error(data.message);
       })
       .catch((error) => {
-        toast.error("Something Went Wrong", { position: "top-center" });
+        console.log(error);
+        toast.error("Something Went Wrong");
       });
-  }, [navigate,id]);
+  }, [navigate, id]);
+
+  const handleApply = () => {
+    try {
+      setapplyLoading(true);
+      const newJob = job;
+      setJob(newJob);
+      // applying for the job
+      applyJob(job._id).then((data) => {
+        setapplyLoading(false);
+
+        if (data.status) {
+          newJob.isApplied = true;
+          setJob(newJob);
+
+          toast.success(data.message, {
+            autoClose: 1000,
+          });
+        }
+      });
+    } catch (err) {
+      toast.error(err, "Something went wrong", { autoClose: 1000 });
+      setapplyLoading(false);
+    }
+  };
+  const handleCancel = () => {
+    try {
+      setapplyLoading(true);
+      const newJob = job;
+      setJob(newJob);
+      // applying for the job
+      cancelJobApplication(job._id).then((data) => {
+        setapplyLoading(false);
+        if (data.status) {
+          newJob.isApplied = false;
+          setJob(newJob);
+          toast.success(data.message, { autoClose: 1000 });
+        }
+      });
+    } catch (err) {
+      toast.error("Something went wrong", { autoClose: 1000 });
+      setapplyLoading(false);
+    }
+  };
   return (
-      
-      <div className="job_main_div bg-white px-5 py-4 m-3">
-        
-        <div className="">
-          <h1 className="">{job.job_type}</h1>
-          <p>
+    <div className="bg-white job_full_Details">
+      <h1 className="">{job.job_type}</h1>
+      <div className="d-flex job-details">
+        <div>
+          <p className="text-secondary ">
             <span className="text-secondary">{job.company}</span>
           </p>
-          <p className="text-secondary">
-            Department : <span className="text-secondary">{job.department}</span>{" "}
+          <p className="text-secondary m-0">
+            Department :
+            <span className="text-secondary">{job.department}</span>
           </p>
           <p className="text-secondary">
             Salary : <span>₹ {job.min_salary + " - " + job.max_salary}</span>
           </p>
+          <p className="highlight_div mt-4">
+            <VscLocation size={30} /> Location - {job.location}
+          </p>
+          <p className="highlight_div mt-4">
+            <MdOutlineDateRange size={30} /> Posted Date - {job.date}
+          </p>
+          <p className="m-1">
+            Uploaded By - {job.name}
+          </p>
+          <p className="">
+          {job.email}
+          </p>
 
-          <div className="">
+          {applyLoading ? (
+            <LoadingButton size="sm" className="apply_butn text-white " />
+          ) : job.isApplied ? (
+            <button onClick={handleCancel} className="apply_butn text-white">
+              Cancel Application
+            </button>
+          ) : (
+            <button onClick={handleApply} className="apply_butn text-white ">
+              Apply Now
+            </button>
+          )}
+        </div>
+
+        <div className="posterimgdiv">
           <img
             src={process.env.REACT_APP_BASE_URL + job.poster}
-            width={350}
-            height={450}
+            className="card-img"
             alt="job poster"
           />
         </div>
+      </div>
+      <h4 className="mt-4 mb-3">Job Description</h4>
+      <p className="">{job.description}</p>
 
-          <h4 className="mt-4 mb-3">Job Description</h4>
-          <p className="">{job.description}</p>
-          <p className="highlight_div">
-            <VscLocation size={30} /> Location - {job.location}
-          </p>
-          <p className="highlight_div">
-            <MdOutlineDateRange size={30} /> Posted Date- {job.date}
-          </p>
+      <div className="requirements_div pb-5">
+        <h3 className="my-3">Requirements</h3>
 
-          <div className="requirements_div pb-5">
-            <h3 className="my-3">Requirements</h3>
-
-            <h6 className="mb-4">Required Skills</h6>
-            <div className="skills_div m-2 p-2 mb-4">
-              {skill.map((item) => (
-                <span className="p-2 px-5 m-2">{item}</span>
-              ))}
-            </div>
-            <div className="mb-4 experience_div">
-              <h6 className="mb-4 ">Experience</h6>
-              <p>{job.experience}</p>
-            </div>
-          </div>
+        <h6 className="mb-4">Required Skills</h6>
+        <div className="skill_div m-2 p-2 mb-4">
+          {skill.map((item, i) => (
+            <span key={i} className="skill p-2 m-2">
+              {item}
+            </span>
+          ))}
+        </div>
+        <div className="mb-4 experience_div">
+          <h6 className="mb-4 ">Experience</h6>
+          <p>{job.experience}</p>
         </div>
       </div>
+    </div>
   );
 }
 

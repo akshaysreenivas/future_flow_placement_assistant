@@ -51,7 +51,6 @@ function AddJob() {
     e.preventDefault();
     state.skills = requiredSkills;
     state.image = poster;
-    console.log(poster);
     // validations
     // image validation
     if (!state.image)

@@ -1,0 +1,71 @@
+/* .profile_sidenav  {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 64px;
+    color: #818181;
+    left: 0;
+    background-color: #efeaea;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profile_sidenav  .sidelink {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .profile_sidenav  .sidelink:hover {
+    color: #1e5df1;
+  }
+  
+  .profile_sidenav  .closebtn {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  @media screen and (max-width: 450px) {
+    .profile_sidenav  {padding-top: 15px;}
+    .profile_sidenav  .sidelink {font-size: 18px;}
+    .profile_sidenav  {
+        width: 100%;
+    }
+
+  }
+  @media screen and (max-: 980px) {
+   
+  }
+  @media screen and (max-width: 450px) {
+    .profile_sidenav  {padding-top: 15px;}
+    .profile_sidenav  .sidelink {font-size: 18px;}
+  } */
+
+.Profile_link {
+    color: #313131;
+    font-weight: 600
+}
+.Profile_link:hover {
+    color: rgb(0, 0, 0);
+  background-color: #efefef;
+}
+.nav-pills .Profile_link.active {
+  color: blue;
+  background-color: #efefef;
+}
+
+/* .nav-pills .nav-link.active{
+    color: blueviolet;
+    background-color: aqua;
+} */

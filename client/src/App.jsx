@@ -28,7 +28,7 @@ function App() {
           <Route path={"/hr/*"} element={<HrRoutes />} />
         </Routes>
       }
-      <ToastContainer />
+      <ToastContainer newestOnTop limit={3} position="top-center"/>
     </>
   );
 }

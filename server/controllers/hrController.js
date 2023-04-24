@@ -49,7 +49,6 @@ module.exports.addjob = async (req, res, next) => {
         if (!experience) {
             experience = "No Prior Experience Needed";
         }
-        console.log("location", location);
         if (!department || !req.file || !job_type || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
         const imgUrl = "/images/" + req.file.filename;
         const newJob = new jobModel({

@@ -50,14 +50,13 @@ function Jobs() {
             }))
           );
 
-          console.log(jobs);
           return;
         }
-        toast.error(data.message, { position: "top-left" });
+        toast.error(data.message);
       })
       .catch((error) => {
         setLoading(false);
-        toast.error("Something Went Wrong", { position: "top-center" });
+        toast.error("Something Went Wrong");
       });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,18 +118,14 @@ function Jobs() {
                 setJobs(newJobs);
                 // applying for the job
                 applyJob(item._id).then((data) => {
-                  if (data) {
                     if (data.status) {
                       newJobs[jobsIndex].isApplied = true;
                       setJobs(newJobs);
+                      toast.success(data.message,{autoClose:1000});
                     }
-                    toast(data.message, {
-                      position: "top-center",
-                    });
-                  }
                 });
               } catch (err) {
-                toast("Something went wrong");
+                toast.error("Something went wrong",{autoClose:1000});
               } finally {
                 const updatedJobs = [...jobs];
                 const jobsIndex = updatedJobs.findIndex(
@@ -151,18 +146,14 @@ function Jobs() {
                 setJobs(newJobs);
                 // applying for the job
                 cancelJobApplication(item._id).then((data) => {
-                  if (data) {
                     if (data.status) {
                       newJobs[jobsIndex].isApplied = false;
-                      setJobs(newJobs);
-                    }
-                    toast(data.message, {
-                      position: "top-center",
-                    });
+                      setJobs(newJobs);              
+                    toast.success(data.message,{autoClose:1000});
                   }
                 });
               } catch (err) {
-                toast("Something went wrong");
+                toast.error("Something went wrong",{autoClose:1000});
               } finally {
                 const updatedJobs = [...jobs];
                 const jobsIndex = updatedJobs.findIndex(

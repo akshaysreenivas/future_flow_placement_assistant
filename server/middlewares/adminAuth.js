@@ -18,7 +18,6 @@ module.exports = async (req, res, next) => {
         req.admin = admin;
         next();
     } catch (error) {
-        console.log(error);
         res.status(401).json({ status: false,login:false, message: "Unauthorized" });
     }
 };

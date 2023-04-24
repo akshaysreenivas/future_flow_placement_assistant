@@ -75,7 +75,6 @@ function Login({ role, url }) {
         setLoading(false);
         if (data.status) {
           localStorage.setItem("userAuthToken", data.token);
-          console.log("loginuser",data.user)
             dispatch(
               setUserDetails( data.user )
             );
@@ -96,7 +95,6 @@ function Login({ role, url }) {
       try {
         const data = await hrLogin(email, password);
         setLoading(false);
-        console.log("data", data);
         if (data.status) {
           localStorage.setItem("hrAuthToken", data.token);
           return navigate("/hr/dashboard");

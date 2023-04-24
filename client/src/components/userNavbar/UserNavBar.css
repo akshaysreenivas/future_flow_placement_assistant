@@ -25,7 +25,7 @@
     position: sticky;
     top: 0;
     left: 0;
-    z-index: 999;
+    z-index: 900;
     transition: 0.3s ease-in;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0);

@@ -44,7 +44,6 @@ function AddUsers() {
     // calling api
     addUsers(state)
       .then((data) => {
-        console.log("data",data)
         setLoading(false);
         const newValues = {
           name: "",

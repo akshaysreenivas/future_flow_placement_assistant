@@ -9,7 +9,6 @@ import AdminUsersList from "../pages/admin/AdminUsersList";
 
 function AdminRouter() {
   return (
-    <>
       <Routes>
         <Route path="/" element={<AdminLogin />} />
         <Route path="/login" element={<AdminLogin />} />
@@ -19,7 +18,7 @@ function AdminRouter() {
         <Route path="/hrList" element={<AdminHrList />} />
         <Route path="/addHrManagers" element={<AdminAddHrManagers />} />
       </Routes>
-    </>
+   
   );
 }
 

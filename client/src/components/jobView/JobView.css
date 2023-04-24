@@ -1,12 +1,45 @@
-.job_main_div{
-    width: 800px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-
+.job_full_Details {
+  width: 800px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 4rem;
+  margin: 2rem;
 }
 
 @media only screen and (max-width: 426px) {
-    .job_main_div{
-        width: fit-content;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    }
+  .job_full_Details {
+    padding: 2rem;
+    margin: 0px;
   }
+}
+
+.apply_butn {
+  width: 25px;
+  height: 15px;
+  width: 10rem;
+  height: 3rem;
+  margin-top: 1rem;
+  margin-bottom: 20px;
+  background: #1532f9;
+  outline: none;
+  border: 1px transparent;
+  border-radius: 7px;
+}
+.job-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.skill_div {
+  display: flex;
+  flex-wrap: wrap;
+}
+.skill {
+  border: 1px solid #1532f9;
+  border-radius: 25px;
+}
+.posterimgdiv {
+  max-width: 250px;
+  max-height: 350px;
+  overflow: hidden;
+  background: center center/cover;
+}

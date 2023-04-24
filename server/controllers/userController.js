@@ -152,7 +152,6 @@ module.exports.cancelJobApplication = async (req, res, next) => {
 
 
 
-
 // fetching jobs which is alredy applied 
 module.exports.appliedJobs = async (req, res, next) => {
     try {
@@ -220,7 +219,6 @@ module.exports.addBasicInfo = async (req, res, next) => {
 // changing user password    
 module.exports.changePassword = async (req, res, next) => {
     try {
-        console.log(req.body);
         // getting id of the user         
         // const { _id } = req.user;
         const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
@@ -247,7 +245,6 @@ module.exports.changePassword = async (req, res, next) => {
 // adding experiences  
 module.exports.addExperiences = async (req, res, next) => {
     try {
-        console.log(req.body);
         // getting id of the user         
         // const { _id } = req.user;
         const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
@@ -270,7 +267,6 @@ module.exports.addExperiences = async (req, res, next) => {
 // adding skills  
 module.exports.addSkills = async (req, res, next) => {
     try {
-        console.log(req.body);
         // getting id of the user         
         // const { _id } = req.user;
         const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
@@ -291,7 +287,6 @@ module.exports.addSkills = async (req, res, next) => {
 // adding education   
 module.exports.addEducation = async (req, res, next) => {
     try {
-        console.log(req.body);
         // getting id of the user         
         // const { _id } = req.user;
         const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
@@ -310,7 +305,6 @@ module.exports.addEducation = async (req, res, next) => {
 };
 module.exports.addCertifications = async (req, res, next) => {
     try {
-        console.log(req.body);
         // getting id of the user         
         // const { _id } = req.user;
         const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
@@ -328,7 +322,6 @@ module.exports.addCertifications = async (req, res, next) => {
 };
 module.exports.addProjects = async (req, res, next) => {
     try {
-        console.log(req.body);
         // getting id of the user         
         // const { _id } = req.user;
         const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
@@ -343,7 +336,6 @@ module.exports.addProjects = async (req, res, next) => {
             description,
             url,
         };
-        console.log(newProject);
         const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $push: { projects: newProject } },
             { new: true, projection: { password: 0 } });
 
@@ -354,14 +346,12 @@ module.exports.addProjects = async (req, res, next) => {
 };
 module.exports.addAttachments = async (req, res, next) => {
     try {
-        console.log(req.body);
         // getting id of the user         
         // const { _id } = req.user;
         const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
         const url = "/images/" + req.file.filename;
         if (!url) throw new Error("can't upload image");
         const { name } = req.body;
-        console.log(url, name);
         const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $push: { attachments: { name, url } } },
             { new: true, projection: { password: 0 } });
 
@@ -371,20 +361,21 @@ module.exports.addAttachments = async (req, res, next) => {
         next(error);
     }
 };
+
 // updating  profile picture  
 module.exports.updateProfilePhoto = async (req, res, next) => {
     try {
-        console.log(req.body);
-        // getting id of the user         
-        // const { _id } = req.user;
-        const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
 
-        if (req.file) throw new Error("Can't Upload Profile Photo");
+        // getting id of the user         
+        const { _id } = req.user;
+           
+        if (!req.file) throw new Error("Can't Upload Profile Photo");
+
         const url = "/images/" + req.file.filename;
         const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $set: { profilePicUrl: url } },
             { new: true, projection: { password: 0 } });
-        if (req.body.oldProfilePic) {
-            Fs.unlinkSync("public" + req.body.oldProfilePic, (err => {
+        if (req.body.oldProfileImg && updatedUser) {
+            Fs.unlink("public" + req.body.oldProfileImg, (err => {
                 if (err) throw Error(err);
             }));
         }
@@ -399,20 +390,19 @@ module.exports.updateProfilePhoto = async (req, res, next) => {
 // updating cover photo  
 module.exports.updateCoverPhoto = async (req, res, next) => {
     try {
-        console.log(req.body);
         // getting id of the user         
-        // const { _id } = req.user;
-        const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
+        const { _id } = req.user;
+        // const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
 
-        if (req.file) throw new Error("Can't Upload Cover Photo");
+        if (!req.file) throw new Error("Can't Upload Cover Photo");
 
         const url = "/images/" + req.file.filename;
 
         const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $set: { coverPicUrl: url } },
             { new: true, projection: { password: 0 } });
-
-        if (req.body.oldCoverPic) {
-            Fs.unlinkSync("public" + req.body.oldCoverPic, (err => {
+        // deleting the old pic 
+        if (req.body.oldCoverImg && updatedUser) {
+            Fs.unlinkSync("public" + req.body.oldCoverImg, (err => {
                 if (err) throw Error(err);
             }));
         }
@@ -423,3 +413,15 @@ module.exports.updateCoverPhoto = async (req, res, next) => {
     }
 };
 
+// fetching user details 
+module.exports.getUserProfile = async (req, res, next) => {
+    try {
+        const { _id } = req.user;
+        // const _id = new mongoose.Types.ObjectId("643f94b40ca74eb7bde85b60");
+
+        const user = await userModel.findOne({ _id: _id }, { password: 0 });
+        res.status(200).json({ status: true, message: "success", user });
+    } catch (error) {
+        next(error);
+    }
+};

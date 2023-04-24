@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 // import controllers 
 const { JobDetails } = require("../controllers/jobsController");
-const { login, Jobs, appliedJobs, applyJob, cancelJobApplication, addBasicInfo, changePassword, addCertifications, addEducation, addSkills, addProjects, addAttachments, addExperiences, updateProfilePhoto, updateCoverPhoto, } = require("../controllers/userController");
+const { login, Jobs, appliedJobs, applyJob, cancelJobApplication, addBasicInfo, changePassword, addCertifications, addEducation, addSkills, addProjects, addAttachments, addExperiences, updateProfilePhoto, updateCoverPhoto, getUserProfile, } = require("../controllers/userController");
 const upload = require("../middlewares/multer");
 
 
@@ -24,6 +24,9 @@ router.post("/applyforJob/:id", userAuth, applyJob);
 
 // canceling the job application  
 router.post("/cancelJobapplication/:id", userAuth, cancelJobApplication);
+
+// fetching already applied jobs  
+router.get("/getUserDetails",userAuth, getUserProfile);
 
 // fetching already applied jobs  
 router.get("/appliedJobs", appliedJobs);
@@ -55,10 +58,10 @@ router.post("/addAttachments",upload.single("file") ,addAttachments);
 
 
 // adding profile pic  
-router.post("/addProfilePhoto",upload.single("profile"), updateProfilePhoto);
+router.post("/addProfilePhoto",userAuth,upload.single("profile"), updateProfilePhoto);
 
 // adding cover pic 
-router.post("/addCoverPhoto",upload.single("cover"), updateCoverPhoto);
+router.post("/addCoverPhoto",userAuth,upload.single("cover"), updateCoverPhoto);
 
 
 

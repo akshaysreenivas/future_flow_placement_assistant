@@ -48,7 +48,7 @@ function UserNavBar({ user }) {
           </Nav>
           <Nav>
             {user ? (
-              <Link to={"/login"} className="Link">
+              <Link to={"/profile"} className="Link">
                 Profile
               </Link>
             ) : (

@@ -1,0 +1,17 @@
+.basicInfo {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(255, 255, 255);
+  gap: 20px;
+}
+.info{
+    padding: 5px;
+    margin: 3px;
+}
+.info Span{
+ color: rgb(84, 84, 84);
+ font-size: small;
+}
+.info p{
+ color: rgb(0, 0, 0);
+}
