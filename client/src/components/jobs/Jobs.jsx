@@ -111,16 +111,16 @@ function Jobs() {
           </div>
         ) : jobs.length ? (
           jobs.map((item) => {
-            item.applyLoading = applyLoading;
             const handleApply = () => {
               try {
-                setapplyLoading(true);
                 const newJobs = [...jobs];
                 // finding the current row
                 const jobsIndex = newJobs.findIndex((u) => u._id === item._id);
                 // setting the loading animation
                 newJobs[jobsIndex].applyLoading = true;
                 setJobs(newJobs);
+                // setapplyLoading(true);
+
                 // applying for the job
                 applyJob(item._id).then((data) => {
                   if (data.status) {

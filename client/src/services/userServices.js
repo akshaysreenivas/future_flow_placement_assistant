@@ -26,7 +26,7 @@ export function applyJob(id) {
     return userInstance.post(`/applyforJob/${id}`);
 }
 // apply for the job 
-export function appliedJobs(i) {
+export function appliedJobs() {
     return userInstance.get(`/appliedJobs`);
 }
 
