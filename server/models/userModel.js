@@ -53,6 +53,9 @@ const userSchema = new mongoose.Schema({
         type: [mongoose.Types.ObjectId],
         ref: "jobs"
     },
+    location:{
+        type:Object
+    },
     experiences: [{
         company: String,
         title: String,

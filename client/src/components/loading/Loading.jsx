@@ -1,12 +1,13 @@
-import React from 'react'
+import React from "react";
 // import Spinner from 'react-bootstrap/Spinner';
-import "./Loading.css"
+import "./Loading.css";
 
 function Loading() {
   return (
     <>
-    <div class="lds-dual-ring"></div>    </>
-  )
+      <div className="lds-dual-ring"></div>{" "}
+    </>
+  );
 }
 
-export default Loading
+export default Loading;

@@ -49,10 +49,6 @@ function ProfilePage() {
     // eslint-disable-next-line
   }, [navigate]);
 
-  // // changing cover Photo
-  // const handleCoverChange = () => {};
-  // // changing profile Photo
-  // const handleProfileChange = () => {};
 
   return (
     <div className="user_page">
@@ -65,7 +61,6 @@ function ProfilePage() {
               background: `url(${coverPic}) no-repeat center center/cover`,
               height: "250px",
               width: "100%",
-              backgroundSize: "cover",
             }}
           >
             <div className="edit_cover">

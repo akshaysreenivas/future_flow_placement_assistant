@@ -25,7 +25,7 @@ function AddHr() {
 
     // name validation
     if (!state.name || state.name.match(/^\s*$/) || state.name.length < 3)
-      return toast.error("Valid student name required minimum 3 characters", {
+      return toast.error("Valid  name required minimum 3 characters", {
         position: "top-center",
       });
 
@@ -85,7 +85,7 @@ function AddHr() {
             <Form.Control
               type="text"
               name="company"
-              placeholder="Enter the eompany name"
+              placeholder="Enter the company name"
               value={state.company}
               id="company"
               onChange={handleInputChange}

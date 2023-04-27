@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { applyJob, cancelJobApplication, getAllJobs } from "../../services/userServices";
+import {
+  applyJob,
+  cancelJobApplication,
+  getAllJobs,
+} from "../../services/userServices";
 import { toast } from "react-toastify";
 import SearchBar from "../searchBar/SearchBar";
 import { MdOutlineLocationOn } from "react-icons/md";
@@ -22,7 +26,7 @@ function Jobs() {
   const [next, setNext] = useState();
   const [prev, setPrev] = useState();
   const [loading, setLoading] = useState(true);
-  const [applyLoading, setapplyLoading] = useState(true);
+  const [applyLoading, setapplyLoading] = useState(false);
   const navigate = useNavigate();
 
   // useeffect for calling api
@@ -107,6 +111,7 @@ function Jobs() {
           </div>
         ) : jobs.length ? (
           jobs.map((item) => {
+            item.applyLoading = applyLoading;
             const handleApply = () => {
               try {
                 setapplyLoading(true);
@@ -118,14 +123,14 @@ function Jobs() {
                 setJobs(newJobs);
                 // applying for the job
                 applyJob(item._id).then((data) => {
-                    if (data.status) {
-                      newJobs[jobsIndex].isApplied = true;
-                      setJobs(newJobs);
-                      toast.success(data.message,{autoClose:1000});
-                    }
+                  if (data.status) {
+                    newJobs[jobsIndex].isApplied = true;
+                    setJobs(newJobs);
+                    toast.success(data.message, { autoClose: 1000 });
+                  }
                 });
               } catch (err) {
-                toast.error("Something went wrong",{autoClose:1000});
+                toast.error("Something went wrong", { autoClose: 1000 });
               } finally {
                 const updatedJobs = [...jobs];
                 const jobsIndex = updatedJobs.findIndex(
@@ -146,15 +151,16 @@ function Jobs() {
                 setJobs(newJobs);
                 // applying for the job
                 cancelJobApplication(item._id).then((data) => {
-                    if (data.status) {
-                      newJobs[jobsIndex].isApplied = false;
-                      setJobs(newJobs);              
-                    toast.success(data.message,{autoClose:1000});
+                  if (data.status) {
+                    newJobs[jobsIndex].isApplied = false;
+                    setJobs(newJobs);
+                    toast.success(data.message, { autoClose: 1000 });
                   }
                 });
               } catch (err) {
-                toast.error("Something went wrong",{autoClose:1000});
+                toast.error("Something went wrong", { autoClose: 1000 });
               } finally {
+                setapplyLoading(false);
                 const updatedJobs = [...jobs];
                 const jobsIndex = updatedJobs.findIndex(
                   (u) => u._id === item._id
@@ -191,11 +197,20 @@ function Jobs() {
                         size="sm"
                         className="apply_btn text-white py-1 px-5"
                       />
+                    ) : item.isApplied ? (
+                      <button
+                        onClick={handleCancel}
+                        className="apply_btn text-white py-1 px-4"
+                      >
+                        Cancel
+                      </button>
                     ) : (
-
-                      item.isApplied ? <button  onClick={handleCancel}  className="apply_btn text-white py-1 px-4">Cancel</button>:
-                      <button onClick={handleApply} className="apply_btn text-white py-1 px-3">Apply Now</button>
-                     
+                      <button
+                        onClick={handleApply}
+                        className="apply_btn text-white py-1 px-3"
+                      >
+                        Apply Now
+                      </button>
                     )}
 
                     <Link to={`/jobdetails/${item._id}`}>
