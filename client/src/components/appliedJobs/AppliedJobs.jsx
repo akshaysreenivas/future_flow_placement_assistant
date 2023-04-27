@@ -1,12 +1,18 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { appliedJobs, applyJob, cancelJobApplication } from "../../services/userServices";
+import {
+  appliedJobs,
+  applyJob,
+  cancelJobApplication,
+} from "../../services/userServices";
 import { toast } from "react-toastify";
 import { MdOutlineLocationOn } from "react-icons/md";
 import Pagination from "../pagination/Pagination";
 import Loading from "../loading/Loading";
 import LoadingButton from "../loadingButton/LoadingButton";
+import SearchBar from "../searchBar/SearchBar";
+import Swal from "sweetalert2";
 
 function AppliedJobs() {
   const [jobs, setJobs] = useState([]);
@@ -18,12 +24,12 @@ function AppliedJobs() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-// useEffect for calling api
+  // useEffect for calling api
   useEffect(() => {
     setLoading(true);
     const token = localStorage.getItem("userAuthToken");
     if (!token || token === "undefined") return navigate("/login");
-    // fetching the datas 
+    // fetching the datas
     appliedJobs(page)
       .then((data) => {
         setLoading(false);
@@ -34,6 +40,7 @@ function AppliedJobs() {
           setTotal(data.total);
           setLimit(data.limit);
           const d = data.result;
+          console.log(d);
           setJobs(
             d.map((jobs) => ({
               ...jobs,
@@ -48,85 +55,60 @@ function AppliedJobs() {
       })
       .catch((error) => {
         setLoading(false);
-        toast.error(error,"Something Went Wrong");
+        toast.error(error, "Something Went Wrong");
       });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, navigate]);
 
   return (
-    <div className="">
+    <div className="jobs_parent_div my-3 p-3">
       <div className="mb-4">
-        <h3 className="">
-          Jobs that are applied.
-        </h3>
+        <h1>
+          Applied <span className="text-primary">Jobs</span>
+        </h1>
+        <h6 className="text-secondary">Your applied jobs, all in one place.</h6>
       </div>
-     
-    
-      <div className="JobsDi m-3 ">
+
+      <div className="JobsDiv m-3 ">
         {loading ? (
           <div className="d-flex justify-content-center mx-auto my-5">
             <Loading />
           </div>
         ) : jobs.length ? (
           jobs.map((item) => {
-            const handleApply = () => {
-              try {
-
-                const newJobs = [...jobs];
-                // finding the current row
-                const jobsIndex = newJobs.findIndex((u) => u._id === item._id);
-                // setting the loading animation
-                newJobs[jobsIndex].applyLoading = true;
-                setJobs(newJobs);
-                // applying for the job
-                applyJob(item._id).then((data) => {
-                    if (data.status) {
-                      newJobs[jobsIndex].isApplied = true;
-                      setJobs(newJobs);
-                      toast.success(data.message,{autoClose:1000});
-                    }
-                });
-              } catch (err) {
-                toast.error("Something went wrong",{autoClose:1000});
-              } finally {
-                const updatedJobs = [...jobs];
-                const jobsIndex = updatedJobs.findIndex(
-                  (u) => u._id === item._id
-                );
-                updatedJobs[jobsIndex].applyLoading = false;
-                setJobs(updatedJobs);
-              }
-            };
             const handleCancel = () => {
-              try {
-                const newJobs = [...jobs];
-                // finding the current row
-                const jobsIndex = newJobs.findIndex((u) => u._id === item._id);
-                // setting the loading animation
-                newJobs[jobsIndex].applyLoading = true;
-                setJobs(newJobs);
-                // applying for the job
-                cancelJobApplication(item._id).then((data) => {
-                    if (data.status) {
-                      newJobs[jobsIndex].isApplied = false;
-                      setJobs(newJobs);              
-                    toast.success(data.message,{autoClose:1000});
+              Swal.fire({
+                title: "Are you sure?",
+                icon: "warning",
+                width: 450,
+                heightAuto: false,
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes!",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  try {
+                    // applying for the job
+                    cancelJobApplication(item._id).then((data) => {
+                      if (data.status) {
+                        const newJobs = [...jobs];
+                        const updated = newJobs.filter(
+                          (u) => u._id !== item._id
+                        );
+                        setJobs(updated);
+                        toast.success(data.message, { autoClose: 1000 });
+                      }
+                    });
+                  } catch (err) {
+                    toast.error("Something went wrong", { autoClose: 1000 });
                   }
-                });
-              } catch (err) {
-                toast.error("Something went wrong",{autoClose:1000});
-              } finally {
-                const updatedJobs = [...jobs];
-                const jobsIndex = updatedJobs.findIndex(
-                  (u) => u._id === item._id
-                );
-                updatedJobs[jobsIndex].applyLoading = false;
-                setJobs(updatedJobs);
-              }
+                }
+              });
             };
             return (
-              <div key={item._id} className="job_di gap-2 p-3  my-3">
+              <div key={item._id} className="job_div gap-2 p-3  my-3">
                 <div>
                   <img
                     src={process.env.REACT_APP_BASE_URL + item.poster}
@@ -143,18 +125,17 @@ function AppliedJobs() {
                   <span className="text-secondary ms-4">
                     &#x20b9; {item.min_salary + " - " + item.max_salary}
                   </span>
+                  <p>
+                    {item.description.split(" ").slice(0, 30).join(" ")}
+                    {". . ."}
+                  </p>
                   <div className="action_btn_div">
-                    {item.applyLoading ? (
-                      <LoadingButton
-                        size="sm"
-                        className="apply_btn text-white py-1 px-5"
-                      />
-                    ) : (
-
-                      item.isApplied ? <button  onClick={handleCancel}  className="apply_btn text-white py-1 px-4">Cancel</button>:
-                      <button onClick={handleApply} className="apply_btn text-white py-1 px-3">Apply Now</button>
-                     
-                    )}
+                    <button
+                      onClick={handleCancel}
+                      className="apply_btn text-white py-1 px-4"
+                    >
+                      Cancel
+                    </button>
 
                     <Link to={`/jobdetails/${item._id}`}>
                       <button className="view_btn py-1 bg-white px-3">

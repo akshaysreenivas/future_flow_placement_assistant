@@ -158,8 +158,10 @@ module.exports.applyJob = async (req, res, next) => {
         await jobModel.updateOne({ _id: req.params.id }, { $addToSet: { applicants: _id } });
         // adding the job details in the user profile
         await userModel.updateOne({ _id: _id }, { $addToSet: { appliedJobs: req.params.id } });
+        setTimeout(() => {
 
-        // res.status(200).json({ status: true, message: "successfully applied" });
+            res.status(200).json({ status: true, message: "successfully applied" });
+        }, 2000);
     } catch (error) {
         next(error);
     }
@@ -209,7 +211,7 @@ module.exports.appliedJobs = async (req, res, next) => {
         // find the jobs where the _id is in the jobIds array
         const jobs = await jobModel.find(query, { "applicants": 0, "hrID": 0 }).lean();
 
-        res.status(200).json({ status: true, message: "success", jobs });
+        res.status(200).json({ status: true, message: "success", result: jobs });
 
     } catch (error) {
         next(error);
