@@ -6,6 +6,7 @@ import JobDetails from "../pages/users/JobDetails";
 import JobsPage from "../pages/users/JobsPage";
 import UserLogin from "../pages/users/UserLogin";
 import ProfilePage from "../pages/users/ProfilePage";
+import AppliedJobsPage from "../pages/users/AppliedJobs";
 
 function UserRouter() {
   return (
@@ -17,7 +18,7 @@ function UserRouter() {
         <Route path="/login" element={<UserLogin />} />
         <Route path="/jobdetails/:id" element={<JobDetails/>} />
         <Route path="/profile" element={<ProfilePage/>} />
-        <Route path="/challenges" element={<ProfilePage />} />
+        <Route path="/appliedJobs" element={<AppliedJobsPage />} />
       </Routes>
  
   );

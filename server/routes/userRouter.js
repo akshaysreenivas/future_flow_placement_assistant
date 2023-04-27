@@ -2,7 +2,9 @@ const router = require("express").Router();
 
 // import controllers 
 const { JobDetails } = require("../controllers/jobsController");
-const { login, Jobs, appliedJobs, applyJob, cancelJobApplication, addBasicInfo, changePassword, addCertifications, addEducation, addSkills, addProjects, addAttachments, addExperiences, updateProfilePhoto, updateCoverPhoto, getUserProfile, } = require("../controllers/userController");
+const { login, Jobs, appliedJobs, applyJob, cancelJobApplication, addBasicInfo, changePassword,
+    addCertifications, addEducation, addSkills, addProjects, addAttachments, addExperiences, updateProfilePhoto,
+    updateCoverPhoto, getUserProfile, deleteExperience, deleteCertification, deleteSkill, deleteProject, deleteAttachment, deleteEducation, editExperience, editSkill, editCertification, editEducation, editProject } = require("../controllers/userController");
 const upload = require("../middlewares/multer");
 
 
@@ -25,43 +27,74 @@ router.post("/applyforJob/:id", userAuth, applyJob);
 // canceling the job application  
 router.post("/cancelJobapplication/:id", userAuth, cancelJobApplication);
 
-// fetching already applied jobs  
-router.get("/getUserDetails",userAuth, getUserProfile);
+// fetching user details 
+router.get("/getUserDetails", userAuth, getUserProfile);
 
 // fetching already applied jobs  
-router.get("/appliedJobs", appliedJobs);
+router.get("/appliedJobs", userAuth, appliedJobs);
 
 // adding basic information 
-router.post("/basicInfo", addBasicInfo);
+router.post("/basicInfo", userAuth, addBasicInfo);
 
 // updating password 
-router.post("/changePassword", changePassword);
+router.put("/changePassword", userAuth, changePassword);
 
 // adding Certifications
-router.post("/addCertifications", addCertifications);
+router.post("/addCertifications", userAuth, addCertifications);
+
+// delete Certification
+router.delete("/deleteCertification/:id", userAuth, deleteCertification);
+
+// editing Certification
+router.patch("/editCertification/:id", userAuth, editCertification);
 
 // adding education history 
-router.post("/addEducation", addEducation);
+router.post("/addEducation", userAuth, addEducation);
+
+// delete education history 
+router.delete("/deleteEducation/:id", userAuth, deleteEducation);
+
+// editing education history 
+router.patch("/editEducation/:id", userAuth, editEducation);
 
 // adding users skills 
-router.post("/addSkills", addSkills);
+router.post("/addSkills", userAuth, addSkills);
+
+// delete users skills 
+router.delete("/deleteSkill/:id", userAuth, deleteSkill);
+
+// editing users skills 
+router.patch("/editSkill/:id", userAuth,editSkill);
 
 // adding projects by user 
-router.post("/addProjects", addProjects);
+router.post("/addProjects", userAuth, addProjects);
+
+// delete projects by user 
+router.delete("/deleteProject/:id", userAuth, deleteProject);
+
+// edit projects by user 
+router.patch("/editProject/:id", userAuth, editProject);
 
 // adding experience  
-router.post("/addExperiences", addExperiences);
+router.post("/addExperiences", userAuth, addExperiences);
 
+// delete experience  
+router.delete("/deleteExperience/:id", userAuth, deleteExperience);
+
+// edit experience  
+router.patch("/editExperience/:id", userAuth, editExperience);
 
 // adding attachments like resume and othey certificates 
-router.post("/addAttachments",upload.single("file") ,addAttachments);
+router.post("/addAttachments", userAuth, upload.documentUpload, addAttachments);
 
+// deleting attachments
+router.delete("/deleteAttachment/:id", userAuth, deleteAttachment);
 
 // adding profile pic  
-router.post("/addProfilePhoto",userAuth,upload.single("profile"), updateProfilePhoto);
+router.post("/addProfilePhoto", userAuth, upload.imageUpload, updateProfilePhoto);
 
 // adding cover pic 
-router.post("/addCoverPhoto",userAuth,upload.single("cover"), updateCoverPhoto);
+router.post("/addCoverPhoto", userAuth, upload.imageUpload, updateCoverPhoto);
 
 
 

@@ -38,13 +38,13 @@ function EditCoverPhoto({
         if (data.status) {
           dispatch(setUserDetails(data.user));
           setShow(false);
-          setCover("");
+          setCover(null);
           setCoverPic(URL.createObjectURL(cover));
           setOldCoverImg(data.user.profilePicUrl);
           toast.success("Successfully Updated");
         } else {
           setShow(false);
-          setCover("");
+          setCover(null);
           toast.error("Something went Wrong");
         }
         setLoading(false);

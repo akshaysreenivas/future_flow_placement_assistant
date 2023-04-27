@@ -23,16 +23,14 @@ function EditProfilePhoto({
 
   const handleClose = () => {
     setShow(false);
-    setProfile("");
+    setProfile(null);
   };
   const handleShow = () => setShow(true);
 
   const handleSubmit = () => {
     // checking for the correct image type
     if (!/^image\/(jpe?g|png|gif|webp)$/.test(profile.type)) {
-      return toast.error("Please Provide a valid image extension", {
-        position: "top-center",
-      });
+      return toast.error("Please Provide a valid image extension");
     }
     try {
       setLoading(true);
@@ -40,13 +38,13 @@ function EditProfilePhoto({
         if (data.status) {
           dispatch(setUserDetails(data.user));
           setShow(false);
-          setProfile("");
           setProfilePic(URL.createObjectURL(profile));
           setOldProfileImg(data.user.profilePicUrl);
           toast.success("Successfully Updated");
+          setProfile(null);
         } else {
+          setProfile(null);
           setShow(false);
-          setProfile("");
           toast.error("Something went Wrong");
         }
         setLoading(false);

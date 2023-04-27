@@ -14,7 +14,7 @@ const upload = require("../middlewares/multer");
 router.post("/login", login);
 
 // adding jobs 
-router.post("/addJob", hrAuth,upload.single("image"), addjob);
+router.post("/addJob", hrAuth,upload.imageUpload, addjob);
 
 // fetch all jobs 
 router.get("/getJobs", hrAuth, getAllJobPosts);
@@ -23,7 +23,7 @@ router.get("/getJobs", hrAuth, getAllJobPosts);
 router.get("/getJobs/getdetails/:id", hrAuth, JobDetails);
 
 // edit job details 
-router.put("/editJobdetails/:id", hrAuth,upload.single("image"), editJob);
+router.put("/editJobdetails/:id", hrAuth ,upload.imageUpload, editJob);
 
 // changing job status 
 router.patch("/changeJobStatus", hrAuth, changeJobStatus);

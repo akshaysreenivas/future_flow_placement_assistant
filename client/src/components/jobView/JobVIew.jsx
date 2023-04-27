@@ -30,6 +30,7 @@ function JobVIew() {
       .then((data) => {
         if (data.status) {
           const d = data.result;
+          console.log(d)
           let { company ,name,email } = d.hrID;
           d.company = company;
           d.name = name;
@@ -38,6 +39,7 @@ function JobVIew() {
           setSkills(skills);
           d.applyloading = false;
           setJob(d);
+
           return;
         }
         toast.error(data.message);

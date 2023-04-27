@@ -29,15 +29,12 @@ function UserNavBar({ user }) {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className=" nav-items">
+          <Nav className=" nav-items d-flex align-items-center">
             <Link to={"/"} className="Link ">
               Home
             </Link>
             <Link to={"/jobs"} className="Link">
               Jobs
-            </Link>
-            <Link to={"/challenges"} className="Link">
-              Challenges
             </Link>
             <Link to={"/"} className="Link">
               Contact
@@ -45,8 +42,6 @@ function UserNavBar({ user }) {
             <Link to={"/"} className="Link">
               About
             </Link>
-          </Nav>
-          <Nav>
             {user ? (
               <Link to={"/profile"} className="Link">
                 Profile
@@ -56,14 +51,21 @@ function UserNavBar({ user }) {
                 login
               </Link>
             )}
+            {user && (
+              <Link to={"/appliedJobs"} className="Link">
+                Applied Jobs
+              </Link>
+            )}
           </Nav>
-         { user && <Nav
-            className="logout_btn d-flex flex-row align-content-center text-md-danger me-1"
-            onClick={handleLogout}
-          >
-            <span className="me-1">Logout</span>
-            <RiLogoutCircleRLine size={15} />
-          </Nav>}
+          {user && (
+            <Nav
+              className="logout_btn d-flex flex-row align-content-center text-md-danger me-1"
+              onClick={handleLogout}
+            >
+              <span className="me-1">Logout</span>
+              <RiLogoutCircleRLine size={15} />
+            </Nav>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>
