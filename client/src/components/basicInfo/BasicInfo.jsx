@@ -17,8 +17,8 @@ function BasicInfo() {
             src="user_default.avif"
             width={25}
             alt=""
-          />{" "}
-          Basic Information{" "}
+          />
+          Basic Information
         </h3>
         <AddBasicInfo />
       </div>
@@ -54,7 +54,6 @@ function BasicInfo() {
         </div>
       ) : (
         <div className="d-flex align-items-center justify-content-center py-5">
-          {" "}
           <Loading />
         </div>
       )}

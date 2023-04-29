@@ -54,7 +54,7 @@ function ProfilePage() {
     <div className="user_page">
       <UserNavBar user={true} />
       <div className="user_profile_page">
-        <div className="profile_images">
+        <div className="profile_images ">
           <div
             className="cover_img_div"
             style={{
@@ -82,7 +82,7 @@ function ProfilePage() {
                 oldProfileImg={oldProfileImg}
                 setProfilePic={setProfilePic}
               />
-              <h4>{user?.name}</h4>
+              <h3>{user?.name}</h3>
             </div>
           </div>
         </div>
