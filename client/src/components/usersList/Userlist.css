@@ -6,7 +6,7 @@ border: 1px solid black !important;
     padding:20px 50px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 5px;
-    background-color: whitesmoke;
+    background-color: rgb(255, 255, 255);
 }
 .table_div h2{
     margin-top:0;

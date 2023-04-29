@@ -3,15 +3,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   appliedJobs,
-  applyJob,
   cancelJobApplication,
 } from "../../services/userServices";
 import { toast } from "react-toastify";
 import { MdOutlineLocationOn } from "react-icons/md";
 import Pagination from "../pagination/Pagination";
 import Loading from "../loading/Loading";
-import LoadingButton from "../loadingButton/LoadingButton";
-import SearchBar from "../searchBar/SearchBar";
 import Swal from "sweetalert2";
 
 function AppliedJobs() {
@@ -44,11 +41,9 @@ function AppliedJobs() {
           setJobs(
             d.map((jobs) => ({
               ...jobs,
-              applyLoading: false,
               isApplied: false,
             }))
           );
-
           return;
         }
         toast.error(data.message);
@@ -57,7 +52,6 @@ function AppliedJobs() {
         setLoading(false);
         toast.error(error, "Something Went Wrong");
       });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, navigate]);
 
@@ -126,7 +120,7 @@ function AppliedJobs() {
                     &#x20b9; {item.min_salary + " - " + item.max_salary}
                   </span>
                   <p>
-                    {item.description.split(" ").slice(0, 30).join(" ")}
+                    {item.description.split(" ").slice(0, 10).join(" ")}
                     {". . ."}
                   </p>
                   <div className="action_btn_div">

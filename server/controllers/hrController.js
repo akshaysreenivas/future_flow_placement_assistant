@@ -44,16 +44,17 @@ module.exports.addjob = async (req, res, next) => {
     try {
         if (!req.file) throw new Error("can't upload image");
         const hrID = req.user.id;
-        let { department, job_type, location, skills, experience, min_salary, max_salary, description } = req.body;
+        let { department, job_type, location, skills, experience, min_salary, max_salary, job_role, description } = req.body;
         // checking if the values are null
         if (!experience) {
             experience = "No Prior Experience Needed";
         }
-        if (!department || !req.file || !job_type || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
+        if (!department || !req.file || !job_type || !job_role || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
         const imgUrl = "/images/" + req.file.filename;
         const newJob = new jobModel({
             department: department,
             job_type: job_type,
+            job_role: job_role,
             skills: skills,
             experience: experience,
             min_salary: min_salary,
@@ -75,13 +76,13 @@ module.exports.editJob = async (req, res, next) => {
     try {
 
         const { id } = req.params;
-        let { department, job_type, location, skills, experience, min_salary, max_salary, description } = req.body;
+        let { department, job_type, location, skills, experience, min_salary, max_salary, job_role, description } = req.body;
         // checking if the values are null
         if (!experience) {
             experience = "No Prior Experience Needed";
         }
 
-        if (!department || !job_type || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
+        if (!department || !job_type || !job_role || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
         let imgUrl;
         if (req.file) {
             imgUrl = "/images/" + req.file.filename;
@@ -97,6 +98,7 @@ module.exports.editJob = async (req, res, next) => {
             $set: {
                 department: department,
                 job_type: job_type,
+                job_role: job_role,
                 location: location,
                 skills: skills,
                 experience: experience,
@@ -152,11 +154,11 @@ module.exports.getAllJobPosts = async (req, res, next) => {
         sortObject[sort] = order;
 
         // quering the job based on the FileSystemEntry,sort,search  
-        const jobs = await jobModel.find(query).sort(sortObject).skip(startIndex).limit(limit);
+        const jobs = await jobModel.find(query).sort(sortObject).skip(startIndex).limit(limit).lean();
 
         // quering all the distinct departments  
         const dep = await jobModel.find({ hrID: hrID }).distinct("department");
-
+        jobs.map((item) => item.applicants = item.applicants.length);
         // counting the total no of documentes available based on the filerstions   
         const total = await jobModel.countDocuments(query);
         // constructing the response   
@@ -192,6 +194,24 @@ module.exports.changeJobStatus = async (req, res, next) => {
         const result = await jobModel.findByIdAndUpdate({ _id: id }, { $set: { active: status } }).exec();
         if (result == null) throw new Error("Can't Find a matching Entry");
         res.status(200).json({ status: true, message: "Successfully updated Job Status" });
+    } catch (error) {
+        next(error);
+    }
+
+};
+
+module.exports.getCandidates = async (req, res, next) => {
+    try {
+
+        const result = await jobModel.find({ _id: req.params.id }, { "applicants.id": 1, "applicants.progress": 1 })
+            .populate({ path: "applicants.id", select: { name: 1, email: 1, studentID: 1, phone: 1, profilePicUrl: 1 } });
+
+        if (result == null) throw new Error("Can't Find a matching Entry");
+
+        if (result[0].applicants.progress.length <= 0) {
+            return res.status(200).json({ status: false, message: "No Applicants" });
+        }
+        res.status(200).json({ status: true, message: "success", result: result[0].applicants });
     } catch (error) {
         next(error);
     }

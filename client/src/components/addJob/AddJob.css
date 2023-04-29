@@ -22,8 +22,9 @@
   overflow: hidden;
   border-radius: 10px;
   border: 2px dotted;
+  object-fit: contain;
 }
 
 .form_div{
-  max-width: 1500px;
+  max-width: 1000px;
 }

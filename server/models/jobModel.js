@@ -26,11 +26,28 @@ const jobSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    applicants: { type: [mongoose.Types.ObjectId], ref: "users" }
-
+    applicants: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "users",
+            required: true
+        },
+        progress: [{
+            status: {
+                type: String,
+                required: true
+            },
+            date: {
+                type: Date,
+                default: Date.now
+            }
+        }]
+    },
+    notification: [{
+        notification_type: String,
+        message: String,
+        date: { type: Date, default: Date.now }, // date when the notification was created
+        isRead: { type: Boolean, default: false }
+    }]
 });
-
-
-
-
 module.exports = mongoose.model("jobs", jobSchema);

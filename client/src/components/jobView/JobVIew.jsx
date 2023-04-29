@@ -13,12 +13,14 @@ import {
 } from "../../services/userServices";
 import "./JobView.css";
 import LoadingButton from "../loadingButton/LoadingButton";
+import Loading from "../loading/Loading";
 
 function JobVIew() {
   const navigate = useNavigate();
   const [job, setJob] = useState({});
   const [skill, setSkills] = useState([]);
   const [applyLoading, setapplyLoading] = useState(false);
+  const [LoadingData, setLoadingData] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
@@ -39,7 +41,7 @@ function JobVIew() {
           setSkills(skills);
           d.applyloading = false;
           setJob(d);
-
+          setLoadingData(false)
           return;
         }
         toast.error(data.message);
@@ -94,7 +96,10 @@ function JobVIew() {
   };
   return (
     <div className="bg-white job_full_Details">
-      <h1 className="">{job.job_type}</h1>
+    {!LoadingData ? 
+      <>
+      <h1 className="">{job.job_role}</h1>
+      <h6 className="">{job.job_type}</h6>
       <div className="d-flex job-details">
         <div>
           <p className="text-secondary ">
@@ -160,6 +165,11 @@ function JobVIew() {
           <p>{job.experience}</p>
         </div>
       </div>
+      </>
+      :<div className="d-flex align-items-center justify-content-center p-5">
+      <Loading/>
+      </div>
+    }
     </div>
   );
 }

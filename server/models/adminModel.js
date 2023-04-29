@@ -9,6 +9,12 @@ const AdminSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    notification: [{
+        notification_type: String,
+        message: String,
+        date: { type: Date, default: Date.now }, // date when the notification was created
+        isRead: { type: Boolean, default: false }
+    }]
 });
 
 

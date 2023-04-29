@@ -47,11 +47,11 @@ function ListJobs() {
           setJobs(d.map((job) => ({ ...job, loading: false })));
           return;
         }
-        toast.error(data.message, { position: "top-left" });
+        toast.error(data.message);
       })
       .catch((error) => {
         setLoading(false);
-        toast.error("Something Went Wrong", { position: "top-center" });
+        toast.error("Something Went Wrong");
       });
   }, [page, search, sort, navigate, filter, limit, status]);
 
@@ -97,7 +97,11 @@ function ListJobs() {
             <option value="5">Show 5</option>
             <option value="10">Show 10</option>
           </Form.Select>
-          <SearchBar value={search} placeholder={"Search"} setSearch={setSearch} />
+          <SearchBar
+            value={search}
+            placeholder={"Search"}
+            setSearch={setSearch}
+          />
         </div>
         <div className="filter_div my-3">
           <Form.Select
@@ -174,6 +178,7 @@ function ListJobs() {
               <th>Salary Range (₹) </th>
               <th>Required skills </th>
               <th>Status</th>
+              <th>Applicants</th>
               <th>More info</th>
               <th>Actions</th>
             </tr>
@@ -227,7 +232,7 @@ function ListJobs() {
                   <td>
                     <img
                       src={process.env.REACT_APP_BASE_URL + item.poster}
-                      width={50}
+                      width={60}
                       alt=""
                     />
                   </td>
@@ -251,11 +256,25 @@ function ListJobs() {
                     {item.active ? "Active" : "Inactive"}
                   </td>
                   <td>
+                    <div className="d-flex p-1 justify-content-center">
+                      {item.applicants > 0 ? (
+                        <Link
+                        className="link text-light d-flex p-1 justify-content-center"
+                        to={`/hr/jobs/getCandidates/${item._id}`}
+                        >
+                        <Button className="bg-info">
+                        View
+                          </Button>
+                          </Link>
+                      ):(item.applicants)}
+                    </div>
+                  </td>
+                  <td >
                     <Link
-                      className="link"
-                      to={`/hr/jobs/JobDeatils/${item._id}`}
+                      className="link d-flex p-1 justify-content-center "
+                      to={`/hr/jobs/JobDetails/${item._id}`}
                     >
-                      More...
+                     <Button className="bg-info">View more</Button>
                     </Link>
                   </td>
                   <td className="text-center text-dark">

@@ -45,3 +45,14 @@ export function changeJobStatus(status ,id) {
 
 }
 
+// changing job status      
+export function getCandidates(id) {
+    return hrInstance.get(`/getCandidates/${id}`);
+
+}
+// changing job status      
+export function getCandidateProfile(id) {
+    return hrInstance.get(`/getCandidateProfile/${id}`);
+
+}
+

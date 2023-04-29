@@ -26,7 +26,6 @@ function Jobs() {
   const [next, setNext] = useState();
   const [prev, setPrev] = useState();
   const [loading, setLoading] = useState(true);
-  const [applyLoading, setapplyLoading] = useState(false);
   const navigate = useNavigate();
 
   // useeffect for calling api
@@ -49,7 +48,7 @@ function Jobs() {
           setJobs(
             d.map((jobs) => ({
               ...jobs,
-              applyLoading: false,
+              apply: false,
               isApplied: false,
             }))
           );
@@ -114,12 +113,11 @@ function Jobs() {
             const handleApply = () => {
               try {
                 const newJobs = [...jobs];
-                // finding the current row
+                // // finding the current row
                 const jobsIndex = newJobs.findIndex((u) => u._id === item._id);
-                // setting the loading animation
-                newJobs[jobsIndex].applyLoading = true;
-                setJobs(newJobs);
-                // setapplyLoading(true);
+                // // setting the loading animation
+                newJobs[jobsIndex].apply = true;
+                    setJobs(newJobs);
 
                 // applying for the job
                 applyJob(item._id).then((data) => {
@@ -136,19 +134,20 @@ function Jobs() {
                 const jobsIndex = updatedJobs.findIndex(
                   (u) => u._id === item._id
                 );
-                updatedJobs[jobsIndex].applyLoading = false;
+                updatedJobs[jobsIndex].apply = false;
                 setJobs(updatedJobs);
               }
             };
             const handleCancel = () => {
               try {
-                setapplyLoading(true);
                 const newJobs = [...jobs];
                 // finding the current row
                 const jobsIndex = newJobs.findIndex((u) => u._id === item._id);
                 // setting the loading animation
-                newJobs[jobsIndex].applyLoading = true;
+                newJobs[jobsIndex].apply = true;
+
                 setJobs(newJobs);
+                
                 // applying for the job
                 cancelJobApplication(item._id).then((data) => {
                   if (data.status) {
@@ -160,12 +159,11 @@ function Jobs() {
               } catch (err) {
                 toast.error("Something went wrong", { autoClose: 1000 });
               } finally {
-                setapplyLoading(false);
                 const updatedJobs = [...jobs];
                 const jobsIndex = updatedJobs.findIndex(
                   (u) => u._id === item._id
                 );
-                updatedJobs[jobsIndex].applyLoading = false;
+                updatedJobs[jobsIndex].apply = false;
                 setJobs(updatedJobs);
               }
             };
@@ -180,7 +178,8 @@ function Jobs() {
                 </div>
                 <div>
                   <span className="text-secondary">{item.department}</span>
-                  <h4 className="text-primary">{item.job_type}</h4>
+                  <h4 className="text-primary">{item.job_role}</h4>
+                  <h6 className="text-black">{item.job_type}</h6>
                   <span className="text-secondary">
                     <MdOutlineLocationOn /> {item.location}
                   </span>
@@ -192,12 +191,12 @@ function Jobs() {
                     {". . ."}
                   </p>
                   <div className="action_btn_div">
-                    {item.applyLoading ? (
+                    {item.apply ? (
                       <LoadingButton
                         size="sm"
                         className="apply_btn text-white py-1 px-5"
                       />
-                    ) : item.isApplied ? (
+                    ) :item.isApplied ? (
                       <button
                         onClick={handleCancel}
                         className="apply_btn text-white py-1 px-4"

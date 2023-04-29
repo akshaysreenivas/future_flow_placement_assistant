@@ -115,7 +115,7 @@ function AddEducation({ edit }) {
             <Form.Control
               type="text"
               name="degree"
-              placeholder="Enter the Role"
+              placeholder="Ex : Bachelor's"
               value={state.degree}
               onChange={handleInputChange}
             />

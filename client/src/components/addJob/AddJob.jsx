@@ -12,6 +12,7 @@ function AddJob() {
   const [state, setState] = useState({
     department: "",
     job_type: "",
+    job_role:"",
     location: "",
     experience: "",
     min_salary: "",
@@ -54,52 +55,41 @@ function AddJob() {
     // validations
     // image validation
     if (!state.image)
-      return toast.error("Poster image required", {
-        position: "top-center",
-      });
+      return toast.error("Poster image required");
+
     // checking for the correct image type
     if (!/^image\/(jpe?g|png|gif|webp)$/.test(state.image.type)) {
-      return toast.error("Please Provide a valid image extension", {
-        position: "top-center",
-      });
+      return toast.error("Please Provide a valid image extension");
     }
 
     if (!state.department || state.department.match(/^\s*$/))
-      return toast.error("Department field required", {
-        position: "top-center",
-      });
+      return toast.error("Department field required");
 
     if (!state.job_type || state.job_type.match(/^\s*$/))
-      return toast.error("Job Type field required", {
-        position: "top-center",
-      });
+      return toast.error("Job Type field required");
+
+    if (!state.job_role || state.job_role.match(/^\s*$/))
+      return toast.error("Job Type field required");
+
     if (!state.location || state.location.match(/^\s*$/))
-      return toast.error("Location field required", {
-        position: "top-center",
-      });
+      return toast.error("Location field required");
+
     if (!state.min_salary || state.min_salary.match(/^\s*$/))
-      return toast.error("Please Provide a Minimum Salary", {
-        position: "top-center",
-      });
+      return toast.error("Please Provide a Minimum Salary");
+
     if (!state.max_salary || state.max_salary.match(/^\s*$/))
-      return toast.error("Please Provide a Maximum Salary", {
-        position: "top-center",
-      });
-    if (parseInt(state.max_salary) < 0 || parseInt(state.min_salary) < 0) {
-      return toast.error("oops! Salary Cannot be negative number", {
-        position: "top-center",
-      });
-    }
+      return toast.error("Please Provide a Maximum Salary");
+
+    if (parseInt(state.max_salary) < 0 || parseInt(state.min_salary) < 0)
+      return toast.error("oops! Salary Cannot be negative number");
+
+    
     if (parseInt(state.max_salary) < parseInt(state.min_salary)) {
-      return toast.error("oops! Maximum Salary is less than minimum salary", {
-        position: "top-center",
-      });
+      return toast.error("oops! Maximum Salary is less than minimum salary");
     }
 
     if (!state.description || state.description.match(/^\s*$/))
-      return toast.error("Please Provide a job Description", {
-        position: "top-center",
-      });
+      return toast.error("Please Provide a job Description");
 
     setLoading(true);
     // calling api
@@ -111,6 +101,7 @@ function AddJob() {
           const newState = {
             department: "",
             job_type: "",
+            job_role:"",
             location: "",
             experience: "",
             min_salary: "",
@@ -119,7 +110,7 @@ function AddJob() {
           };
           setRequiredSkills([""]);
           setState(newState);
-          setPoster(null)
+          setPoster(null);
           return Swal.fire(
             "Success",
             "Successfully Added Job Vacancy",
@@ -136,46 +127,72 @@ function AddJob() {
   };
   return (
     <>
-      <div className="form_div">
+      <div className="form_div mx-lg-5">
         <h2 className="pb-3 mt-0">Post a job vacancy</h2>
         <Form onSubmit={handlesubmit}>
           <Row>
             <Form.Group as={Col} className="mb-3">
               <Form.Label>Department</Form.Label>
-              <Form.Control
-                type="text"
+              <Form.Select
+                defaultValue={"Full-time"}
+                aria-label="Default select"
                 name="department"
                 id="department"
                 value={state.department}
                 onChange={handleInputChange}
-              />
+              >
+                <option defaultChecked value="Marketing">Marketing</option>
+                <option value="Sales">Sales</option>
+                <option value="Human-Resources">Human Resources (HR)</option>
+                <option value="Information-Technology">Information Technology (IT)</option>
+                <option value="Project-Management">Project Management</option>               
+                <option value="Finance">Finance</option>
+              </Form.Select>
             </Form.Group>
             <Form.Group as={Col} className="mb-3">
               <Form.Label>Job Type</Form.Label>
-              <Form.Control
-                type="text"
+              <Form.Select
                 name="job_type"
+                defaultValue={"Full-time"}
+                aria-label="Default select"
                 id="job_type"
                 value={state.job_type}
+                onChange={handleInputChange}
+              >
+                <option defaultChecked value="Full-time">Full time</option>
+                <option value="Part-time">Part time</option>
+                <option value="Remote">Remote</option>
+                <option value="Internship">Internship</option>
+              </Form.Select>
+            </Form.Group>
+          </Row>
+          <Row>
+            <Form.Group as={Col} className="mb-3">
+              <Form.Label>Job Role </Form.Label>
+              <Form.Control
+                type="text"
+                name="job_role"
+                id="job_role"
+                value={state.job_role}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Form.Group as={Col} className="mb-3">
+              <Form.Label>Location </Form.Label>
+              <Form.Control
+                type="text"
+                name="location"
+                id="location"
+                value={state.location}
                 onChange={handleInputChange}
               />
             </Form.Group>
           </Row>
           <Form.Group className="mb-3">
-            <Form.Label>Location </Form.Label>
-            <Form.Control
-              type="text"
-              name="location"
-              id="location"
-              value={state.location}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
             <Form.Label>Experience</Form.Label>
             <Form.Control
               as="textarea"
-              style={{ height: "100px" }}
+              rows={2}
               name="experience"
               id="experience"
               value={state.experience}
@@ -242,20 +259,24 @@ function AddJob() {
               />
             </Form.Group>
           </Row>
+          <h5>Upload Poster</h5>
           {/*image upload */}
-          <div className="imgpreviewdiv">
-            <img
-              src={poster ? URL.createObjectURL(poster) : "/upload_Icon.png"}
-              width={poster ? 270 : 50}
-              alt=""
-            />
-          </div>
-          <Form.Group controlId="Poster" className="mb-3">
+          
+          <Form.Group controlId="Poster" className="mt-2 mb-3">
             <Form.Label>
-              <div className="imgUploadDiv">
-                <img width={50} src="/upload.png" alt="upload_icon" />
-                <h4>Upload a Poster</h4>
-              </div>
+            <div className="imgpreviewdiv pointer">
+            <div className="d-flex flex-column justify-content-center">
+            <img
+            src={poster ? URL.createObjectURL(poster) : "/upload_Icon.png"}
+            width={!poster && 50}
+            alt=""
+            className="m-auto"
+            />
+            
+            <small>{!poster && "Click to Upload"}</small>
+            
+            </div>
+          </div>
             </Form.Label>
             <Form.Control
               className="d-none"

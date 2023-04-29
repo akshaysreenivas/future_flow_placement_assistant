@@ -7,6 +7,7 @@ import LoadingButton from "../loadingButton/LoadingButton";
 import "./EditJobPost.css";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
+
 function EditJob() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState();
@@ -15,6 +16,7 @@ function EditJob() {
   const [state, setState] = useState({
     department: "",
     job_type: "",
+    job_role: "",
     location: "",
     experience: "",
     min_salary: "",
@@ -34,7 +36,6 @@ function EditJob() {
           d.company = company;
           const { skills } = d;
           setRequiredSkills(skills);
-          // setJob(d);
           return;
         }
         toast.error(data.message, { position: "top-left" });
@@ -78,10 +79,13 @@ function EditJob() {
     state.image = poster;
     // validations
     // image validation
-   
+
     // checking for the correct image type
-    
-    if (state.image && !/^image\/(jpe?g|png|gif|webp)$/.test(state.image.type)) {
+
+    if (
+      state.image &&
+      !/^image\/(jpe?g|png|gif|webp)$/.test(state.image.type)
+    ) {
       return toast.error("Please Provide a valid image extension", {
         position: "top-center",
       });
@@ -96,12 +100,16 @@ function EditJob() {
       return toast.error("Job Type field required", {
         position: "top-center",
       });
+    if (!state.job_role || state.job_role.match(/^\s*$/))
+      return toast.error("Job Type field required", {
+        position: "top-center",
+      });
     if (!state.location || state.location.match(/^\s*$/))
       return toast.error("Location field required", {
         position: "top-center",
       });
-   
-    if (!state.max_salary )
+
+    if (!state.max_salary)
       return toast.error("Please Provide a Maximum Salary", {
         position: "top-center",
       });
@@ -122,10 +130,10 @@ function EditJob() {
       });
 
     setLoading(true);
-    
+
     const { id } = params;
     // calling api
-    editJobDetails(state,id)
+    editJobDetails(state, id)
       .then((data) => {
         setLoading(false);
         if (data.status) {
@@ -153,35 +161,69 @@ function EditJob() {
           <Row>
             <Form.Group as={Col} className="mb-3">
               <Form.Label>Department</Form.Label>
-              <Form.Control
-                type="text"
+              <Form.Select
+                defaultValue={state.department}
+                aria-label="Default select"
                 name="department"
                 id="department"
                 value={state.department}
                 onChange={handleInputChange}
+              >
+                <option defaultChecked value="Marketing">
+                  Marketing
+                </option>
+                <option value="Sales">Sales</option>
+                <option value="Human-Resources">Human Resources (HR)</option>
+                <option value="Information-Technology">
+                  Information Technology (IT)
+                </option>
+                <option value="Project-Management">Project Management</option>
+                <option value="Finance">Finance</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group as={Col} className="mb-3">
+              <Form.Label>Job Type</Form.Label>
+              <Form.Select
+                name="job_type"
+                defaultValue={state.job_type}
+                aria-label="Default select"
+                id="job_type"
+                value={state.job_type}
+                onChange={handleInputChange}
+              >
+                <option defaultChecked value="Full-time">
+                  Full time
+                </option>
+                <option value="Part-time">Part time</option>
+                <option value="Remote">Remote</option>
+                <option value="Internship">Internship</option>
+              </Form.Select>
+            </Form.Group>
+          </Row>
+          <Row>
+            <Form.Group as={Col} className="mb-3">
+              <Form.Label>Job Role</Form.Label>
+              <Form.Control
+                type="text"
+                name="job_role"
+                id="department"
+                value={state.job_role}
+                onChange={handleInputChange}
               />
             </Form.Group>
             <Form.Group as={Col} className="mb-3">
-              <Form.Label>Job Type</Form.Label>
+              <Form.Label>Location </Form.Label>
               <Form.Control
                 type="text"
-                name="job_type"
-                id="job_type"
-                value={state.job_type}
+                name="location"
+                id="location"
+                value={state.location}
                 onChange={handleInputChange}
               />
             </Form.Group>
           </Row>
-          <Form.Group className="mb-3">
-            <Form.Label>Location </Form.Label>
-            <Form.Control
-              type="text"
-              name="location"
-              id="location"
-              value={state.location}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label>Experience</Form.Label>
             <Form.Control
@@ -254,10 +296,9 @@ function EditJob() {
             </Form.Group>
           </Row>
           {/*image upload */}
+          <h5>Current Poster</h5>
           <div className="img_div">
-         
             <div className="oldimgdiv">
-            <h5>Current Poster</h5>
               <img
                 src={process.env.REACT_APP_BASE_URL + state.poster}
                 width={200}
@@ -265,20 +306,23 @@ function EditJob() {
               />
             </div>
             <div className="newimg_div">
-              <div className="imgpreviewdiv">
-                <img
-                  src={
-                    poster ? URL.createObjectURL(poster) : "/upload_Icon.png"
-                  }
-                  width={poster ? 300 : 50}
-                  alt=""
-                />
-              </div>
-              <Form.Group controlId="Poster" className="mb-3">
+              <Form.Group controlId="Poster" className="mb-0">
                 <Form.Label>
-                  <div className="imgUploadDiv">
-                    <img width={50} src="/upload.png" alt="upload_icon" />
-                    <h4>change Poster</h4>
+                <div className="imgpreviewdiv pointer">
+                    <div className="d-flex flex-column justify-content-center">
+                      <img
+                        src={
+                          poster
+                            ? URL.createObjectURL(poster)
+                            : "/upload_Icon.png"
+                        }
+                        width={!poster && 50}
+                        alt=""
+                        className="m-auto object-fit"
+                      />
+
+                      <small>{!poster && "Change Poster"}</small>
+                    </div>
                   </div>
                 </Form.Label>
                 <Form.Control

@@ -87,8 +87,15 @@ module.exports.Jobs = async (req, res, next) => {
         const department = req.query.department;
         const order = parseInt(req.query.order) || -1;
         const sort = req.query.sort || "date";
+
+        // finding already applied jobs   
+        const appliedJobIds = await userModel.findById(_id, { appliedJobs: 1 }).lean();
+        const jobIds = appliedJobIds.appliedJobs.map(job => job._id);
         // query         
-        const query = { active: true, applicants: { $not: { $in: [_id] } } };
+        const query = {
+            active: true,
+            _id: { $nin: jobIds }
+        };
 
         // search option setup    
         if (search) {
@@ -150,18 +157,29 @@ module.exports.applyJob = async (req, res, next) => {
     try {
         const { _id } = req.user;
         // checking if the user is already applied for the job 
-        const checkuser = await jobModel.findOne({ _id: req.params.id, applicants: { $in: [_id] } });
+        const checkuser = await jobModel.findOne({ _id: req.params.id, applicants: { $elemMatch: { id: _id } } }, { hrID: 1 });
         if (checkuser) {
             return res.status(200).json({ status: false, message: "Already applied" });
         }
         // adding user details in the applicants colum of jobs  
-        await jobModel.updateOne({ _id: req.params.id }, { $addToSet: { applicants: _id } });
+        await jobModel.updateOne({ _id: req.params.id }, {
+            $addToSet: {
+                applicants: {
+                    id: _id,
+                    progress: {
+                        status: "Applied",
+                        date: Date.now()
+                    }
+                }
+            }
+        });
         // adding the job details in the user profile
         await userModel.updateOne({ _id: _id }, { $addToSet: { appliedJobs: req.params.id } });
-        setTimeout(() => {
+        const HrManager = await jobModel.findOne({ _id: req.params.id }, { hrID: 1 });
 
-            res.status(200).json({ status: true, message: "successfully applied" });
-        }, 2000);
+        console.log(HrManager);
+        res.status(200).json({ status: true, message: "successfully applied" });
+
     } catch (error) {
         next(error);
     }
@@ -175,7 +193,7 @@ module.exports.cancelJobApplication = async (req, res, next) => {
     try {
         const { _id } = req.user;
         // adding user details in the applicants colum of jobs  
-        await jobModel.updateOne({ _id: req.params.id }, { $pull: { applicants: _id } });
+        await jobModel.updateOne({ _id: req.params.id }, { $pull: { applicants: { id: _id } } });
         // adding the job details in the user profile
         await userModel.updateOne({ _id: _id }, { $pull: { appliedJobs: req.params.id } });
         res.status(200).json({ status: true, message: "successfully Cancelled", });
@@ -219,7 +237,7 @@ module.exports.appliedJobs = async (req, res, next) => {
 };
 
 
-// profile building 
+//       profile building 
 
 
 // adding basic info
@@ -759,6 +777,7 @@ module.exports.getUserProfile = async (req, res, next) => {
     try {
 
         const { _id } = req.user;
+
         const user = await userModel.findOne({ _id: _id }, { password: 0 }).lean();
         user.experiences = convertAllDatesToYMDFormat(user.experiences);
         user.projects = convertAllDatesToYMDFormat(user.projects);
@@ -769,3 +788,21 @@ module.exports.getUserProfile = async (req, res, next) => {
         next(error);
     }
 };
+
+// fetching user details for third Party 
+module.exports.getUserProfileDetails = async (req, res, next) => {
+    try {
+        const user = await userModel.findOne({ _id: req.params.id }, { password: 0,appliedJobs:0,status:0,firstLogin:0 }).lean();
+        user.experiences = convertAllDatesToYMDFormat(user.experiences);
+        user.projects = convertAllDatesToYMDFormat(user.projects);
+        user.certifications = convertAllDatesToYMDFormat(user.certifications);
+        user.education = convertAllDatesToYMDFormat(user.education);
+
+        res.status(200).json({ status: true, message: "success", result:user });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+

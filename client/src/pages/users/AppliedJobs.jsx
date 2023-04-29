@@ -13,7 +13,7 @@ function AppliedJobsPage() {
   }, [navigate, user]);
 
   return (
-    <div className='user_page'>
+    <div className='user_page mx-2'>
     <UserNavBar user={true}/>
       <div className="user_page  d-flex  justify-content-center">  
           <AppliedJobs />

@@ -53,8 +53,8 @@ const userSchema = new mongoose.Schema({
         type: [mongoose.Types.ObjectId],
         ref: "jobs"
     },
-    location:{
-        type:Object
+    location: {
+        type: Object
     },
     experiences: [{
         company: String,
@@ -90,6 +90,12 @@ const userSchema = new mongoose.Schema({
         name: String,
         url: String,
         file: String,
+    }],
+    notification: [{
+        notification_type: String,
+        message: String,
+        date: { type: Date, default: Date.now }, // date when the notification was created
+        isRead: { type: Boolean, default: false }
     }]
 
 });
