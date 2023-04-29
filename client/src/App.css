@@ -29,6 +29,9 @@
   background-color: #f3f2ef;
   min-height: 100vh;
 }
+.custom-box-Shadow{
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
 .user_profile_page {
   background-color: #ffffff;
   max-width: 800px;

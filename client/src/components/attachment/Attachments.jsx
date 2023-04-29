@@ -63,7 +63,7 @@ function Attachments() {
               className="single-exp-div p-2 border rounded m-1 border-secondary border-1"
             >
               <div className="d-flex align-items-center justify-content-between">
-                <img src="pdf.avif" width={50} alt="" />
+                <img src="/pdf.avif" height={50} width={50} alt="" />
                 <h5>
                   {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
                 </h5>
@@ -74,9 +74,11 @@ function Attachments() {
                   >
                     Delete
                   </button>
-                  <button className="rounded px-2 bg-info  border-0 text-white ">
-                    view
-                  </button>
+                  <a href={process.env.REACT_APP_BASE_URL+"/"+item.url} target="_blank" rel="noopener noreferrer">
+                    <button className="rounded px-2 bg-info  border-0 text-white ">
+                      view
+                    </button>
+                  </a>
                 </div>
               </div>
             </div>
