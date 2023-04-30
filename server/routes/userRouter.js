@@ -4,7 +4,7 @@ const router = require("express").Router();
 const { JobDetails } = require("../controllers/jobsController");
 const { login, Jobs, appliedJobs, applyJob, cancelJobApplication, addBasicInfo, changePassword,
     addCertifications, addEducation, addSkills, addProjects, addAttachments, addExperiences, updateProfilePhoto,
-    updateCoverPhoto, getUserProfile, deleteExperience, deleteCertification, deleteSkill, deleteProject, deleteAttachment, deleteEducation, editExperience, editSkill, editCertification, editEducation, editProject } = require("../controllers/userController");
+    updateCoverPhoto, getUserProfile, deleteExperience, deleteCertification, deleteSkill, deleteProject, deleteAttachment, deleteEducation, editExperience, editSkill, editCertification, editEducation, editProject, getNotifications, ClearNotification, markAsRead } = require("../controllers/userController");
 const upload = require("../middlewares/multer");
 
 
@@ -95,6 +95,16 @@ router.post("/addProfilePhoto", userAuth, upload.imageUpload, updateProfilePhoto
 
 // adding cover pic 
 router.post("/addCoverPhoto", userAuth, upload.imageUpload, updateCoverPhoto);
+
+
+// fetching notifications 
+router.get("/getNotifications", userAuth,  getNotifications);
+
+// fetching notifications 
+router.delete("/clearNotification/:id", userAuth,  ClearNotification);
+
+// marking as read 
+router.patch("/markAsRead", userAuth,  markAsRead);
 
 
 

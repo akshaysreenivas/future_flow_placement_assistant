@@ -14,11 +14,10 @@ function Candidates() {
   useEffect(() => {
     getCandidates(id)
       .then((data) => {
-        console.log(data);
         if (data.status) {
           const d = data.result;
           setUsers(d.map((user) => ({ ...user, loading: false })));
-          console.log(d);
+  
         }
       })
       .catch((error) => {
@@ -38,9 +37,9 @@ function Candidates() {
               <th>Student ID</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Status</th>
+              <th>Current Status</th>
               <th>Details</th>
-              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -126,6 +125,7 @@ function Candidates() {
                     </Link>
                   </td>
                   <td className="text-center text-dark">
+                  <div>
                     {item.loading ? (
                       <LoadingButton
                         size="sm"
@@ -133,12 +133,26 @@ function Candidates() {
                       />
                     ) : (
                       <Button
-                        className={item.blocked ? "bg-success" : "bg-danger"}
+                        className={ "bg-danger me-1"}
                         onClick={changeStatus}
                       >
-                        {item.blocked ? "Unblock" : "Block"}
+                        Reject
                       </Button>
                     )}
+                    {item.loading ? (
+                      <LoadingButton
+                        size="sm"
+                        className={item.blocked ? "bg-success" : "bg-danger"}
+                      />
+                    ) : (
+                      <Button
+                        className={ "bg-success"}
+                        onClick={changeStatus}
+                      >
+                        Short List
+                      </Button>
+                    )}
+                    </div>
                   </td>
                 </tr>
               );

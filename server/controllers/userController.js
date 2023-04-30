@@ -58,7 +58,13 @@ module.exports.login = async (req, res, next) => {
         // checking whether the user is bolcked or not 
         if (user.blocked) return res.status(200).json({ status: false, message: "Your Account is Temporarly Suspended" });
         // if login success and the if the user is inactive  changing the status to active 
-
+        if (user.firstLogin) {
+            let newNotification = {
+                notification_type: "Security Alert",
+                message: `hey ${user.name},Welcome to Futureflow! To help keep your account and personal data secure, we kindly ask all new users to choose a strong, unique password on their first login`
+            };
+            await userModel.updateOne({ email: email }, { $push: { notification: newNotification } });
+        }
         // calling function to create jwt token 
         const token = createToken(user._id);
         user.password = null;
@@ -175,9 +181,7 @@ module.exports.applyJob = async (req, res, next) => {
         });
         // adding the job details in the user profile
         await userModel.updateOne({ _id: _id }, { $addToSet: { appliedJobs: req.params.id } });
-        const HrManager = await jobModel.findOne({ _id: req.params.id }, { hrID: 1 });
 
-        console.log(HrManager);
         res.status(200).json({ status: true, message: "successfully applied" });
 
     } catch (error) {
@@ -364,12 +368,9 @@ module.exports.deleteExperience = async (req, res, next) => {
             { new: true, projection: { password: 0 } }).lean();
 
         updatedUser.experiences = convertAllDatesToYMDFormat(updatedUser.experiences);
-        let j = await convertAllDatesToYMDFormat(updatedUser.experiences);
-
         updatedUser.projects = convertAllDatesToYMDFormat(updatedUser.projects);
         updatedUser.certifications = convertAllDatesToYMDFormat(updatedUser.certifications);
         updatedUser.education = convertAllDatesToYMDFormat(updatedUser.education);
-        console.log("after", j);
         res.status(200).json({ status: true, message: "success", user: updatedUser });
 
     } catch (error) {
@@ -392,7 +393,6 @@ module.exports.addSkills = async (req, res, next) => {
         updatedUser.projects = convertAllDatesToYMDFormat(updatedUser.projects);
         updatedUser.certifications = convertAllDatesToYMDFormat(updatedUser.certifications);
         updatedUser.education = convertAllDatesToYMDFormat(updatedUser.education);
-        console.log("updatedUser", updatedUser);
         res.status(200).json({ status: true, message: "success", user: updatedUser });
 
     } catch (error) {
@@ -422,7 +422,6 @@ module.exports.editSkill = async (req, res, next) => {
         updatedUser.projects = convertAllDatesToYMDFormat(updatedUser.projects);
         updatedUser.certifications = convertAllDatesToYMDFormat(updatedUser.certifications);
         updatedUser.education = convertAllDatesToYMDFormat(updatedUser.education);
-        console.log("updatedUser", updatedUser);
         res.status(200).json({ status: true, message: "success", user: updatedUser });
 
     } catch (error) {
@@ -443,7 +442,6 @@ module.exports.deleteSkill = async (req, res, next) => {
         updatedUser.projects = convertAllDatesToYMDFormat(updatedUser.projects);
         updatedUser.certifications = convertAllDatesToYMDFormat(updatedUser.certifications);
         updatedUser.education = convertAllDatesToYMDFormat(updatedUser.education);
-        console.log("updatedUser", updatedUser);
         res.status(200).json({ status: true, message: "success", user: updatedUser });
 
     } catch (error) {
@@ -693,7 +691,6 @@ module.exports.deleteAttachment = async (req, res, next) => {
         // getting id of the user         
         const { _id } = req.user;
         const attachment = await userModel.findOne({ _id: _id, "attachments._id": req.params.id }, { "attachments.$": 1 }).lean();
-        console.log(attachment);
         if (!attachment) throw new Error("Attachment not found");
         const url = attachment.attachments[0].url;
         Fs.unlink("public" + url, (err) => {
@@ -792,13 +789,98 @@ module.exports.getUserProfile = async (req, res, next) => {
 // fetching user details for third Party 
 module.exports.getUserProfileDetails = async (req, res, next) => {
     try {
-        const user = await userModel.findOne({ _id: req.params.id }, { password: 0,appliedJobs:0,status:0,firstLogin:0 }).lean();
+
+        const visitor = req.user;
+        const user = await userModel.findOne({ _id: req.params.id }, { password: 0, appliedJobs: 0, status: 0, firstLogin: 0, notification: 0 }).lean();
         user.experiences = convertAllDatesToYMDFormat(user.experiences);
         user.projects = convertAllDatesToYMDFormat(user.projects);
         user.certifications = convertAllDatesToYMDFormat(user.certifications);
         user.education = convertAllDatesToYMDFormat(user.education);
+        const userNotification = await userModel.findOne(
+            {
+                _id: req.params.id,
+                notification: {
+                    $elemMatch: {
+                        visitor_id: visitor._id
+                    }
+                }
+            },
+            { notification: 1 }
+        ).lean();
 
-        res.status(200).json({ status: true, message: "success", result:user });
+        // If an existing notification is found, return
+        if (userNotification) {
+            return res.status(200).json({ status: true, message: "success", result: user });
+        }
+        // saving notification of profile view  
+        const newNotification = {
+            notification_type: "Profile Visit",
+            message: `Guess what? HR manager ${visitor.name} from ${visitor.company} just viewed your profile! `,
+            date: new Date(),
+            isRead: false,
+            visitor_id: visitor._id
+        };
+        await userModel.findByIdAndUpdate(req.params.id, {
+            $push: {
+                notification: {
+                    $each: [newNotification],
+                    $sort: { date: -1 }
+                }
+            }
+        });
+        res.status(200).json({ status: true, message: "success", result: user });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// fetching Notifications 
+module.exports.getNotifications = async (req, res, next) => {
+    try {
+        const { _id } = req.user;
+        const notification = await userModel.aggregate([
+            { $match: { _id: _id } },
+            { $project: { notification: 1 } },
+            { $unwind: "$notification" },
+            { $sort: { "notification.date": -1 } },
+            { $group: { _id: "$_id", notification: { $push: "$notification" } } }
+        ]).exec();
+        let notifications = { count: 0 };
+
+        const data = notification[0]?.notification;
+        // notifications.notification = convertAllDatesToYMDFormat(notifications.notification);
+        notifications.notification = data;
+        notifications.count = data?.reduce((count, item) => {
+            if (!item.isRead) {
+                count++;
+            }
+            return count;
+        }, 0);
+
+        res.status(200).json({ status: true, message: "success", result: notifications });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+// fetching Notifications 
+module.exports.ClearNotification = async (req, res, next) => {
+    try {
+        const { _id } = req.user;
+        await userModel.updateOne({ _id: _id }, { $pull: { notification: { _id: req.params.id } } }).lean();
+        res.status(200).json({ status: true, message: "success" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// fetching Notifications 
+module.exports.markAsRead = async (req, res, next) => {
+    try {
+        const { _id } = req.user;
+        await userModel.updateMany({ _id: _id }, { $set: { "notification.$[].isRead": true } }).lean();
+        res.status(200).json({ status: true, message: "success" });
     } catch (error) {
         next(error);
     }
@@ -806,3 +888,9 @@ module.exports.getUserProfileDetails = async (req, res, next) => {
 
 
 
+
+// let newNotification = {
+//             notification_type: "Profile Visit",
+//             message: `Guess what? HR manager ${visitor.name} from ${visitor.company} just viewed your profile! Looks like you're making an impression!`
+//         };
+//         await userModel.updateOne({ _id: req.params.id }, { $push: { notification: newNotification } });

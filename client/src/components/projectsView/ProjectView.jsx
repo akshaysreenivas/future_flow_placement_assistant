@@ -3,8 +3,19 @@ import { IoIosShareAlt } from 'react-icons/io';
 
 function ProjectView({projects}) {
   return (
-    <div className='bg-white custom-box-Shadow m-2 p-3 px-5'>
-    <h2>Projects</h2>
+    <div className='bg-white custom-box-Shadow my-3 p-3 px-5'>
+    <div className="d-flex gap-2 my-3 align-items-center">
+    <img
+      className="mx-2 border-1"
+      src="/content-management.png"
+      width={35}
+      alt=""
+    />
+        <h3>
+          Projects
+        </h3>
+
+      </div>
     {projects?.length ? (
         projects.map((item) => {
        

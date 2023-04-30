@@ -24,7 +24,13 @@ const hrSchema = new mongoose.Schema({
     blocked: {
         type: Boolean,
         default: false
-    }
+    },
+    notification: [{
+        notification_type: String,
+        message: String,
+        date: { type: Date, default: Date.now }, // date when the notification was created
+        isRead: { type: Boolean, default: false }
+    }]
 });
 
 

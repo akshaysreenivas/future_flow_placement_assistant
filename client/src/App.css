@@ -12,11 +12,16 @@
   position: relative;
   background-color: #f3f2ef;
 }
+.loading_main_div {
+  position: absolute;
+  left: 50vw;
+  top: 51vh;
+}
 
 .component {
   width: 100%;
   padding: 40px 50px 30px 100px;
-  min-height: 100vh
+  min-height: 100vh;
 }
 
 .logout_btn {
@@ -29,7 +34,7 @@
   background-color: #f3f2ef;
   min-height: 100vh;
 }
-.custom-box-Shadow{
+.custom-box-Shadow {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .user_profile_page {
@@ -37,7 +42,7 @@
   max-width: 800px;
   margin: auto;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  margin-top: 15px
+  margin-top: 15px;
 }
 
 .profile_img {
@@ -90,7 +95,7 @@
 }
 @media only screen and (max-width: 425px) {
   .topRight {
-      gap: 9px;
+    gap: 9px;
   }
 }
 @media only screen and (max-width: 470px) {
@@ -104,6 +109,6 @@
   }
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }

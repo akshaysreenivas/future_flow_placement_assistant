@@ -2,8 +2,14 @@ import React from 'react'
 
 function CertificationView({certifications}) {
   return (
-    <div className='bg-white custom-box-Shadow rounded px-5 p-3 m-2'>
-    <h3>Certification</h3>
+    <div className='bg-white custom-box-Shadow rounded px-5 p-3 my-3'>
+    <div className="d-flex gap-2 my-3 align-items-center">
+    <img className="mx-2 border-1" src="/winner.png" width={30} alt="" />
+        <h3>
+          Certifications
+        </h3>
+
+      </div>
      {certifications?.length ? (
         certifications.map((item) => {
           
