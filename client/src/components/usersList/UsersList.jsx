@@ -18,7 +18,6 @@ function UserList() {
       .catch((error) => {
         toast.error("Something Went Wrong", { position: "top-center" });
       });
-    // eslint-disable-next-line
   }, []);
   return (
     <div className="table_div">

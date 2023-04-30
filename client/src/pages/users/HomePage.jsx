@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Alerts from "../../components/alert/Alert";
 import UserNavBar from "../../components/userNavbar/UserNavBar";
+
 
 function HomePage() {
   const navigate = useNavigate();
@@ -14,11 +14,25 @@ function HomePage() {
 
   return (
     <div className="user_page">
-      {user?.firstLogin && <Alerts data={user.name} />}
-
       <UserNavBar user={true} />
-
-      <h1 className="px-5">Home Page</h1>
+      <div className="bg-white">
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>
+      <h1 className="px-5"> Home Page gkgkjgj ggkgkgjjgc gfffhjfhyfyfyfyy hgghdggdgdg jfjffhfhjjh jdfgdu </h1>  
+      </div>
     </div>
   );
 }

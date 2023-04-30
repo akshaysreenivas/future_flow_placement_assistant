@@ -42,12 +42,6 @@ const jobSchema = new mongoose.Schema({
                 default: Date.now
             }
         }]
-    },
-    notification: [{
-        notification_type: String,
-        message: String,
-        date: { type: Date, default: Date.now }, // date when the notification was created
-        isRead: { type: Boolean, default: false }
-    }]
+    }
 });
 module.exports = mongoose.model("jobs", jobSchema);

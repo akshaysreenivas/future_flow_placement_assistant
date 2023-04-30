@@ -1,7 +1,17 @@
 function BasicinfoView({ user }) {
   return (
     <div>
-    <h2 className="px-5">Basic Information</h2>
+    <div className=" px-5 d-flex align-items-center gap-2">
+    <img
+      className="mx-2 border-black rounded-circle"
+      src="/user_default.avif"
+      width={25}
+      alt=""
+    />
+        <h3>
+          Basic Information
+        </h3>
+      </div>
       <div className="basicInfo  rounded bg-white px-5">
         <div>
           <div className="info">

@@ -10,6 +10,7 @@ import CertificationView from "../certificationView/CertificationView";
 import SkillsView from "../skillsView/SkillsView";
 import ProjectView from "../projectsView/ProjectView";
 import AttachmentView from "../attachmentView/AttachmentView";
+import Loading from "../loading/Loading";
 function UserProfileView() {
   const [state, setState] = useState();
   const [profilePic, setProfilePic] = useState();
@@ -19,13 +20,14 @@ function UserProfileView() {
     getCandidateProfile(userid)
       .then((data) => {
         if (data.status) {
-          setState(data.result);
-          const pic = state?.profilePicUrl
-            ? process.env.REACT_APP_BASE_URL + state.profilePicUrl
+          const result=data.result
+          setState(result);
+          const pic = result?.profilePicUrl
+            ? process.env.REACT_APP_BASE_URL + result.profilePicUrl
             : "default_profile_pic.avif";
           setProfilePic(pic);
-          const coverPhoto = state?.coverPicUrl
-            ? process.env.REACT_APP_BASE_URL + state.coverPicUrl
+          const coverPhoto = result?.coverPicUrl
+            ? process.env.REACT_APP_BASE_URL + result.coverPicUrl
             : "default_cover_photo.png";
           setCoverPic(coverPhoto);
         } else {
@@ -35,10 +37,9 @@ function UserProfileView() {
       .catch((error) => {
         toast.error("Something Went Wrong");
       });
-    //
   }, [userid]);
   return (
-    <>
+    <React.Fragment>
       {state ? (
         <div className="d-flex align-items-center justify-content-center">
           <div className="profileView">
@@ -54,10 +55,9 @@ function UserProfileView() {
               <div className="d-flex justify-content-between px-3">
                 <div className="d-flex profile_img_div">
                   <img className="profile_img" src={profilePic} alt="" />
-                  <h3>{state?.name}</h3>
+                  <h3>{state.name}</h3>
                 </div>
               </div>
-
               <BasicinfoView user={state} />
             </div>
             <EducationView education={state.education} />
@@ -69,32 +69,10 @@ function UserProfileView() {
           </div>
         </div>
       ) : (
-        "couldn't find profile"
+        <div  className="loading_main_div d-flex align-items-center justify-content-center bg-light bg-opacity-50"><Loading/></div>
       )}
-    </>
+    </React.Fragment>
   );
 }
 
 export default UserProfileView;
-
-// UserProfileView
-//             <CertificationView />
-//             <SkillsView />
-//             <ProjectView />
-//             <AttachmentView/>
-//             <BasicinfoView />
-
-// <ExperienceView />
-//             <EducationView />
-
-// UserProfileView
-//             <CertificationView />
-//             <SkillsView />
-//             <ProjectView />
-//             <AttachmentView/>
-//             <BasicinfoView />
-
-// <ExperienceView />
-//             <EducationView />
-
-// UserProfileView

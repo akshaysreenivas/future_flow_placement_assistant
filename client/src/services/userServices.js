@@ -142,3 +142,17 @@ export function deleteProject(id) {
 export function editProject(id,state) {
     return userInstance.patch(`/editProject/${id}`,state);
 }
+
+// fetchings notifications
+export function getNotifications() {
+    return userInstance.get(`/getNotifications`);
+}
+// deleting notifications
+export function clearNotification(id) {
+    return userInstance.delete(`/clearNotification/${id}`);
+}
+
+// deleting notifications
+export function markAsRead() {
+    return userInstance.patch(`/markAsRead`);
+}

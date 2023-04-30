@@ -2,8 +2,11 @@ import React from "react";
 
 function ExperienceView({ experience }) {
   return (
-    <div className='bg-white custom-box-Shadow m-2 p-3 px-5'>
-    <h2>Experience</h2>
+    <div className="bg-white custom-box-Shadow my-3 p-3 px-5">
+      <div className="d-flex gap-2 my-3 align-items-center">
+        <img className="mx-2 border-1" src="/briefcase.png" width={25} alt="" />
+        <h3>Experiences</h3>
+      </div>
       {experience?.length
         ? experience.map((item) => {
             return (
