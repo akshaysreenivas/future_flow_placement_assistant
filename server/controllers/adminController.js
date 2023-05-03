@@ -49,9 +49,10 @@ module.exports.login = async (req, res, next) => {
 // admin adding users
 module.exports.addStudents = async (req, res, next) => {
     try {
-        const { username, studentID, email } = req.body;
+        const { username, studentID, email, department } = req.body;
+
         // checking if the values are null
-        if (!username || !studentID || !email) throw Error("All fields required");
+        if (!username || !studentID || !email || !department) throw Error("All fields required");
         // checking if the student  already has account
         const alreadyExist = await userModel.findOne({
             $or: [{ studentID }, { email }]
@@ -78,7 +79,8 @@ module.exports.addStudents = async (req, res, next) => {
             name: username,
             studentID: studentID,
             email: email,
-            password: password
+            password: password,
+            department: department
         });
 
         await newStudent.save();
@@ -125,8 +127,64 @@ module.exports.addHrManager = async (req, res, next) => {
 
 module.exports.getAllStudents = async (req, res, next) => {
     try {
-        const students = await userModel.find({}, { password: 0 }).lean();
-        res.status(200).json({ status: true, result: students });
+
+        // taking the values from the request  
+        const page = parseInt(req.query.page);
+        const limit = req.query.limit || 10;
+        const search = req.query.search;
+        const department = req.query.department;
+
+
+        // query         
+        const query = {};
+
+        // search option setup    
+        if (search) {
+            query.$or = [
+                { department: { $regex: search, $options: "i" } },
+                { name: { $regex: search, $options: "i" } },
+                { email: { $regex: search, $options: "i" } },
+                { studentID: { $regex: search, $options: "i" } },
+            ];
+        }
+
+        // if there is a filter
+
+        //  filter by status  
+        if (department) {
+            query.department = department;
+        }
+        const total = await userModel.countDocuments(query);
+
+        // page setup      
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        const students = await userModel.find(query, { name: 1, email: 1, department: 1, studentID: 1, status: 1 }).skip(startIndex).limit(limit);
+
+        const departments = await userModel.find({}).distinct("department");
+
+        //         // constructing the response   
+        const response = { status: true, total, limit, page, departments, result: students };
+
+        // finding if a next page is available  
+        if (endIndex < total)
+            response.next = {
+                page: page + 1,
+                limit: limit
+            };
+
+        // finding if previous page exists  
+        if (startIndex > 0) {
+            response.previous = {
+                page: page - 1,
+                limit: limit
+            };
+        }
+
+        // finally sending the response  
+        res.status(200).json(response);
+
     } catch (error) {
         next(error);
     }
@@ -134,8 +192,62 @@ module.exports.getAllStudents = async (req, res, next) => {
 };
 module.exports.getHRManagers = async (req, res, next) => {
     try {
-        const hrManagers = await hrModel.find({}, { password: 0 }).lean();
-        res.status(200).json({ status: true, result: hrManagers });
+        const page = parseInt(req.query.page) || 1;
+        const limit = req.query.limit || 5;
+        const search = req.query.search || "";
+        const filter = req.query.hiring || "";
+
+        // query         
+        const query = {};
+
+        // search option setup    
+        if (search) {
+            query.$or = [
+                { company: { $regex: search, $options: "i" } },
+                { name: { $regex: search, $options: "i" } },
+                { email: { $regex: search, $options: "i" } },
+            ];
+        }
+
+        // if there is a filter
+
+        //  filter by status  
+        if (filter) {
+            if (filter === "true") {
+                query.active = true;
+            } else if (filter === "false") {
+                query.active = false;
+            }
+        }
+        const total = await hrModel.countDocuments(query);
+
+        // page setup      
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        const hrManagers = await hrModel.find(query, { password: 0 }).skip(startIndex).limit(limit);
+
+        //         // constructing the response   
+        const response = { status: true, total, limit, page, result: hrManagers };
+
+        // finding if a next page is available  
+        if (endIndex < total)
+            response.next = {
+                page: page + 1,
+                limit: limit
+            };
+
+        // finding if previous page exists  
+        if (startIndex > 0) {
+            response.previous = {
+                page: page - 1,
+                limit: limit
+            };
+        }
+
+        // finally sending the response  
+        res.status(200).json(response);
+
     } catch (error) {
         next(error);
     }

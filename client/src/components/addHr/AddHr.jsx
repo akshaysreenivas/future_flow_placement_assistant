@@ -96,14 +96,14 @@ function AddHr() {
             <Form.Control
               type="email"
               name="email"
-              placeholder="Enter the email of HR"
+              placeholder="Enter the email of HR Manager"
               value={state.email}
               id="email"
               onChange={handleInputChange}
             />
           </Form.Group>
           {loading ? (
-            <LoadingButton size={"sm"} variant={"white"}  className={"submitButton"} />
+            <LoadingButton size={"sm"} variant={"white"}  className={"submitButton rounded outline-0"} />
           ) : (
             <Button type="submit" className="submitButton">
               Submit

@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  appliedJobs,
-  cancelJobApplication,
-} from "../../services/userServices";
+import { appliedJobs, cancelJobApplication } from "../../services/userServices";
 import { toast } from "react-toastify";
 import { MdOutlineLocationOn } from "react-icons/md";
 import Pagination from "../pagination/Pagination";
 import Loading from "../loading/Loading";
 import Swal from "sweetalert2";
+import { Button, Form } from "react-bootstrap";
+import SearchBar from "../searchBar/SearchBar";
 
 function AppliedJobs() {
   const [jobs, setJobs] = useState([]);
@@ -18,6 +17,9 @@ function AppliedJobs() {
   const [limit, setLimit] = useState();
   const [next, setNext] = useState();
   const [prev, setPrev] = useState();
+  const [search, setSearch] = useState([]);
+  const [filter, setFilter] = useState([]);
+  const [department, setDepertment] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -27,7 +29,7 @@ function AppliedJobs() {
     const token = localStorage.getItem("userAuthToken");
     if (!token || token === "undefined") return navigate("/login");
     // fetching the datas
-    appliedJobs(page)
+    appliedJobs(page, search, filter)
       .then((data) => {
         setLoading(false);
         if (data.status) {
@@ -36,6 +38,7 @@ function AppliedJobs() {
           setPrev(data.previous);
           setTotal(data.total);
           setLimit(data.limit);
+          setDepertment(data.department);
           const d = data.result;
           console.log(d);
           setJobs(
@@ -52,9 +55,14 @@ function AppliedJobs() {
         setLoading(false);
         toast.error(error, "Something Went Wrong");
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, navigate]);
+  }, [page, navigate, search, filter]);
 
+  // handling reseting the filterations
+  const handleReset = () => {
+    setFilter("");
+    setSearch("");
+    setPage(1);
+  };
   return (
     <div className="jobs_parent_div my-3 p-3">
       <div className="mb-4">
@@ -63,7 +71,33 @@ function AppliedJobs() {
         </h1>
         <h6 className="text-secondary">Your applied jobs, all in one place.</h6>
       </div>
+      <SearchBar
+        placeholder={"Search by Skill , Job type ,Department ,Role"}
+        value={search}
+        setSearch={setSearch}
+      />
+      <div className="d-flex justify-content-between align-items-center mb-4 px-4">
+        <Form.Select
+          size="sm"
+          className=""
+          value={filter}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            setPage(1);
+          }}
+        >
+          <option value="" defaultChecked disabled>
+            &#xE16E; Filter By Department
+          </option>
 
+          {department?.map((item, index) => (
+            <option value={item} key={index}>
+              {item}
+            </option>
+          ))}
+        </Form.Select>
+        <Button onClick={handleReset}>reset</Button>
+      </div>
       <div className="JobsDiv m-3 ">
         {loading ? (
           <div className="d-flex justify-content-center mx-auto my-5">
@@ -80,7 +114,8 @@ function AppliedJobs() {
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes!",
+                cancelButtonText:"Abort",
+                confirmButtonText: "Confirm!",
               }).then((result) => {
                 if (result.isConfirmed) {
                   try {
@@ -92,7 +127,9 @@ function AppliedJobs() {
                           (u) => u._id !== item._id
                         );
                         setJobs(updated);
-                        toast.success(data.message, { autoClose: 1000 });
+                        toast.success("Job Application Cancelled", {
+                          autoClose: 1000,
+                        });
                       }
                     });
                   } catch (err) {
@@ -112,7 +149,8 @@ function AppliedJobs() {
                 </div>
                 <div>
                   <span className="text-secondary">{item.department}</span>
-                  <h4 className="text-primary">{item.job_type}</h4>
+                  <h4 className="text-primary">{item.job_role}</h4>
+                  <h6 className="text-dark">{item.job_type}</h6>
                   <span className="text-secondary">
                     <MdOutlineLocationOn /> {item.location}
                   </span>

@@ -42,7 +42,17 @@ function AddBasicInfo() {
   const dispatch = useDispatch();
 
   const handleClose = () => {
+    setState({
+      name: user.name,
+      email: user.email,
+      gender: user.gender,
+      phone: user.phone,
+      website: user.website,
+      State: user.location?.state,
+      district: user.location?.district,
+    });
     setShow(false);
+    console.log(user);
   };
 
   const handleInputChange = (event) => {
@@ -55,15 +65,29 @@ function AddBasicInfo() {
   const handleShow = () => setShow(true);
 
   const handleSubmit = () => {
-    // password validation
+    // name validation
     if (!state.name || state.name.match(/^\s*$/)) {
       return toast.error("Name field required");
     }
-    // email validation    
+    if (!state.name || state.name.match(/^\s*$/) || state.name.length < 3)
+      return toast.error("Valid  name required minimum 3 characters");
+
+    var regex = /[^a-zA-Z0-9]/;
+
+    // check if the name contains special characters
+    if (regex.test(state.name)) {
+      // name contains special characters
+      return toast.error("No special characters");
+    }
+
+    // email validation
     if (!state.email || state.email.match(/^\s*$/)) {
       return toast.error("Email field required");
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(state.email)) {
       return toast.error("enter a valid email");
+    }
+    if (state.phone && (!/^\d{10}$/.test(state.phone) || !/^\d+$/.test(state.phone))) {
+      return toast.error("enter a valid phone number");
     }
 
     try {
@@ -121,7 +145,7 @@ function AddBasicInfo() {
             <Form.Control
               type="text"
               name="gender"
-              placeholder="Enter Email ID"
+              placeholder="Gender"
               id="name"
               value={state.gender}
               onChange={handleInputChange}

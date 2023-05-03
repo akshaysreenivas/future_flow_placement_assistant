@@ -1,6 +1,5 @@
 .img_div{
     display: flex;
-    align-items: baseline;
     flex-wrap: wrap;
 
 }

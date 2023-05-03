@@ -9,9 +9,10 @@ import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../store/store";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import "./ChangePassword.css"
+import { changeHRPassword } from "../../services/hrServices";
 
 
-function ChangePassword() {
+function ChangePassword({hr}) {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [confirmPasswordType, setconfirmPasswordType] = useState(true);
@@ -53,6 +54,22 @@ function ChangePassword() {
 
     try {
       setLoading(true);
+     if(hr){
+      changeHRPassword(password).then((data) => {
+        if (data.status) {
+          setShow(false);
+          setPassword("");
+          setConfirmPassword("");
+          toast.success("Successfully Updated");
+        } else {
+          setShow(false);
+          setPassword("");
+          setConfirmPassword("");
+          toast.error("Something went Wrong");
+        }
+        setLoading(false);
+      });
+     }else{
       changePassword(password).then((data) => {
         if (data.status) {
           dispatch(setUserDetails(data.user));
@@ -68,6 +85,7 @@ function ChangePassword() {
         }
         setLoading(false);
       });
+     }
     } catch (error) {
       setLoading(false);
       setShow(false);
@@ -115,7 +133,7 @@ function ChangePassword() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 name="password"
             />
-            <i className="eye_icon" onClick={toggleConfirmPassword}>
+            <i className="eye_icon position-absolute top-38 right-7" onClick={toggleConfirmPassword}>
                 {confirmPasswordType ? (
                   <MdVisibilityOff size={23} />
                 ) : (

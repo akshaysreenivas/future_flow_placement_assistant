@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 // import controllers 
-const { login, addjob, getAllJobPosts,editJob, changeJobStatus, getCandidates } = require("../controllers/hrController");
+const { login, addjob, getAllJobPosts,editJob, changeJobStatus, getCandidates, changeCandidateStatus, changeHRPassword } = require("../controllers/hrController");
 const { JobDetails } = require("../controllers/jobsController");
 const { getUserProfileDetails } = require("../controllers/userController");
 
@@ -34,5 +34,11 @@ router.get("/getCandidates/:id", hrAuth, getCandidates);
 
 // fetching details of a candidate 
 router.get("/getCandidateProfile/:id", hrAuth, getUserProfileDetails);
+
+//chnage candidate password
+router.patch("/changeCandidateStatus/:id", hrAuth,  changeCandidateStatus);
+
+// changing password 
+router.put("/changePassword", hrAuth,  changeHRPassword);
 
 module.exports = router;

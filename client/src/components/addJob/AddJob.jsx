@@ -12,7 +12,7 @@ function AddJob() {
   const [state, setState] = useState({
     department: "",
     job_type: "",
-    job_role:"",
+    job_role: "",
     location: "",
     experience: "",
     min_salary: "",
@@ -54,8 +54,7 @@ function AddJob() {
     state.image = poster;
     // validations
     // image validation
-    if (!state.image)
-      return toast.error("Poster image required");
+    if (!state.image) return toast.error("Poster image required");
 
     // checking for the correct image type
     if (!/^image\/(jpe?g|png|gif|webp)$/.test(state.image.type)) {
@@ -83,7 +82,6 @@ function AddJob() {
     if (parseInt(state.max_salary) < 0 || parseInt(state.min_salary) < 0)
       return toast.error("oops! Salary Cannot be negative number");
 
-    
     if (parseInt(state.max_salary) < parseInt(state.min_salary)) {
       return toast.error("oops! Maximum Salary is less than minimum salary");
     }
@@ -101,7 +99,7 @@ function AddJob() {
           const newState = {
             department: "",
             job_type: "",
-            job_role:"",
+            job_role: "",
             location: "",
             experience: "",
             min_salary: "",
@@ -141,11 +139,16 @@ function AddJob() {
                 value={state.department}
                 onChange={handleInputChange}
               >
-                <option defaultChecked value="Marketing">Marketing</option>
+                <option defaultChecked value="">
+                  Select Department
+                </option>
+                <option value="Marketing">Marketing</option>
                 <option value="Sales">Sales</option>
                 <option value="Human-Resources">Human Resources (HR)</option>
-                <option value="Information-Technology">Information Technology (IT)</option>
-                <option value="Project-Management">Project Management</option>               
+                <option value="Information-Technology">
+                  Information Technology (IT)
+                </option>
+                <option value="Project-Management">Project Management</option>
                 <option value="Finance">Finance</option>
               </Form.Select>
             </Form.Group>
@@ -159,7 +162,10 @@ function AddJob() {
                 value={state.job_type}
                 onChange={handleInputChange}
               >
-                <option defaultChecked value="Full-time">Full time</option>
+                <option defaultChecked value="">
+                  Select Job Type
+                </option>
+                <option value="Full-time">Full time</option>
                 <option value="Part-time">Part time</option>
                 <option value="Remote">Remote</option>
                 <option value="Internship">Internship</option>
@@ -261,22 +267,23 @@ function AddJob() {
           </Row>
           <h5>Upload Poster</h5>
           {/*image upload */}
-          
+
           <Form.Group controlId="Poster" className="mt-2 mb-3">
             <Form.Label>
-            <div className="imgpreviewdiv pointer">
-            <div className="d-flex flex-column justify-content-center">
-            <img
-            src={poster ? URL.createObjectURL(poster) : "/upload_Icon.png"}
-            width={!poster && 50}
-            alt=""
-            className="m-auto"
-            />
-            
-            <small>{!poster && "Click to Upload"}</small>
-            
-            </div>
-          </div>
+              <div className="imgpreviewdiv pointer">
+                <div className="d-flex flex-column justify-content-center">
+                  <img
+                    src={
+                      poster ? URL.createObjectURL(poster) : "/upload_Icon.png"
+                    }
+                    width={poster ? 300 : 50}
+                    alt=""
+                    className="m-auto"
+                  />
+
+                  <small>{!poster && "Click to Upload"}</small>
+                </div>
+              </div>
             </Form.Label>
             <Form.Control
               className="d-none"
@@ -304,7 +311,7 @@ function AddJob() {
             <LoadingButton
               size={"sm"}
               variant={"white"}
-              className={"submitButton"}
+              className={"submitButton rounded"}
             />
           ) : (
             <Button type="submit" className="submitButton">

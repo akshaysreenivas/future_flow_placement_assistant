@@ -33,23 +33,27 @@ export function addUsers(state) {
         {
             username: state.name,
             studentID: state.studentId,
-            email: state.email
+            email: state.email,
+            department: state.department
         }
     );
 
 }
 
 // LISTING STUDENTS
-export function getUsers() {
+export function getUsers(department,page,search) {
     //   calling api
-    return adminInstance.get("/allStudents");
+    const url=`?page=${page}&department=${department}&search=${search}`
+    return adminInstance.get(`/allStudents/${url}`);
 }
-// listing hr managers 
-export function getHRManagers() {
+
+
+// Listing HR Managers 
+export function getHRManagers(hiring,search,page) {
     //   calling api
-    return adminInstance.get(
-        "/allHRManagers",
-    );
+    const url=`?page=${page}&hiring=${hiring}&search=${search}`
+    return adminInstance.get(`/allHRManagers/${url}`);
+  
 
 }
 

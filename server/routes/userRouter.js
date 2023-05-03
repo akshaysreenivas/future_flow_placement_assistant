@@ -96,7 +96,6 @@ router.post("/addProfilePhoto", userAuth, upload.imageUpload, updateProfilePhoto
 // adding cover pic 
 router.post("/addCoverPhoto", userAuth, upload.imageUpload, updateCoverPhoto);
 
-
 // fetching notifications 
 router.get("/getNotifications", userAuth,  getNotifications);
 
@@ -105,7 +104,6 @@ router.delete("/clearNotification/:id", userAuth,  ClearNotification);
 
 // marking as read 
 router.patch("/markAsRead", userAuth,  markAsRead);
-
 
 
 module.exports = router;

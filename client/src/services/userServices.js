@@ -25,9 +25,11 @@ export function getJob(id) {
 export function applyJob(id) {
     return userInstance.post(`/applyforJob/${id}`);
 }
+
 // apply for the job 
-export function appliedJobs() {
-    return userInstance.get(`/appliedJobs`);
+export function appliedJobs(page,search,filter) {
+    const url=`?page=${page}&department=${filter}&search=${search}`
+    return userInstance.get(`/appliedJobs/${url}`);
 }
 
 // cancel the job application

@@ -12,6 +12,7 @@ function AddUsers() {
     name: "",
     studentId: "",
     email: "",
+    department: ""
   });
 
   const handleInputChange = (event) => {
@@ -24,45 +25,46 @@ function AddUsers() {
     e.preventDefault();
     // validations
     if (!state.name || state.name.match(/^\s*$/) || state.name.length < 3)
-      return toast.error("Valid student name required minimum 3 characters", {
-        position: "top-center",
-      });
+      return toast.error("Valid student name required minimum 3 characters");
+
+    if (!state.department || state.department.match(/^\s*$/) )
+      return toast.error("Valid Department required");
+
     if (
       !state.studentId ||
       state.studentId.match(/^\s*$/) ||
       state.studentId.length < 4
     )
-      return toast.error("Valid Student ID required minimum 4 characters", {
-        position: "top-center",
-      });
+      return toast.error("Valid Student ID required minimum 4 characters");
     // email validation
     if (!state.email || state.email.match(/^\s*$/))
-      return toast.error("email required", { position: "top-center" });
+      return toast.error("email required");
+
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(state.email))
-      return toast.error(" enter a valid email", { position: "top-center" });
+      return toast.error("Please enter a valid email");
+
     setLoading(true);
     // calling api
     addUsers(state)
       .then((data) => {
-        setLoading(false);
         const newValues = {
           name: "",
           studentId: "",
           email: "",
+          department:""
         };
         if (data.status) {
           swal.fire("Success", "Successfully added Student", "success");
           setState(newValues);
           return;
         }
-        toast.error(data.message, { position: "top-center" });
+        toast.error(data.message);
       })
       .catch((err) => {
         console.log("err",err)
-        setLoading(false);
         const  data  = err;
-        toast.error(data.message, { position: "top-center" });
-      });
+        toast.error(data.message);
+      }).finally(()=> setLoading(false));
   };
 
   return (
@@ -103,10 +105,20 @@ function AddUsers() {
               onChange={handleInputChange}
             />
           </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Department</Form.Label>
+            <Form.Control
+              type="text"
+              name="department"
+              placeholder="Enter the Department."
+              value={state.department}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
           {loading ? (
-            <LoadingButton size={"sm"} variant={"white"} className={"submitButton"} />
+            <LoadingButton size={"sm"} variant={"white"} className={"submitButton rounded outline-0"} />
           ) : (
-            <Button type="submit" className="submitButton">
+            <Button type="submit" className="submitButton rounded">
               Submit
             </Button>
           )}

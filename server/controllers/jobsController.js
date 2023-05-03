@@ -13,7 +13,7 @@ module.exports.JobDetails = async (req, res, next) => {
         if (result == null) throw new Error("Can't Find a matching Entry");
         const applicant_id = new mongoose.Types.ObjectId(_id);
         result.isApplied = false;
-        const applicant = await jobModel.exists({ _id: req.params.id, applicants: applicant_id });
+        const applicant = await jobModel.exists({ _id: req.params.id, applicants:{ $elemMatch: { id: applicant_id }}});
         if (applicant) {
             result.isApplied = true;
         }
@@ -26,6 +26,5 @@ module.exports.JobDetails = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-
 };
 

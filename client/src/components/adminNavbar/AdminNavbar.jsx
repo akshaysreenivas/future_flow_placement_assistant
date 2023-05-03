@@ -16,7 +16,7 @@ function Topbar() {
         </div>
         <div className="topRight">
           <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/13/38/man-161282__340.png"
+            src="/admin_profile.avif"
             alt=""
             className="topAvatar"
           />
