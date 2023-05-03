@@ -34,7 +34,8 @@ function BasicinfoView({ user }) {
           </div>
           <div className="info">
             <span>Address</span>
-            <p>{user?.location.district + "," + user?.location.state}</p>
+            <p> {user.location ? user.location?.district + "," + user.location?.state 
+            : ""}</p>
           </div>
         </div>
       </div>

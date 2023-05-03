@@ -14,7 +14,7 @@ function HrRoutes() {
     <Routes>
       <Route path="/" element={<HrLogin />} />
       <Route path="/login" element={<HrLogin />} />
-      <Route path="/dashboard" element={<HrDashboard />} />
+      <Route path="/dashboard" exact element={<HrDashboard />} />
       <Route path="/addJobs" element={<HRAddJobPost />} />
       <Route path="/jobs" element={<HRListJobs/>} />
       <Route path="/jobs/JobDetails/:id" element={<HrJobDetails/>} />

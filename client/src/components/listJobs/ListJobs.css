@@ -10,15 +10,18 @@
   margin: 50px 10px;
 
 }
+.limit_select{
+height: 30px;
+width: fit-content;
+}
  select {
   cursor: pointer;
   min-width: 220px;
   max-width: 280px;
 }
-.first_div{
+/* .first_div{
 display: flex;
-justify-content: space-between;
-}
+justify-content:} */
 .arrow_btn {
   display: flex;
   align-items: center;

@@ -1,11 +1,12 @@
 import React from "react";
 import "./CompanyBanner.css";
+import { Link } from 'react-router-dom';
 
 function CompanyBanner() {
   return (
     <>
       <div className="bannerDiv companyBannerdiv">
-      <div data-aos="zoom-in-up" >
+      <div  >
       <img
       className="img-fluid"
       src="/welcomebannerimg.avif"
@@ -20,7 +21,9 @@ function CompanyBanner() {
           <p>
           A simple glance at your showcased projects will connect you directly with startups and top-notch companies.
           </p>
-          <button className="bannercompaniesbtn">View Companies</button>
+           <Link to="/jobs" className="text-decoration-none">
+           <button className="bannercompaniesbtn">View Jobs</button>
+           </Link>
         </div>
        
       </div>

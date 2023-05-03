@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../store/store";
 import "./UserNavBar.css";
-import Notification from "../notification/Notification";
+import { MdNotifications } from "react-icons/md";
 function UserNavBar({ user }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,11 +28,14 @@ function UserNavBar({ user }) {
     <Navbar.Brand className="brand" onClick={() => navigate("/")}>
       FutureFlow
     </Navbar.Brand>
-    {user &&
-      <div className="ms-auto d-md-block d-lg-none" >
-      <div className="px-md-4 px-2"></div>
-      <Notification /> {/* show Notification only on larger screens */}
-      </div> 
+    {
+      // user &&
+      // <div className="ms-auto d-md-block d-lg-none" >
+      // <div className="px-md-4 px-2"></div>
+      // <div>
+      // <Notification  /> {/* show Notification only on larger screens */}
+      // </div>
+      // </div> 
     }
     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
     <Navbar.Collapse id="responsive-navbar-nav">
@@ -42,12 +45,6 @@ function UserNavBar({ user }) {
         </Link>
         <Link to={"/jobs"} className="Link">
           Jobs
-        </Link>
-        <Link to={"/"} className="Link">
-          Contact
-        </Link>
-        <Link to={"/"} className="Link">
-          About
         </Link>
         {user ? (
           <Link to={"/profile"} className="Link">
@@ -67,9 +64,9 @@ function UserNavBar({ user }) {
       
       {user && (
         <>
-        <div className="me-auto ms-auto d-md-none d-lg-block" >
-        <Notification /> {/* show Notification only on larger screens */}
-        </div>
+        <Link to={"/notifications"} className="me-auto ms-auto d-md-none d-lg-block" >
+        <MdNotifications color="blue" size={25} />
+        </Link>
         <Nav
         className="logout_btn d-flex flex-row align-content-center text-md-danger me-1"
         onClick={handleLogout}

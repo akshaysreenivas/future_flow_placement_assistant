@@ -1,33 +1,62 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { Button, Table } from "react-bootstrap";
+import { Button, Form, Table } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { changeHRStatus } from "../../services/adminServices";
 import LoadingButton from "../loadingButton/LoadingButton";
 import { Link, useParams } from "react-router-dom";
-import { getCandidates } from "../../services/hrServices";
-
+import {
+  changeCandidateStatus,
+  getCandidates,
+} from "../../services/hrServices";
+import "./Candidates.css";
 function Candidates() {
   const [users, setUsers] = useState([]);
+  const [filter, setFilter] = useState("");
   const { id } = useParams();
   useEffect(() => {
-    getCandidates(id)
+    getCandidates(id, filter)
       .then((data) => {
         if (data.status) {
           const d = data.result;
-          setUsers(d.map((user) => ({ ...user, loading: false })));
-  
+          setUsers(
+            d?.map((user) => ({
+              ...user,
+              rejectloading: false,
+              loading: false,
+            }))
+          );
         }
       })
       .catch((error) => {
         console.log(error);
         toast.error("Something Went Wrong", { position: "top-center" });
       });
-  }, [id]);
+  }, [id, filter]);
+  const Status = ["Applied", "Rejected", "Short Listed", "Placed"];
   return (
     <div className="table_div">
-      <h2 className="mb-3">Candidates</h2>
+      <h2 className="mb-3 text-center">Job Candidates</h2>
+
+      <div className="me-auto mb-4 ">
+        <label className="mb-1">Filter by Candidates Status</label>
+        <Form.Select
+          size="sm"
+          value={filter}
+          onChange={(e) => {
+            setFilter(e.target.value);
+          }}
+        >
+          <option value="" defaultChecked>
+            &#xE16E; All Candidates
+          </option>
+          {Status.map((item, index) => (
+            <option value={item} key={index}>
+              {item}
+            </option>
+          ))}
+        </Form.Select>
+      </div>
       {users.length ? (
         <Table responsive hover>
           <thead>
@@ -44,7 +73,7 @@ function Candidates() {
           </thead>
           <tbody>
             {users?.map((item) => {
-              const changeStatus = () => {
+              const changeStatus = (status) => {
                 Swal.fire({
                   title: "Are you sure?",
                   icon: "warning",
@@ -57,36 +86,36 @@ function Candidates() {
                 }).then((result) => {
                   if (result.isConfirmed) {
                     const newUsers = [...users];
-                    // finding the current row
+                    // // finding the current row
                     const userIndex = newUsers.findIndex(
-                      (u) => u._id === item._id
+                      (u) => u.id._id === item.id._id
                     );
-                    // setting the loading animation
-                    newUsers[userIndex].loading = true;
+                    // // setting the loading animation
+                    if (status === "Rejected") {
+                      newUsers[userIndex].rejectloading = true;
+                    } else {
+                      newUsers[userIndex].loading = true;
+                    }
                     setUsers(newUsers);
+
+                    // // setting the new status
                     // Calling Api
-                    changeHRStatus(!item.blocked, item._id)
+                    changeCandidateStatus(id, item.id._id, status)
                       .then((data) => {
-                        const updatedUsers = [...users];
-                        updatedUsers[userIndex].loading = false;
                         if (data.status) {
-                          updatedUsers[userIndex].blocked = !item.blocked;
-                          toast(
-                            `Successfully ${
-                              item.blocked ? "Blocked" : "UnBlocked"
-                            } HR Manager`,
-                            { position: "top-center" }
-                          );
+                          newUsers[userIndex].progress.status = status;
+                          setUsers(newUsers);
+                          toast.success(`Successfully ${status} candidate`);
                         }
-                        setUsers(updatedUsers);
                       })
                       .catch((err) => {
+                        toast.error("Something Went Wrong");
+                      })
+                      .finally(() => {
                         const updatedUsers = [...users];
                         updatedUsers[userIndex].loading = false;
+                        newUsers[userIndex].rejectloading = false;
                         setUsers(updatedUsers);
-                        toast.error("Something Went Wrong", {
-                          position: "top-center",
-                        });
                       });
                   }
                 });
@@ -125,33 +154,50 @@ function Candidates() {
                     </Link>
                   </td>
                   <td className="text-center text-dark">
-                  <div>
-                    {item.loading ? (
-                      <LoadingButton
-                        size="sm"
-                        className={item.blocked ? "bg-success" : "bg-danger"}
-                      />
-                    ) : (
-                      <Button
-                        className={ "bg-danger me-1"}
-                        onClick={changeStatus}
-                      >
-                        Reject
-                      </Button>
-                    )}
-                    {item.loading ? (
-                      <LoadingButton
-                        size="sm"
-                        className={item.blocked ? "bg-success" : "bg-danger"}
-                      />
-                    ) : (
-                      <Button
-                        className={ "bg-success"}
-                        onClick={changeStatus}
-                      >
-                        Short List
-                      </Button>
-                    )}
+                    <div className="d-flex align-items-center justify-content-center">
+                      {item.progress.status === "Rejected" ? (
+                        <span className="text-danger">Rejected</span>
+                      ) : item.progress.status === "Placed" ? (
+                        <span className="text-success">Placed</span>
+                      ) : (
+                        <>
+                          {item.rejectloading ? (
+                            <LoadingButton size="sm" className={"reject_btn"} />
+                          ) : (
+                            <button
+                              className={"reject_btn"}
+                              onClick={() => changeStatus("Rejected")}
+                            >
+                              Reject
+                            </button>
+                          )}
+
+                          {item.loading ? (
+                            <LoadingButton
+                              size="sm"
+                              className={
+                                item.progress.status === "Short Listed"
+                                  ? "hire_btn"
+                                  : "shortList_btn"
+                              }
+                            />
+                          ) : item.progress.status === "Short Listed" ? (
+                            <Button
+                              className={"hire_btn"}
+                              onClick={() => changeStatus("Placed")}
+                            >
+                              Hire
+                            </Button>
+                          ) : (
+                            <Button
+                              className={"shortList_btn"}
+                              onClick={() => changeStatus("Short Listed")}
+                            >
+                              Short List
+                            </Button>
+                          )}
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -161,7 +207,7 @@ function Candidates() {
         </Table>
       ) : (
         <div>
-          <h5 className="text-center">No Datas Available Here!</h5>
+          <h5 className="text-center">No Candidates Found!</h5>
         </div>
       )}
     </div>
@@ -169,3 +215,47 @@ function Candidates() {
 }
 
 export default Candidates;
+
+// <td className="text-center text-dark">
+// <div className="d-flex align-items-center justify-content-center">
+//   {item.progress.status==="Rejected" ? (
+//     <span className="text-danger">Rejected</span>
+//   ) : (
+//     <>
+//       {item.rejectloading ? (
+//         <LoadingButton size="sm" className={"reject_btn"} />
+//       ) : (
+//         item.progress.status !== "Placed" && (
+//           <button
+//             className={"reject_btn"}
+//             onClick={() => changeStatus("Rejected")}
+//           >
+//             Reject
+//           </button>
+//         )
+//       )}
+//       {item.loading ? (
+//         <LoadingButton size="sm" className={ item.progress.status !== "Placed" ? "shortList_btn" : "hire_btn"} />
+//       ) : item.progress.status === "Short Listed" ? (
+//         item.progress.status !== "Placed" && (
+//           <Button
+//             className={"hire_btn"}
+//             onClick={() => changeStatus("Placed")}
+//           >
+//             Hire
+//           </Button>
+//         )
+//       ) : item.progress.status !== "Placed" ? (
+//         <Button
+//           className={"shortList_btn"}
+//           onClick={() => changeStatus("Short Listed")}
+//         >
+//           Short List
+//         </Button>
+//       ) : (
+//         <span className="text-success">Placed</span>
+//         )}
+//     </>
+//   )}
+// </div>
+// </td>

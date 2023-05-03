@@ -87,10 +87,10 @@ module.exports.Jobs = async (req, res, next) => {
     try {
         const { _id } = req.user;
         // taking the values from the request  
-        const page = parseInt(req.query.page);
+        const page = parseInt(req.query.page) || 1;
         const limit = req.query.limit || 4;
-        const search = req.query.search;
-        const department = req.query.department;
+        const search = req.query.search | "";
+        const department = req.query.department|| "";
         const order = parseInt(req.query.order) || -1;
         const sort = req.query.sort || "date";
 
@@ -109,6 +109,7 @@ module.exports.Jobs = async (req, res, next) => {
                 { department: { $regex: search, $options: "i" } },
                 { job_type: { $regex: search, $options: "i" } },
                 { skills: { $regex: search, $options: "i" } },
+                { job_role: { $regex: search, $options: "i" } },
             ];
         }
 
@@ -190,8 +191,6 @@ module.exports.applyJob = async (req, res, next) => {
 };
 
 
-
-
 // cancel the jobapplication 
 module.exports.cancelJobApplication = async (req, res, next) => {
     try {
@@ -211,9 +210,16 @@ module.exports.cancelJobApplication = async (req, res, next) => {
 // fetching jobs which is alredy applied 
 module.exports.appliedJobs = async (req, res, next) => {
     try {
-        const search = req.query.search;
         // the ID of the user
         const { _id } = req.user;
+
+        // taking the values from the request  
+        const page = parseInt(req.query.page) || 1;
+        const limit = req.query.limit || 4;
+        const search = req.query.search || "";
+        const department = req.query.department || "";
+        const order = parseInt(req.query.order) || -1;
+        const sort = req.query.sort || "date";
 
         // get the applied jobs array of the user
         const appliedJobs = await userModel.findById(_id, "appliedJobs").lean();
@@ -227,13 +233,47 @@ module.exports.appliedJobs = async (req, res, next) => {
             query.$or = [
                 { department: { $regex: search, $options: "i" } },
                 { job_type: { $regex: search, $options: "i" } },
+                { job_role: { $regex: search, $options: "i" } },
                 { skills: { $regex: search, $options: "i" } },
             ];
         }
-        // find the jobs where the _id is in the jobIds array
-        const jobs = await jobModel.find(query, { "applicants": 0, "hrID": 0 }).lean();
 
-        res.status(200).json({ status: true, message: "success", result: jobs });
+        //  filter by department  
+        if (department) {
+            query.department = department;
+        }
+
+        // page setup      
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        // sorting setup   
+        let sortObject = {};
+        sortObject[sort] = order;
+
+        // find the jobs where the _id is in the jobIds array
+        // const jobs = await jobModel.find(query, { "applicants": 0, "hrID": 0 }).lean();
+        const jobs = await jobModel.find(query, { "applicants": 0, "hrID": 0 }).sort(sortObject).skip(startIndex).limit(limit);
+
+        const total = await jobModel.countDocuments(query);
+        const dep = await jobModel.find({}).distinct("department");
+        const response = { status: true, total, page, limit, department: dep, result: jobs };
+
+        // finding if a next page is available  
+        if (endIndex < total)
+            response.next = {
+                page: page + 1,
+                limit: limit
+            };
+
+        // finding if previous page exists  
+        if (startIndex > 0) {
+            response.previous = {
+                page: page - 1,
+                limit: limit
+            };
+        }
+        res.status(200).json(response);
 
     } catch (error) {
         next(error);

@@ -1,0 +1,30 @@
+.reject_btn {
+  padding: 4px 1px !important;
+  border-radius: 7px;
+  background-color: rgb(229, 2, 2);
+  color: #fff;
+  margin: 2px 4px;
+}
+.shortList_btn {
+  padding: 4px 1px !important;
+  border-radius: 7px;
+  background-color: rgb(2, 134, 249);
+  color: #fff;
+  margin: 2px 4px;
+}
+.hire_btn {
+  padding: 4px 1px !important;
+  border-radius: 7px;
+  background-color: rgb(4, 200, 30);
+  color: #fff;
+  margin: 2px 4px;
+}
+.reject_btn:hover {
+  background-color: rgb(247, 45, 45);
+}
+.reject_btn:focus {
+  outline: none;
+}
+.reject_btn:active {
+  outline: none;
+}

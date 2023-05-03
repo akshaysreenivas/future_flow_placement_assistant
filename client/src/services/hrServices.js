@@ -46,13 +46,25 @@ export function changeJobStatus(status ,id) {
 }
 
 // changing job status      
-export function getCandidates(id) {
-    return hrInstance.get(`/getCandidates/${id}`);
+export function getCandidates(id,filter) {
+    return hrInstance.get(`/getCandidates/${id}/?filter=${filter}`);
 
 }
+
 // changing job status      
 export function getCandidateProfile(id) {
-    return hrInstance.get(`/getCandidateProfile/${id}`);
+    return hrInstance.get(`/getCandidateProfile/${id}`,);
 
 }
 
+
+// changing job status      
+export function changeCandidateStatus(id,candidate_id,status) {
+    return hrInstance.patch(`/changeCandidateStatus/${id}`,{candidate_id ,status});
+
+}
+
+// change password  
+export function changeHRPassword(password) {
+    return hrInstance.put(`/changePassword`,{password});
+}

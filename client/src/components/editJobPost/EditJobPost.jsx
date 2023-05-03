@@ -138,7 +138,7 @@ function EditJob() {
         setLoading(false);
         if (data.status) {
           const { id } = params;
-          navigate(`/hr/jobs/JobDeatils/${id}`);
+          navigate(`/hr/jobs/JobDetails/${id}`);
           return Swal.fire(
             "Success",
             "Successfully Updated Job Vacancy",
@@ -316,7 +316,7 @@ function EditJob() {
                             ? URL.createObjectURL(poster)
                             : "/upload_Icon.png"
                         }
-                        width={!poster && 50}
+                        width={!poster ? 50 :300}
                         alt=""
                         className="m-auto object-fit"
                       />

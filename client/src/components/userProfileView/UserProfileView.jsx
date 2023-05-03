@@ -24,11 +24,11 @@ function UserProfileView() {
           setState(result);
           const pic = result?.profilePicUrl
             ? process.env.REACT_APP_BASE_URL + result.profilePicUrl
-            : "default_profile_pic.avif";
+            : "/default_profile_pic.avif";
           setProfilePic(pic);
           const coverPhoto = result?.coverPicUrl
             ? process.env.REACT_APP_BASE_URL + result.coverPicUrl
-            : "default_cover_photo.png";
+            : "/default_cover_photo.png";
           setCoverPic(coverPhoto);
         } else {
           toast.error("Something Went Wrong");

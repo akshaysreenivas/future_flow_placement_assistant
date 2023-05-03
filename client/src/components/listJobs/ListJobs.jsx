@@ -76,6 +76,7 @@ function ListJobs() {
     setFilter("");
     setSearch("");
     setStatus("");
+    setPage(1);
     setLimit(3);
   };
 
@@ -84,12 +85,17 @@ function ListJobs() {
       <h2 className="mb-3"> Job Posts</h2>
       <div>
         <div className="first_div ">
+          <SearchBar
+            value={search}
+            placeholder={"Search"}
+            setSearch={setSearch}
+          />
           <Form.Select
             size="sm"
             value={limit}
             name="limit"
             onChange={(e) => handleLimitChange(e)}
-            className="limit"
+            className="limit_select ms-0"
           >
             <option value="3" defaultChecked>
               showing first 3 datas
@@ -97,11 +103,6 @@ function ListJobs() {
             <option value="5">Show 5</option>
             <option value="10">Show 10</option>
           </Form.Select>
-          <SearchBar
-            value={search}
-            placeholder={"Search"}
-            setSearch={setSearch}
-          />
         </div>
         <div className="filter_div my-3">
           <Form.Select
@@ -112,7 +113,7 @@ function ListJobs() {
             className=""
           >
             <option value={""} defaultChecked disabled>
-              filter By
+              Sort By
             </option>
             <option value="department">Department</option>
             <option value="job_type">Job Type</option>
@@ -259,22 +260,22 @@ function ListJobs() {
                     <div className="d-flex p-1 justify-content-center">
                       {item.applicants > 0 ? (
                         <Link
-                        className="link text-light d-flex p-1 justify-content-center"
-                        to={`/hr/jobs/getCandidates/${item._id}`}
+                          className="link text-light d-flex p-1 justify-content-center"
+                          to={`/hr/jobs/getCandidates/${item._id}`}
                         >
-                        <Button className="bg-info">
-                        View
-                          </Button>
-                          </Link>
-                      ):(item.applicants)}
+                          <Button className="bg-info">View</Button>
+                        </Link>
+                      ) : (
+                        item.applicants
+                      )}
                     </div>
                   </td>
-                  <td >
+                  <td>
                     <Link
                       className="link d-flex p-1 justify-content-center "
                       to={`/hr/jobs/JobDetails/${item._id}`}
                     >
-                     <Button className="bg-info">View more</Button>
+                      <Button className="bg-info">View more</Button>
                     </Link>
                   </td>
                   <td className="text-center text-dark">

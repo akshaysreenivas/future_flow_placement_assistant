@@ -26,13 +26,13 @@ const jobSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    applicants: {
+    applicants: [{
         id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "users",
             required: true
         },
-        progress: [{
+        progress: {
             status: {
                 type: String,
                 required: true
@@ -41,7 +41,7 @@ const jobSchema = new mongoose.Schema({
                 type: Date,
                 default: Date.now
             }
-        }]
-    }
+        }
+    }]
 });
 module.exports = mongoose.model("jobs", jobSchema);

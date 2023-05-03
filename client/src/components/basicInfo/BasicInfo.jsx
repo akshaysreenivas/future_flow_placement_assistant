@@ -46,8 +46,8 @@ function BasicInfo() {
             <div className="info">
               <span>Address</span>
               <p>
-                {user.location.district + "," + user.location.state ??
-                  "Add Address to view here"}
+                {user.location ? user.location?.district + "," + user.location?.state 
+                  : "Add Address to view here"}
               </p>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import "./WelcomeBanner.css";
+import { Link } from 'react-router-dom';
 
 function WelcomeBanner() {
   const navigate = useNavigate()
@@ -13,10 +14,11 @@ function WelcomeBanner() {
             Ultimate Job Placement Assistant
           </h1>
           <p>
-            Get your dream job with our networking and modern career tools.
-            Achieve your goals with us
+          Get your dream job with our advanced networking and modern career tools. Achieve your career goals with ease by building an attractive profile that will grab the attention of employers. 
           </p>
-          <button onClick={()=> navigate("/login")} className="bannerGetStartedbtn">Get Started</button>
+           <Link to="/profile" className="text-decoration-none">
+           <button className="bannerGetStartedbtn">Get Started</button>
+           </Link>
         </div>
        <div>
        <img

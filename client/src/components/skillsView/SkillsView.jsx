@@ -17,7 +17,7 @@ function SkillsView({ skills }) {
           {skills.map((item) => {
             return (
               <div
-                key={item._id}
+              key={item._id}
                 className="single_skill_div  px-3 py-2  rounded col"
               >
                 <div>

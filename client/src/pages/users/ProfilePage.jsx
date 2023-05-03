@@ -4,7 +4,7 @@ import Sidenav from "../../components/profileSidenav/Sidenav";
 import UserNavBar from "../../components/userNavbar/UserNavBar";
 import { getUserDetails } from "../../services/userServices";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "../../store/store";
 
 import EditProfilePhoto from "../../components/editProfilePic/EditProfilePhoto";
@@ -18,6 +18,8 @@ function ProfilePage() {
   const [oldCoverImg, setOldCoverImg] = useState();
   const [user, setUser] = useState();
   const dispatch = useDispatch();
+
+  const User = useSelector((state) => state.user.user);
 
   useEffect(() => {
     const token = localStorage.getItem("userAuthToken");
@@ -82,7 +84,7 @@ function ProfilePage() {
                 oldProfileImg={oldProfileImg}
                 setProfilePic={setProfilePic}
               />
-              <h3>{user?.name}</h3>
+              <h3>{User?.name}</h3>
             </div>
           </div>
         </div>

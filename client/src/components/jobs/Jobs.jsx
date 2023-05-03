@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import SearchBar from "../searchBar/SearchBar";
 import { MdOutlineLocationOn } from "react-icons/md";
 import "./Jobs.css";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import Pagination from "../pagination/Pagination";
 import Loading from "../loading/Loading";
 import LoadingButton from "../loadingButton/LoadingButton";
@@ -62,9 +62,13 @@ function Jobs() {
         toast.error("Something Went Wrong");
       });
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, navigate, search, filter]);
-
+ // handling reseting the filterations
+ const handleReset = () => {
+  setFilter("");
+  setSearch("");
+  setPage(1);
+};
   return (
     <div className="jobs_parent_div my-3 p-3">
       <div className="mb-4">
@@ -76,33 +80,34 @@ function Jobs() {
         </h6>
       </div>
       <SearchBar
-        placeholder={"Search by Skill , Title or Company"}
-        value={search}
+      placeholder={"Search by Skill , Job type ,Department or Role"}
+      value={search}
         setSearch={setSearch}
       />
-      {jobs.length ? (
+        <div className="d-flex justify-content-between align-items-center mb-4 px-4">
         <Form.Select
-          size="sm"
-          className="ms-auto mb-4"
+        size="sm"
+          className=" m"
           value={filter}
           onChange={(e) => {
             setFilter(e.target.value);
             setPage(1);
           }}
         >
-          <option value="" defaultChecked>
+          <option value="" defaultChecked disabled>
             &#xE16E; Filter By Department
-          </option>
-
-          {department.map((item, index) => (
-            <option value={item} key={index}>
-              {item}
             </option>
-          ))}
-        </Form.Select>
-      ) : (
-        ""
-      )}
+
+            {department.map((item, index) => (
+            <option value={item} key={index}>
+            {item}
+            </option>
+            ))}
+            </Form.Select>
+            <Button onClick={handleReset}>reset</Button>
+
+            </div>
+         
       <div className="JobsDiv m-3 ">
         {loading ? (
           <div className="d-flex justify-content-center mx-auto my-5">
@@ -153,7 +158,7 @@ function Jobs() {
                   if (data.status) {
                     newJobs[jobsIndex].isApplied = false;
                     setJobs(newJobs);
-                    toast.success(data.message, { autoClose: 1000 });
+                    toast("Job Applicaton Cancelled", { autoClose: 1000 });
                   }
                 });
               } catch (err) {
