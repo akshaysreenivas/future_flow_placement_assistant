@@ -22,7 +22,6 @@ function App() {
         <Route path="/hr/*" element={<HrRoutes />} />
 
         {/* Showing error page */}
-        <Route path="*" element={<ErrorPage />} />
       </Routes>
       {/* Toast container */}
       <ToastContainer newestOnTop limit={3} position="top-center" />

@@ -21,11 +21,11 @@ module.exports.login = async (req, res, next) => {
         if (!email || !password) throw new Error("All Fields required");
         // finding the user 
         const user = await hrModel.findOne({ email: email });
-        if (!user) return res.status(401).json({ status: false, message: "incorrect email or password" });
+        if (!user) return res.status(401).json({ status: false, message: "incorrect email" });
         // comparing password 
         const auth = await bcrypt.compare(password, user.password);
         // sending false response if the password doesn't match
-        if (!auth) return res.status(401).json({ status: false, message: "incorrect email or password" });
+        if (!auth) return res.status(401).json({ status: false, message: "incorrect password" });
         // checking whether the user is bolcked or not 
         if (user.blocked) return res.status(200).json({ status: false, message: "Your Account is Temporarly Suspended" });
         // calling function to create jwt token 
@@ -52,6 +52,7 @@ module.exports.addjob = async (req, res, next) => {
         }
         if (!department || !req.file || !job_type || !job_role || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
         const imgUrl = "/images/" + req.file.filename;
+        const company = await hrModel.findOne({ _id: hrID }, { company: 1 });
         const newJob = new jobModel({
             department: department,
             job_type: job_type,
@@ -62,12 +63,13 @@ module.exports.addjob = async (req, res, next) => {
             max_salary: max_salary,
             description: description,
             location: location,
+            company: company.company,
             hrID: hrID,
             poster: imgUrl
         });
         await newJob.save();
         // await hrModel.
-        await hrModel.updateOne({ _id: hrID }, { $set: { active:true } });
+        await hrModel.updateOne({ _id: hrID }, { $set: { active: true } });
 
         res.status(200).json({ status: true, message: "Successfully Added Job" });
     } catch (error) {
@@ -300,6 +302,7 @@ module.exports.changeHRPassword = async (req, res, next) => {
 
         // getting the password 
         const { password } = req.body;
+        if (!password) throw new Error("Password required");
 
         // hashing password   
         const saltRounds = 10;
@@ -313,3 +316,62 @@ module.exports.changeHRPassword = async (req, res, next) => {
         next(error);
     }
 };
+
+
+
+// fetching datas for dashboard  
+module.exports.getHRDashboardDatas = async (req, res, next) => {
+    try {
+        // getting id of the user         
+        const { _id } = req.user;
+
+        
+        // res.status(200).json({ status: true, message: "success" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+
+
+
+
+
+
+// const totalPlacements = await jobModel.aggregate([
+//     // unwind the applicants array
+//     { $unwind: "$applicants" },
+
+//     // group by year, month, and status
+//     {
+//         $group: {
+//             _id: {
+//                 status: "$applicants.progress.status"
+//             },
+//             count: { $sum: 1 }
+//         }
+//     },
+
+//     // match the shortlisted and placed statuses
+//     { $match: { "_id.status": { $in: [ "Placed"] } } },
+
+//     // project the required fields
+//     {
+//         $project: {
+//             _id: 0,
+//             count: "$count"
+//         }
+//     },
+
+//     // sort by year and month
+//     { $sort: { year: 1, month: 1 } },
+
+//     // group by status and sum the count
+//     {
+//         $group: {
+//             _id: "$status",
+//             total: { $sum: "$count" }
+//         }
+//     }
+// ]);

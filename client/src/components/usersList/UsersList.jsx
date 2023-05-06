@@ -8,10 +8,12 @@ import LoadingButton from "../loadingButton/LoadingButton";
 import Swal from "sweetalert2";
 import SearchBar from "../searchBar/SearchBar";
 import Pagination from "../pagination/Pagination";
+import Loading from "../loading/Loading";
 
 function UserList() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
   const [department, setDepartment] = useState("");
   const [departments, setDepartments] = useState([]);
   const [page, setPage] = useState(1);
@@ -31,8 +33,10 @@ function UserList() {
         setDepartments(data.departments);
       })
       .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
         toast.error("Something Went Wrong", { position: "top-center" });
-      });
+      }).finally(()=>setLoading(false));
   }, [department, page, search]);
 
   // handling reseting the filterations
@@ -72,7 +76,10 @@ function UserList() {
           <Button onClick={handleReset}>reset</Button>
         </div>
       </div>
-      {users.length ? (
+      {  loading ? ( <div className="d-flex justify-content-center mx-auto my-5">
+      <Loading />
+    </div>) :
+        (users.length ? (
         <>
           <Table responsive hover>
             <thead>
@@ -188,7 +195,7 @@ function UserList() {
             No Datas Available Here! Try Adding Students
           </h5>
         </div>
-      )}
+      )) }
     </div>
   );
 }

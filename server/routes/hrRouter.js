@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 // import controllers 
-const { login, addjob, getAllJobPosts,editJob, changeJobStatus, getCandidates, changeCandidateStatus, changeHRPassword } = require("../controllers/hrController");
+const { login, addjob, getAllJobPosts, editJob, changeJobStatus, getCandidates, changeCandidateStatus, changeHRPassword, getHRDashboardDatas } = require("../controllers/hrController");
 const { JobDetails } = require("../controllers/jobsController");
 const { getUserProfileDetails } = require("../controllers/userController");
 
@@ -15,7 +15,7 @@ const upload = require("../middlewares/multer");
 router.post("/login", login);
 
 // adding jobs 
-router.post("/addJob", hrAuth,upload.imageUpload, addjob);
+router.post("/addJob", hrAuth, upload.imageUpload, addjob);
 
 // fetch all jobs 
 router.get("/getJobs", hrAuth, getAllJobPosts);
@@ -24,7 +24,7 @@ router.get("/getJobs", hrAuth, getAllJobPosts);
 router.get("/getJobs/getdetails/:id", hrAuth, JobDetails);
 
 // edit job details 
-router.put("/editJobdetails/:id", hrAuth ,upload.imageUpload, editJob);
+router.put("/editJobdetails/:id", hrAuth, upload.imageUpload, editJob);
 
 // changing job status 
 router.patch("/changeJobStatus", hrAuth, changeJobStatus);
@@ -36,9 +36,12 @@ router.get("/getCandidates/:id", hrAuth, getCandidates);
 router.get("/getCandidateProfile/:id", hrAuth, getUserProfileDetails);
 
 //chnage candidate password
-router.patch("/changeCandidateStatus/:id", hrAuth,  changeCandidateStatus);
+router.patch("/changeCandidateStatus/:id", hrAuth, changeCandidateStatus);
 
 // changing password 
-router.put("/changePassword", hrAuth,  changeHRPassword);
+router.put("/changePassword", hrAuth, changeHRPassword);
+
+// fetching dashboard datas
+router.get("/getHRDashboardDatas", hrAuth, getHRDashboardDatas);
 
 module.exports = router;

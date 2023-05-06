@@ -10,6 +10,7 @@ import { MdNotifications } from "react-icons/md";
 function UserNavBar({ user }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleLogout = () => {
     localStorage.removeItem("userAuthToken");
     dispatch(setUserDetails(null));

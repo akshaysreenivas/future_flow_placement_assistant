@@ -14,6 +14,7 @@ const jobSchema = new mongoose.Schema({
     max_salary: { type: Number },
     description: { type: String },
     poster: { type: Object },
+    company: { type: String },
     hrID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "hrManager"

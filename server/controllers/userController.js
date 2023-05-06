@@ -63,7 +63,7 @@ module.exports.login = async (req, res, next) => {
                 notification_type: "Security Alert",
                 message: `hey ${user.name},Welcome to Futureflow! To help keep your account and personal data secure, we kindly ask all new users to choose a strong, unique password on their first login`
             };
-            await userModel.updateOne({ email: email }, { $push: { notification: newNotification } });
+            await userModel.updateOne({ email: email }, { $push: { notification: newNotification },$set:{status:"Active"} });
         }
         // calling function to create jwt token 
         const token = createToken(user._id);
@@ -96,7 +96,7 @@ module.exports.Jobs = async (req, res, next) => {
 
         // finding already applied jobs   
         const appliedJobIds = await userModel.findById(_id, { appliedJobs: 1 }).lean();
-        const jobIds = appliedJobIds.appliedJobs.map(job => job._id);
+        const jobIds = appliedJobIds.appliedJobs?.map(job => job._id);
         // query         
         const query = {
             active: true,
