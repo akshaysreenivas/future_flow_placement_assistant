@@ -187,7 +187,7 @@ function AppliedJobs() {
               src="/no-matching-job.avif"
               alt=""
             />
-            <h5 className="text-center">No Matching Jobs Found</h5>
+            <h6 className="text-center">Jobs that you applied will appear here</h6>
           </div>
         )}
         <Pagination

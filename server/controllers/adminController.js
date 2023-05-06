@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const hrModel = require("../models/hrModel");
 const sendEmail = require("../config/mailer");
+const jobModel = require("../models/jobModel");
 
 
 // creating jwt token
@@ -263,12 +264,129 @@ module.exports.changeUserStatus = async (req, res, next) => {
     }
 
 };
+
+// blocking or unblocking hr manager 
 module.exports.changeHRStatus = async (req, res, next) => {
     try {
         const { status, id } = req.body;
         const result = await hrModel.findByIdAndUpdate({ _id: id }, { $set: { blocked: status } }).exec();
         if (result == null) throw new Error("Can't Find a matching Entry");
         res.status(200).json({ status: true, message: "Successfully updated" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+
+
+// fetching nessary datas for admin dashboard
+module.exports.getDashboardDatas = async (req, res, next) => {
+    try {
+        const hrManagers = await hrModel.countDocuments({}).exec();
+        const students = await userModel.countDocuments({}).exec();
+        const jobs = await jobModel.countDocuments({}).exec();
+        // const placements = await jobModel.find({ "applicants.progress.status": "Applied" });
+
+        let analysis = await jobModel.aggregate([
+            // unwind the applicants array
+            { $unwind: "$applicants" },
+
+            // group by year, month, and status
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$applicants.progress.date" },
+                        month: { $month: "$applicants.progress.date" },
+                        status: "$applicants.progress.status"
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+
+            // match the shortlisted and placed statuses
+            { $match: { "_id.status": { $in: ["Placed"] } } },
+
+            // project the required fields
+            {
+                $project: {
+                    _id: 0,
+                    year: "$_id.year",
+                    month: "$_id.month",
+                    status: "$_id.status",
+                    count: "$count"
+                }
+            },
+
+            // sort by year and month
+            { $sort: { year: 1, month: 1 } },
+        ]);
+
+        const placements = await jobModel.aggregate([
+            // unwind the applicants array
+            { $unwind: "$applicants" },
+
+            // group by year, month, and status
+            {
+                $group: {
+                    _id: {
+                        status: "$applicants.progress.status"
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+
+            // match the shortlisted and placed statuses
+            { $match: { "_id.status": { $in: ["Placed"] } } },
+
+            // project the required fields
+            {
+                $project: {
+                    _id: 0,
+                    count: "$count"
+                }
+            },
+
+            // sort by year and month
+            { $sort: { year: 1, month: 1 } },
+
+            // group by status and sum the count
+            {
+                $group: {
+                    _id: "$status",
+                    total: { $sum: "$count" }
+                }
+            }
+        ]);
+        const companys =await jobModel.aggregate([
+            { "$unwind": "$applicants" },
+            // Match only applicants with a "Placed" status
+            { $match: { "applicants.progress.status": "Placed" } },
+            {
+                $group: {
+                    _id: "$company",
+                    count: { $sum: 1 }
+                }
+            },
+            // Project the fields to remove the "_id" and rename the remaining fields
+            {
+                $project: {
+                    _id: 0,
+                    company: "$_id",
+                    count: "$count"
+                }
+            }
+
+
+        ]);
+        const totalPlacements = placements[0]?.total ?? 0;
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        analysis.map(item => item.month = months[item.month - 1]);
+
+        let response = { status: true, students, hrManagers, jobs, analysis, totalPlacements, companys };
+        console.log(response);
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }

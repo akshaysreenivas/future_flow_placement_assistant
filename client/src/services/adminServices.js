@@ -76,3 +76,10 @@ export function changeHRStatus(status, id) {
 }
 
 
+// fetching datas for admin dashboard 
+export function getDashboardDatas() {
+    //   calling api
+    return adminInstance.get("/getDashboardDatas");
+}
+
+

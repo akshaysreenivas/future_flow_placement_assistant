@@ -15,7 +15,6 @@ const adminInstance = axios.create({
 // instance for HR making apis
 const hrInstance = axios.create({
     baseURL: `${process.env.REACT_APP_BASE_URL}/hr`,
-    
 })
 
 
@@ -57,8 +56,8 @@ hrInstance.interceptors.request.use((request) => {
 
 
 // HR instance response interceptor 
-hrInstance.interceptors.response.use((response) => response.data,
-    (error) => error.response.data
+hrInstance.interceptors.response.use(response => response.data,
+    error => error.response.data
 )
 
 

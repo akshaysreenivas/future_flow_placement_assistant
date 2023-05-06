@@ -97,13 +97,15 @@ function Login({ role, url }) {
         setLoading(false);
         if (data.status) {
           localStorage.setItem("hrAuthToken", data.token);
-          return navigate("/hr/dashboard");
+          toast("good")
+          // return navigate("/hr/dashboard");
+          return navigate("/hr/jobs");
+        }else{
+          toast.error(data.message);
         }
-        toast.error(data.message, { position: "top-center" });
       } catch (err) {
         setLoading(false);
         console.log("err", err);
-
         toast.error(err, { position: "top-center" });
       }
     }

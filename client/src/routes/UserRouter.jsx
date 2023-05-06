@@ -8,13 +8,11 @@ import UserLogin from "../pages/users/UserLogin";
 import ProfilePage from "../pages/users/ProfilePage";
 import AppliedJobsPage from "../pages/users/AppliedJobs";
 import NotificationsPage from "../pages/users/NotificationsPage";
-import ErrorPage from "../pages/ErrorPage";
 
 function UserRouter() {
   return (
   
       <Routes>
-        <Route path="/*" exact element={<ErrorPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/jobs" element={<JobsPage />} />

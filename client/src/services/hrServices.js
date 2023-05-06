@@ -68,3 +68,8 @@ export function changeCandidateStatus(id,candidate_id,status) {
 export function changeHRPassword(password) {
     return hrInstance.put(`/changePassword`,{password});
 }
+
+// fetching datas for hr dashboard  
+export function getHRDashboardDatas() {
+    return hrInstance.get(`/getHRDashboardDatas`);
+}

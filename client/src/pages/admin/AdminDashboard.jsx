@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Topbar from "../../components/adminNavbar/AdminNavbar";
 import Sidebar from "../../components/adminSidebar/AdminSidebar";
 import { useNavigate } from "react-router-dom";
+import Dashboard from "../../components/dashboard/Dashboard";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ function AdminDashboard() {
       <Sidebar />
       <div className="component">
         <h1>Dashboard</h1>
+        <Dashboard/>
       </div>
     </div>
   );
