@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const jobModel = require("../models/jobModel");
 const Fs = require("fs");
 const userModel = require("../models/userModel");
+const ExcelJS = require("exceljs");
+
 
 // creating jwt token
 const maxAge = 3 * 24 * 60 * 1000;
@@ -324,9 +326,109 @@ module.exports.getHRDashboardDatas = async (req, res, next) => {
     try {
         // getting id of the user         
         const { _id } = req.user;
+        const jobs = await jobModel.countDocuments({ hrID: _id }).exec();
 
-        
-        // res.status(200).json({ status: true, message: "success" });
+        // department wise hirings  
+        let analysis = await jobModel.aggregate([
+            { $match: { hrID: _id } },
+
+            // unwind the applicants array
+            { $unwind: "$applicants" },
+
+            // Match only applicants with a "Placed" status
+            { $match: { "applicants.progress.status": "Placed" } },
+
+            // group by department
+            {
+                $group: {
+                    _id: {
+                        department: "$department"
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            //   Project the fields to remove the "_id" and rename the remaining fields
+            {
+                $project: {
+                    _id: 0,
+                    department: "$_id.department",
+                    count: "$count"
+                }
+            }
+
+        ]);
+
+        // total placements   
+        const placements = await jobModel.aggregate([
+            { $match: { hrID: _id } },
+            // unwind the applicants array
+            { $unwind: "$applicants" },
+
+            {
+                $group: {
+                    _id: {
+                        status: "$applicants.progress.status"
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+
+            // match the shortlisted and placed statuses
+            { $match: { "_id.status": { $in: ["Placed"] } } },
+
+            // project the required fields
+            {
+                $project: {
+                    _id: 0,
+                    count: "$count"
+                }
+            },
+
+
+            // group by status and sum the count
+            {
+                $group: {
+                    _id: "$status",
+                    total: { $sum: "$count" }
+                }
+            }
+        ]);
+
+        // no of appliants by dtatus  
+        let statusCount = await jobModel.aggregate([
+            { $match: { hrID: _id } },
+            { $unwind: "$applicants" },
+            {
+                $group: {
+                    _id: "$applicants.progress.status",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    countsByStatus: {
+                        $push: {
+                            status: "$_id",
+                            count: "$count"
+                        }
+                    },
+                    total: { $sum: "$count" }
+                }
+            }
+
+        ]);
+
+
+        const departments = await jobModel.countDocuments({ hrID: _id }).distinct("department");
+        const totaldepartments = departments.length;
+
+
+        const totalPlacements = placements[0]?.total ?? 0;
+        let totalApplicants = statusCount[0]?.total ?? 0;
+        statusCount = statusCount[0]?.countsByStatus ?? [];
+        const response = { status: true, jobs, analysis, totalPlacements, totaldepartments, totalApplicants, statusCount };
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }
@@ -334,44 +436,70 @@ module.exports.getHRDashboardDatas = async (req, res, next) => {
 
 
 
+// fetching datas for dashboard  
+module.exports.downloadHrDashboardDatas = async (req, res, next) => {
+    try {
+        // getting id of the user         
+        const { _id } = req.user;
+
+
+        const placements = await jobModel.aggregate([
+            { $match: { hrID: _id } },
+            // unwind the applicants array
+            { $unwind: "$applicants" },
+
+            // match the shortlisted and placed statuses
+            { $match: { "applicants.progress.status": { $in: ["Placed"] } } },
+            // lookup the name and email fields from the users collection
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "applicants.id",
+                    foreignField: "_id",
+                    as: "applicant"
+                }
+            },
+            // project the required fields
+            {
+                $project: {
+                    _id: 0,
+                    title: "$job_role",
+                    department: "$department",
+                    job_type: "$job_type",
+                    name: { $arrayElemAt: ["$applicant.name", 0] },
+                    email: { $arrayElemAt: ["$applicant.email", 0] },
+                    salary: { $concat: [{ $toString: "$min_salary" }, "-", { $toString: "$max_salary" }] }
+                }
+            }
 
 
 
+        ]);
 
 
-// const totalPlacements = await jobModel.aggregate([
-//     // unwind the applicants array
-//     { $unwind: "$applicants" },
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Placements");
 
-//     // group by year, month, and status
-//     {
-//         $group: {
-//             _id: {
-//                 status: "$applicants.progress.status"
-//             },
-//             count: { $sum: 1 }
-//         }
-//     },
+        worksheet.columns = [
+            { header: "Title", key: "title", width: 25 },
+            { header: "department", key: "department", width: 25 },
+            { header: "name", key: "name", width: 25 },
+            { header: "email", key: "email", width: 30 },
+            { header: "salary", key: "salary", width: 25 },
+            { header: "job_type", key: "job_type", width: 25 },
+        ];
+        placements.forEach(job => {
+            worksheet.addRow({
+                title: job.title, department: job.department,
+                name: job.name, email: job.email,
+                salary: job.salary, job_type: job.job_type,
+            });
+        });
+        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        res.setHeader("Content-Disposition", "attachment; filename=placements.xlsx");
+        await workbook.xlsx.write(res);
 
-//     // match the shortlisted and placed statuses
-//     { $match: { "_id.status": { $in: [ "Placed"] } } },
-
-//     // project the required fields
-//     {
-//         $project: {
-//             _id: 0,
-//             count: "$count"
-//         }
-//     },
-
-//     // sort by year and month
-//     { $sort: { year: 1, month: 1 } },
-
-//     // group by status and sum the count
-//     {
-//         $group: {
-//             _id: "$status",
-//             total: { $sum: "$count" }
-//         }
-//     }
-// ]);
+    } catch (error) {
+        next(error);
+    }
+};

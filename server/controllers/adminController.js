@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const hrModel = require("../models/hrModel");
 const sendEmail = require("../config/mailer");
 const jobModel = require("../models/jobModel");
+const ExcelJS = require("exceljs");
 
 
 // creating jwt token
@@ -286,7 +287,6 @@ module.exports.getDashboardDatas = async (req, res, next) => {
         const hrManagers = await hrModel.countDocuments({}).exec();
         const students = await userModel.countDocuments({}).exec();
         const jobs = await jobModel.countDocuments({}).exec();
-        // const placements = await jobModel.find({ "applicants.progress.status": "Applied" });
 
         let analysis = await jobModel.aggregate([
             // unwind the applicants array
@@ -326,7 +326,7 @@ module.exports.getDashboardDatas = async (req, res, next) => {
             // unwind the applicants array
             { $unwind: "$applicants" },
 
-            // group by year, month, and status
+            // group by  status
             {
                 $group: {
                     _id: {
@@ -358,7 +358,7 @@ module.exports.getDashboardDatas = async (req, res, next) => {
                 }
             }
         ]);
-        const companys =await jobModel.aggregate([
+        const companys = await jobModel.aggregate([
             { "$unwind": "$applicants" },
             // Match only applicants with a "Placed" status
             { $match: { "applicants.progress.status": "Placed" } },
@@ -385,8 +385,66 @@ module.exports.getDashboardDatas = async (req, res, next) => {
         analysis.map(item => item.month = months[item.month - 1]);
 
         let response = { status: true, students, hrManagers, jobs, analysis, totalPlacements, companys };
-        console.log(response);
         res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+
+
+// fetching datas for dashboard  
+module.exports.downloadDashboardDatas = async (req, res, next) => {
+    try {
+        // getting id of the user         
+        let analysis = await jobModel.aggregate([
+            // unwind the applicants array
+            { $unwind: "$applicants" },
+
+            // group by year, month, and status
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$applicants.progress.date" },
+                        month: { $month: "$applicants.progress.date" },
+                        status: "$applicants.progress.status"
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+
+            // match the shortlisted and placed statuses
+            { $match: { "_id.status": { $in: ["Placed"] } } },
+
+            // project the required fields
+            {
+                $project: {
+                    _id: 0,
+                    year: "$_id.year",
+                    month: "$_id.month",
+                    status: "$_id.status",
+                    count: "$count"
+                }
+            },
+
+            // sort by year and month
+            { $sort: { year: 1, month: 1 } },
+        ]);
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Jobs");
+        worksheet.columns = [
+            { header: "Title", key: "title", width: 25 },
+            { header: "Description", key: "description", width: 50 }
+        ];
+        analysis.forEach(job => {
+            worksheet.addRow({ title: job.title, description: job.description });
+        });
+        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        res.setHeader("Content-Disposition", "attachment; filename=jobs.xlsx");
+        await workbook.xlsx.write(res);
+
+        // res.status(200).json(response);
     } catch (error) {
         next(error);
     }

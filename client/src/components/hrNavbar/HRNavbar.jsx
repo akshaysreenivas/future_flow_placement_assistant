@@ -19,18 +19,18 @@ function Topbar() {
         <div className="topRight">
           <div className="pointer">
             
-            <DropdownButton id="dropdown-basic-button" variant="white" color="white" title={<FcSettings size={25} color="black" />}>
+            <DropdownButton id="dropdown-basic-button" variant="white" color="white" title={<FcSettings size={20} color="black" />}>
               <Dropdown.Item> <ChangePassword hr={true}/></Dropdown.Item>
 
             </DropdownButton>
           </div>
           <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/13/38/man-161282__340.png"
+            src="/hr_profile.png"
             alt=""
             className="topAvatar"
           />
           <div className="topbarIconContainer">
-            <RiLogoutCircleRLine size={25} onClick={handleLogout} />
+            <RiLogoutCircleRLine size={20} onClick={handleLogout} />
           </div>
         </div>
       </div>

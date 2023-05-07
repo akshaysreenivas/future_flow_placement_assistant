@@ -73,3 +73,9 @@ export function changeHRPassword(password) {
 export function getHRDashboardDatas() {
     return hrInstance.get(`/getHRDashboardDatas`);
 }
+
+// downloading report  
+export function downloadHRDashboardDatas() {
+    //   calling api
+    return hrInstance.get('/downloadhrDashboardDatas', { responseType: 'blob' });
+}

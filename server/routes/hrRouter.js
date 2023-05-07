@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 // import controllers 
-const { login, addjob, getAllJobPosts, editJob, changeJobStatus, getCandidates, changeCandidateStatus, changeHRPassword, getHRDashboardDatas } = require("../controllers/hrController");
+const { login, addjob, getAllJobPosts, editJob, changeJobStatus, getCandidates, changeCandidateStatus, changeHRPassword, getHRDashboardDatas, downloadHrDashboardDatas } = require("../controllers/hrController");
 const { JobDetails } = require("../controllers/jobsController");
 const { getUserProfileDetails } = require("../controllers/userController");
 
@@ -43,5 +43,8 @@ router.put("/changePassword", hrAuth, changeHRPassword);
 
 // fetching dashboard datas
 router.get("/getHRDashboardDatas", hrAuth, getHRDashboardDatas);
+
+// downloading Dashboard Datas
+router.get("/downloadhrDashboardDatas", hrAuth, downloadHrDashboardDatas);
 
 module.exports = router;
