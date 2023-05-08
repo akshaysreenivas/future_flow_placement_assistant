@@ -10,11 +10,21 @@
   background: #ffe0e6;
   box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
     rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
-  max-width: 210px;
+  max-width: 230px;
   min-width: 163px;
   border-left: 6px solid ;
 
 }
+.data_div_2 {
+  background: #d7ffe2;
+}
+.data_div_3 {
+  background: #fdffe0;
+}
+.data_div_4 {
+  background: #e0e5ff;
+}
+
 .datas_div {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;

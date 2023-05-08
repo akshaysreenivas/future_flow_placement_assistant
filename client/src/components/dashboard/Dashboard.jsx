@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { VerticalBar } from "../verticalBarChart/VerticalBarChart";
 import "./Dashboard.css";
-import { getDashboardDatas } from "../../services/adminServices";
+import { downloadDashboardDatas, getDashboardDatas } from "../../services/adminServices";
 import { toast } from "react-toastify";
 import DoughnutChart from "../doughnutChart/DoughnutChart";
 import Loading from "../loading/Loading";
+import { LineChart } from "../lineChart/LineChart";
+import { Button } from "react-bootstrap";
+import { saveAs } from 'file-saver';
 
 function Dashboard() {
   const [state, setState] = useState();
@@ -22,6 +24,17 @@ function Dashboard() {
       })
       .finally(() => setLoading(false));
   }, []);
+  const downloadExcel = async () => {
+  try {
+    downloadDashboardDatas().then((data)=>{
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, 'Students Placed.xlsx');
+    })
+  } catch (err) {
+    console.error(err);
+  }
+};
+
   return (
     <>
       {loading ? (
@@ -34,24 +47,25 @@ function Dashboard() {
             <div className="p-2 px-4 border-danger data_div flex-fill rounded ">
               <h5> Students </h5> <h6> {state.students}</h6>
             </div>
-            <div className="p-2 px-4 border-warning data_div flex-fill rounded ">
+            <div className="p-2 px-4 data_div_3 border-warning data_div flex-fill rounded ">
               <h5> HR Managers </h5> <h6> {state.hrManagers}</h6>
             </div>
-            <div className="p-2 px-4 border-info data_div flex-fill rounded ">
+            <div className="p-2 px-4 data_div_4 border-info data_div flex-fill rounded ">
               <h5> Jobs </h5> <h6> {state.jobs}</h6>
             </div>
-            <div className="p-2 px-4 border-success data_div flex-fill rounded ">
+            <div className="p-2 px-4 data_div_2 border-success data_div flex-fill rounded ">
               <h5> Total Placements </h5> <h6> {state.totalPlacements}</h6>
             </div>
           </div>
           <div className="d-flex flex-wrap my-3 mx-auto gap-3">
             <div className="Vertical_chart p-4 bg-white rounded">
-              <VerticalBar datas={state.analysis} />
+              <LineChart datas={state.analysis} />
             </div>
             <div className="doughnut_chart p-4 bg-white rounded">
               <DoughnutChart datas={state.companys} />
             </div>
           </div>
+          <div  className="d-flex"><Button className="ms-auto" onClick={downloadExcel} >Download report</Button></div>
         </>
       ) : (
         "something went wrong"

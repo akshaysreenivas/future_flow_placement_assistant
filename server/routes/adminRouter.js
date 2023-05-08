@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 // import controllers 
-const { login, addStudents, addHrManager, getAllStudents, getHRManagers, changeUserStatus, changeHRStatus, getDashboardDatas } = require("../controllers/adminController");
+const { login, addStudents, addHrManager, getAllStudents, getHRManagers, changeUserStatus, changeHRStatus, getDashboardDatas, downloadDashboardDatas } = require("../controllers/adminController");
 
 // import middlewares 
 const verifyAdmin = require("../middlewares/adminAuth");
@@ -32,6 +32,9 @@ router.patch("/ChangeHRStatus", verifyAdmin, changeHRStatus);
 
 // ferching datas for admin dashboard
 router.get("/getDashboardDatas", verifyAdmin, getDashboardDatas);
+
+// ferching datas for admin dashboard
+router.get("/downloadDashboardDatas", verifyAdmin, downloadDashboardDatas);
 
 
 

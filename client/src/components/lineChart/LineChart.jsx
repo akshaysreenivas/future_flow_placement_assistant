@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,8 +8,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -21,33 +21,34 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
+const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'bottom' ,
+      position: "bottom",
     },
     title: {
       display: true,
-      text: ' Line Chart',
+      text: "Placements per month",
     },
   },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: [4,8,9,4,5],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ],
-};
-
-export function LineChart() {
+export function LineChart({datas}) {
+  let labels = [];
+  let values = [];
+  labels = datas?.map((item) => item.month);
+  values = datas?.map((item) => item.count);
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "No of Placements",
+        data: values,
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
   return <Line options={options} data={data} />;
 }

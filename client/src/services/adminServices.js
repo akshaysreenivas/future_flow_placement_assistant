@@ -83,3 +83,11 @@ export function getDashboardDatas() {
 }
 
 
+
+// downloading report  
+export function downloadDashboardDatas() {
+    //   calling api
+    return adminInstance.get('/downloadDashboardDatas', { responseType: 'blob' });
+}
+
+

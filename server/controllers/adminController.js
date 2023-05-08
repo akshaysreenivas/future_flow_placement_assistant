@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const hrModel = require("../models/hrModel");
 const sendEmail = require("../config/mailer");
 const jobModel = require("../models/jobModel");
+const ExcelJS = require("exceljs");
 
 
 // creating jwt token
@@ -286,7 +287,6 @@ module.exports.getDashboardDatas = async (req, res, next) => {
         const hrManagers = await hrModel.countDocuments({}).exec();
         const students = await userModel.countDocuments({}).exec();
         const jobs = await jobModel.countDocuments({}).exec();
-        // const placements = await jobModel.find({ "applicants.progress.status": "Applied" });
 
         let analysis = await jobModel.aggregate([
             // unwind the applicants array
@@ -326,7 +326,7 @@ module.exports.getDashboardDatas = async (req, res, next) => {
             // unwind the applicants array
             { $unwind: "$applicants" },
 
-            // group by year, month, and status
+            // group by  status
             {
                 $group: {
                     _id: {
@@ -358,7 +358,7 @@ module.exports.getDashboardDatas = async (req, res, next) => {
                 }
             }
         ]);
-        const companys =await jobModel.aggregate([
+        const companys = await jobModel.aggregate([
             { "$unwind": "$applicants" },
             // Match only applicants with a "Placed" status
             { $match: { "applicants.progress.status": "Placed" } },
@@ -385,8 +385,74 @@ module.exports.getDashboardDatas = async (req, res, next) => {
         analysis.map(item => item.month = months[item.month - 1]);
 
         let response = { status: true, students, hrManagers, jobs, analysis, totalPlacements, companys };
-        console.log(response);
         res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+
+
+// fetching datas for dashboard  
+module.exports.downloadDashboardDatas = async (req, res, next) => {
+    try {
+        // getting id of the user         
+        const placements = await jobModel.aggregate([
+            // unwind the applicants array
+            { $unwind: "$applicants" },
+
+            // match the shortlisted and placed statuses
+            { $match: { "applicants.progress.status": { $in: ["Placed"] } } },
+            // lookup the name and email fields from the users collection
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "applicants.id",
+                    foreignField: "_id",
+                    as: "applicant"
+                }
+            },
+            // project the required fields
+            {
+                $project: {
+                    _id: 0,
+                    title: "$job_role",
+                    department: "$department",
+                    company: "$company",
+                    job_type: "$job_type",
+                    name: { $arrayElemAt: ["$applicant.name", 0] },
+                    email: { $arrayElemAt: ["$applicant.email", 0] },
+                    salary: { $concat: [{ $toString: "$min_salary" }, "-", { $toString: "$max_salary" }] }
+                }
+            }
+
+
+
+        ]);
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Placements");
+
+        worksheet.columns = [
+            { header: "Title", key: "title", width: 25 },
+            { header: "company", key: "company", width: 25 },
+            { header: "department", key: "department", width: 25 },
+            { header: "name", key: "name", width: 25 },
+            { header: "email", key: "email", width: 30 },
+            { header: "salary", key: "salary", width: 25 },
+            { header: "job_type", key: "job_type", width: 25 },
+        ];
+        placements.forEach(job => {
+            worksheet.addRow({
+                title: job.title, department: job.department,
+                name: job.name, email: job.email,
+                salary: job.salary, job_type: job.job_type,
+                company: job.company
+            });
+        });
+        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        res.setHeader("Content-Disposition", "attachment; filename=placements.xlsx");
+        await workbook.xlsx.write(res);
     } catch (error) {
         next(error);
     }

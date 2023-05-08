@@ -25,9 +25,9 @@ function DoughnutChart({ datas }) {
     datasets: [
       {
         label: "No of Placemants",
-        data:[...values ,5,6],
+        data:values,
         backgroundColor: randomColor({
-          count: values.length + 2,
+          count: values.length,
           luminosity: "bright",
           format: "rgba",
           alpha:1,
