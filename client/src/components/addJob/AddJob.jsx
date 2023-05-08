@@ -119,7 +119,6 @@ function AddJob() {
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err);
         toast.error("Something went Wrong", { position: "top-center" });
       });
   };

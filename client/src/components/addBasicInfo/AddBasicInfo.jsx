@@ -52,7 +52,6 @@ function AddBasicInfo() {
       district: user.location?.district,
     });
     setShow(false);
-    console.log(user);
   };
 
   const handleInputChange = (event) => {

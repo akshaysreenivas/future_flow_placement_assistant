@@ -32,7 +32,6 @@ function JobVIew() {
       .then((data) => {
         if (data.status) {
           const d = data.result;
-          console.log(d)
           let { company ,name,email } = d.hrID;
           d.company = company;
           d.name = name;

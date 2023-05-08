@@ -40,7 +40,6 @@ function AppliedJobs() {
           setLimit(data.limit);
           setDepertment(data.department);
           const d = data.result;
-          console.log(d);
           setJobs(
             d.map((jobs) => ({
               ...jobs,
