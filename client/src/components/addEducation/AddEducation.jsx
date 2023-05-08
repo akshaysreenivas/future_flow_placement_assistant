@@ -8,7 +8,7 @@ import LoadingButton from "../loadingButton/LoadingButton";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../store/store";
 
-function AddEducation({ edit }) {
+function AddEducation() {
   const [state, setState] = useState({
     institution: "",
     fieldofStudy: "",
