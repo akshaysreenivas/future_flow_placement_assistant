@@ -85,7 +85,10 @@ function AddBasicInfo() {
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(state.email)) {
       return toast.error("enter a valid email");
     }
-    if (state.phone && (!/^\d{10}$/.test(state.phone) || !/^\d+$/.test(state.phone))) {
+    if (
+      state.phone &&
+      (!/^\d{10}$/.test(state.phone) || !/^\d+$/.test(state.phone))
+    ) {
       return toast.error("enter a valid phone number");
     }
 
