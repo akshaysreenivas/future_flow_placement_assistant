@@ -398,53 +398,61 @@ module.exports.getDashboardDatas = async (req, res, next) => {
 module.exports.downloadDashboardDatas = async (req, res, next) => {
     try {
         // getting id of the user         
-        let analysis = await jobModel.aggregate([
+        const placements = await jobModel.aggregate([
             // unwind the applicants array
             { $unwind: "$applicants" },
 
-            // group by year, month, and status
+            // match the shortlisted and placed statuses
+            { $match: { "applicants.progress.status": { $in: ["Placed"] } } },
+            // lookup the name and email fields from the users collection
             {
-                $group: {
-                    _id: {
-                        year: { $year: "$applicants.progress.date" },
-                        month: { $month: "$applicants.progress.date" },
-                        status: "$applicants.progress.status"
-                    },
-                    count: { $sum: 1 }
+                $lookup: {
+                    from: "users",
+                    localField: "applicants.id",
+                    foreignField: "_id",
+                    as: "applicant"
                 }
             },
-
-            // match the shortlisted and placed statuses
-            { $match: { "_id.status": { $in: ["Placed"] } } },
-
             // project the required fields
             {
                 $project: {
                     _id: 0,
-                    year: "$_id.year",
-                    month: "$_id.month",
-                    status: "$_id.status",
-                    count: "$count"
+                    title: "$job_role",
+                    department: "$department",
+                    company: "$company",
+                    job_type: "$job_type",
+                    name: { $arrayElemAt: ["$applicant.name", 0] },
+                    email: { $arrayElemAt: ["$applicant.email", 0] },
+                    salary: { $concat: [{ $toString: "$min_salary" }, "-", { $toString: "$max_salary" }] }
                 }
-            },
+            }
 
-            // sort by year and month
-            { $sort: { year: 1, month: 1 } },
+
+
         ]);
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet("Jobs");
+        const worksheet = workbook.addWorksheet("Placements");
+
         worksheet.columns = [
             { header: "Title", key: "title", width: 25 },
-            { header: "Description", key: "description", width: 50 }
+            { header: "company", key: "company", width: 25 },
+            { header: "department", key: "department", width: 25 },
+            { header: "name", key: "name", width: 25 },
+            { header: "email", key: "email", width: 30 },
+            { header: "salary", key: "salary", width: 25 },
+            { header: "job_type", key: "job_type", width: 25 },
         ];
-        analysis.forEach(job => {
-            worksheet.addRow({ title: job.title, description: job.description });
+        placements.forEach(job => {
+            worksheet.addRow({
+                title: job.title, department: job.department,
+                name: job.name, email: job.email,
+                salary: job.salary, job_type: job.job_type,
+                company: job.company
+            });
         });
         res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        res.setHeader("Content-Disposition", "attachment; filename=jobs.xlsx");
+        res.setHeader("Content-Disposition", "attachment; filename=placements.xlsx");
         await workbook.xlsx.write(res);
-
-        // res.status(200).json(response);
     } catch (error) {
         next(error);
     }

@@ -65,7 +65,7 @@ function HrDashboard() {
               <PieChart datas={state.statusCount} />
             </div>
           </div>
-          <div className="d-flex me-auto" ><Button onClick={downloadReport}>Download Report</Button></div>
+          <div className="d-flex" ><Button className="ms-auto" onClick={downloadReport}>Download Report</Button></div>
         </>
       ) : (
         "something went wrong"

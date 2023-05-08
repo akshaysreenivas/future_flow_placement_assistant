@@ -28,7 +28,7 @@ function Dashboard() {
   try {
     downloadDashboardDatas().then((data)=>{
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      saveAs(blob, 'jobs.xlsx');
+      saveAs(blob, 'Students Placed.xlsx');
     })
   } catch (err) {
     console.error(err);
@@ -65,7 +65,7 @@ function Dashboard() {
               <DoughnutChart datas={state.companys} />
             </div>
           </div>
-          <div><Button onClick={downloadExcel} >Download report</Button></div>
+          <div  className="d-flex"><Button className="ms-auto" onClick={downloadExcel} >Download report</Button></div>
         </>
       ) : (
         "something went wrong"
