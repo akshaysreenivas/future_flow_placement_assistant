@@ -19,8 +19,6 @@ function Certifications() {
     }
   }, [allCertifications]);
 
-
-
   return (
     <div>
       <div className="d-flex justify-content-between my-3 align-items-center">
@@ -33,7 +31,7 @@ function Certifications() {
 
       {certifications.length ? (
         certifications.map((item) => {
-            const handleDelete = () => {
+          const handleDelete = () => {
             Swal.fire({
               title: "Are you sure?",
               icon: "warning",
@@ -61,16 +59,22 @@ function Certifications() {
             });
           };
           return (
-            <div  key={item._id}  className="single-exp-div p-3 border rounded m-1 border-secondary border-1">
+            <div
+              key={item._id}
+              className="single-exp-div p-3 border rounded m-1 border-secondary border-1"
+            >
               <div className="d-flex align-items-center justify-content-between">
                 <h4>
                   {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
                 </h4>
                 <div className="d-flex align-items-center gap-3">
-                  <button onClick={handleDelete} className="rounded px-2  border-0 text-dark ">
+                  <button
+                    onClick={handleDelete}
+                    className="rounded px-2  border-0 text-dark "
+                  >
                     Delete
                   </button>
-                <EditCertification id={item._id}/>
+                  <EditCertification id={item._id} />
                 </div>
               </div>
               <p className="text-secondary lead">{item.issuingOrganization}</p>

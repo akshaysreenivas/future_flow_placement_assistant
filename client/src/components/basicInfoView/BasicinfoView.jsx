@@ -1,16 +1,14 @@
 function BasicinfoView({ user }) {
   return (
     <div>
-    <div className=" px-5 d-flex align-items-center gap-2">
-    <img
-      className="mx-2 border-black rounded-circle"
-      src="/user_default.avif"
-      width={25}
-      alt=""
-    />
-        <h3>
-          Basic Information
-        </h3>
+      <div className=" px-5 d-flex align-items-center gap-2">
+        <img
+          className="mx-2 border-black rounded-circle"
+          src="/user_default.avif"
+          width={25}
+          alt=""
+        />
+        <h3>Basic Information</h3>
       </div>
       <div className="basicInfo  rounded bg-white px-5">
         <div>
@@ -34,8 +32,12 @@ function BasicinfoView({ user }) {
           </div>
           <div className="info">
             <span>Address</span>
-            <p> {user.location ? user.location?.district + "," + user.location?.state 
-            : ""}</p>
+            <p>
+              {" "}
+              {user.location
+                ? user.location?.district + "," + user.location?.state
+                : ""}
+            </p>
           </div>
         </div>
       </div>

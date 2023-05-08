@@ -8,11 +8,10 @@ import LoadingButton from "../loadingButton/LoadingButton";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../store/store";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import "./ChangePassword.css"
+import "./ChangePassword.css";
 import { changeHRPassword } from "../../services/hrServices";
 
-
-function ChangePassword({hr}) {
+function ChangePassword({ hr }) {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [confirmPasswordType, setconfirmPasswordType] = useState(true);
@@ -54,38 +53,38 @@ function ChangePassword({hr}) {
 
     try {
       setLoading(true);
-     if(hr){
-      changeHRPassword(password).then((data) => {
-        if (data.status) {
-          setShow(false);
-          setPassword("");
-          setConfirmPassword("");
-          toast.success("Successfully Updated");
-        } else {
-          setShow(false);
-          setPassword("");
-          setConfirmPassword("");
-          toast.error("Something went Wrong");
-        }
-        setLoading(false);
-      });
-     }else{
-      changePassword(password).then((data) => {
-        if (data.status) {
-          dispatch(setUserDetails(data.user));
-          setShow(false);
-          setPassword("");
-          setConfirmPassword("");
-          toast.success("Successfully Updated");
-        } else {
-          setShow(false);
-          setPassword("");
-          setConfirmPassword("");
-          toast.error("Something went Wrong");
-        }
-        setLoading(false);
-      });
-     }
+      if (hr) {
+        changeHRPassword(password).then((data) => {
+          if (data.status) {
+            setShow(false);
+            setPassword("");
+            setConfirmPassword("");
+            toast.success("Successfully Updated");
+          } else {
+            setShow(false);
+            setPassword("");
+            setConfirmPassword("");
+            toast.error("Something went Wrong");
+          }
+          setLoading(false);
+        });
+      } else {
+        changePassword(password).then((data) => {
+          if (data.status) {
+            dispatch(setUserDetails(data.user));
+            setShow(false);
+            setPassword("");
+            setConfirmPassword("");
+            toast.success("Successfully Updated");
+          } else {
+            setShow(false);
+            setPassword("");
+            setConfirmPassword("");
+            toast.error("Something went Wrong");
+          }
+          setLoading(false);
+        });
+      }
     } catch (error) {
       setLoading(false);
       setShow(false);
@@ -105,41 +104,44 @@ function ChangePassword({hr}) {
           <Modal.Title>Change Password</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group className="mb-3 position-relative" >
+          <Form.Group className="mb-3 position-relative">
             <Form.Label>Enter a Password</Form.Label>
             <Form.Control
-            className="input "
-                type={passwordType ? "password" : "text"}
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                name="password"
+              className="input "
+              type={passwordType ? "password" : "text"}
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              name="password"
               autoFocus
             />
             <i className="eye_icon" onClick={togglePassword}>
-                {passwordType ? (
-                  <MdVisibilityOff size={23} />
-                ) : (
-                  <MdVisibility size={23} />
-                )}
-              </i>
+              {passwordType ? (
+                <MdVisibilityOff size={23} />
+              ) : (
+                <MdVisibility size={23} />
+              )}
+            </i>
           </Form.Group>
-          <Form.Group className="mb-3 position-relative" >
+          <Form.Group className="mb-3 position-relative">
             <Form.Label>Confirm Password</Form.Label>
             <Form.Control
-            type={confirmPasswordType ? "password" : "text"}
-                id="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                name="password"
+              type={confirmPasswordType ? "password" : "text"}
+              id="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              name="password"
             />
-            <i className="eye_icon position-absolute top-38 right-7" onClick={toggleConfirmPassword}>
-                {confirmPasswordType ? (
-                  <MdVisibilityOff size={23} />
-                ) : (
-                  <MdVisibility size={23} />
-                )}
-              </i>
+            <i
+              className="eye_icon position-absolute top-38 right-7"
+              onClick={toggleConfirmPassword}
+            >
+              {confirmPasswordType ? (
+                <MdVisibilityOff size={23} />
+              ) : (
+                <MdVisibility size={23} />
+              )}
+            </i>
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

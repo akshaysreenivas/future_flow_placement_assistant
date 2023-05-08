@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 // importing aos
 import WelcomeBanner from "../components/welcomeBanner/WelcomeBanner";
 import CompanyBanner from "../components/companysBanner/CompanyBanner";
-import ChallengesBanner from "../components/challengesBanner/ChallengesBanner";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import UserNavBar from "../components/userNavbar/UserNavBar";
@@ -20,7 +19,6 @@ function LandingPage() {
      <UserNavBar/>
       <WelcomeBanner />
       <CompanyBanner />
-      <ChallengesBanner  />
     </>
   );
 }
