@@ -117,6 +117,8 @@ function Jobs() {
           jobs.map((item) => {
             const handleApply = () => {
               try {
+                toast.success("data.message", { autoClose: 1000 });
+
                 const newJobs = [...jobs];
                 // // finding the current row
                 const jobsIndex = newJobs.findIndex((u) => u._id === item._id);
