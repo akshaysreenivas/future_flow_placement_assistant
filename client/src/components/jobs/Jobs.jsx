@@ -185,7 +185,8 @@ function Jobs() {
                 </div>
                 <div>
                   <span className="text-secondary">{item.department}</span>
-                  <h4 className="text-primary">{item.job_role}</h4>
+                  <h4 className="text-primary mb-1">{item.job_role}</h4>
+                  <small className="text-secondary">{item.company}</small>
                   <h6 className="text-black">{item.job_type}</h6>
                   <span className="text-secondary">
                     <MdOutlineLocationOn /> {item.location}
