@@ -20,10 +20,12 @@ function App() {
 
         {/*  Hr Manager routes */}
         <Route path="/hr/*" element={<HrRoutes />} />
-
+        
         {/* Showing error page */}
-      </Routes>
+        <Route path="*" element={<ErrorPage />} />
+        </Routes>
       {/* Toast container */}
+
       <ToastContainer newestOnTop limit={3} position="top-center" />
     </>
   );
