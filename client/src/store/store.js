@@ -1,4 +1,4 @@
-import {createSlice,configureStore} from "@reduxjs/toolkit"
+import { createSlice, configureStore } from "@reduxjs/toolkit"
 
 const initialState = {
     user: null
@@ -6,24 +6,24 @@ const initialState = {
 
 
 
-const userDetailsSlice=createSlice({
-    name:"user",
+const userDetailsSlice = createSlice({
+    name: "user",
     initialState,
-    reducers:{
-        setUserDetails:(state,action)=>{
-            state.user=action.payload
+    reducers: {
+        setUserDetails: (state, action) => {
+            state.user = action.payload
         }
     }
 
 })
 
-export const {setUserDetails}= userDetailsSlice.actions
+export const { setUserDetails } = userDetailsSlice.actions
 
 
 
 
 export default configureStore({
-    reducer:{
-        user:userDetailsSlice.reducer
+    reducer: {
+        user: userDetailsSlice.reducer
     }
 })
