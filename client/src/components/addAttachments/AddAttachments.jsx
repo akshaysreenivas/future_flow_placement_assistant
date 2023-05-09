@@ -40,6 +40,8 @@ function AddAttachment() {
     if (!state.name || state.name.match(/^\s*$/)) {
       return toast.error("Name field required");
     }
+
+    // file validation   
     if (!state.file) {
       return toast.error("file required");
     }
