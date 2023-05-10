@@ -46,7 +46,7 @@ function BasicInfo() {
             <div className="info">
               <span>Address</span>
               <p>
-                {user.location ? user.location?.district + "," + user.location?.state 
+                {user.location && user.location.district && user.location.state ?  user.location.district  + "," + user.location.state 
                   : "Add Address to view here"}
               </p>
             </div>

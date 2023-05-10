@@ -79,7 +79,7 @@ function Jobs() {
         </h6>
       </div>
       <SearchBar
-        placeholder={"Search by Skill , Job type ,Department or Role"}
+        placeholder={"Search by Skill , Job type , Department or Role"}
         value={search}
         setSearch={setSearch}
       />

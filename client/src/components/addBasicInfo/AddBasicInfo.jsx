@@ -91,7 +91,6 @@ function AddBasicInfo() {
     ) {
       return toast.error("enter a valid phone number");
     }
-
     try {
       setLoading(true);
       updateBasicInfo(state).then((data) => {
@@ -144,15 +143,41 @@ function AddBasicInfo() {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Gender</Form.Label>
-            <Form.Control
-              type="text"
-              name="gender"
-              placeholder="Gender"
-              id="name"
-              value={state.gender}
-              onChange={handleInputChange}
-            />
+            <div>
+              <Form.Check
+                inline
+                type="radio"
+                label="Male"
+                name="gender"
+                for="gender"
+                id="male"
+                value="Male"
+                checked={state.gender === "Male"}
+                onChange={handleInputChange}
+              />
+              <Form.Check
+                inline
+                type="radio"
+                label="Female"
+                name="gender"
+                id="female"
+                value="Female"
+                checked={state.gender === "Female"}
+                onChange={handleInputChange}
+              />
+              <Form.Check
+                inline
+                type="radio"
+                label="Other"
+                name="gender"
+                value="Other"
+                id="other"
+                checked={state.gender === "Other"}
+                onChange={handleInputChange}
+              />
+            </div>
           </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label>Phone</Form.Label>
             <Form.Control
@@ -209,7 +234,6 @@ function AddBasicInfo() {
               <Button type="button" variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-
               <Button type="button" variant="primary" onClick={handleSubmit}>
                 Save Changes
               </Button>
