@@ -66,7 +66,7 @@ function AddExperience() {
         if (data.status) {
           dispatch(setUserDetails(data.user));
           setShow(false);
-          toast.success("Successfully Added");
+          toast.success("Successfully Added", {autoClose: 1000});
           setState({
             company: "",
             title: "",
@@ -99,7 +99,7 @@ function AddExperience() {
     
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
         <Modal.Header closeButton>
-          <Modal.Title>"Add Experience</Modal.Title>
+          <Modal.Title>Add Experience</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group className="mb-3 position-relative">

@@ -11,7 +11,6 @@ import "./Login.css";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../store/store";
 
-
 function Login({ role, url }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -54,13 +53,14 @@ function Login({ role, url }) {
           if (data.status) {
             localStorage.setItem("adminAuthToken", data.token);
             return navigate("/admin/dashboard");
+          } else {
+            toast.error(data.message);
           }
-          toast.error(data.message, { position: "top-center" });
         })
         .catch((error) => {
           setLoading(false);
-          console.log("err", error);
-          toast.error(error, { position: "top-center" });
+          console.error(error.message);
+          toast.error("Something Went Wrong");
         });
     }
   };
@@ -75,15 +75,15 @@ function Login({ role, url }) {
         setLoading(false);
         if (data.status) {
           localStorage.setItem("userAuthToken", data.token);
-            dispatch(
-              setUserDetails( data.user )
-            );
+          dispatch(setUserDetails(data.user));
           return navigate("/home");
+        } else {
+          toast.error(data.message);
         }
-        toast.error(data.message, { position: "top-center" });
-      } catch (err) {
+      } catch (error) {
         setLoading(false);
-        toast.error(err, { position: "top-center" });
+        console.error(error.message);
+        toast.error("Something Went Wrong");
       }
     }
   };
@@ -97,16 +97,14 @@ function Login({ role, url }) {
         setLoading(false);
         if (data.status) {
           localStorage.setItem("hrAuthToken", data.token);
-          toast("good")
-          // return navigate("/hr/dashboard");
-          return navigate("/hr/jobs");
-        }else{
+          return navigate("/hr/dashboard");
+        } else {
           toast.error(data.message);
         }
-      } catch (err) {
+      } catch (error) {
         setLoading(false);
-        console.log("err", err);
-        toast.error(err, { position: "top-center" });
+        console.error(error.message);
+        toast.error("Something Went Wrong");
       }
     }
   };

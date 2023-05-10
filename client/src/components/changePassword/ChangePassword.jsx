@@ -48,7 +48,7 @@ function ChangePassword({ hr }) {
       );
     }
     if (confirmPassword !== password) {
-      return toast.error("Password field required");
+      return toast.error("Passwords did not match");
     }
 
     try {
@@ -59,12 +59,12 @@ function ChangePassword({ hr }) {
             setShow(false);
             setPassword("");
             setConfirmPassword("");
-            toast.success("Successfully Updated");
+            toast.success("Successfully Updated", {autoClose: 1000});
           } else {
             setShow(false);
             setPassword("");
             setConfirmPassword("");
-            toast.error("Something went Wrong");
+            toast.error("Something went Wrong", {autoClose: 1000});
           }
           setLoading(false);
         });

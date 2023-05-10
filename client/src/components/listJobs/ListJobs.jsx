@@ -18,7 +18,7 @@ function ListJobs() {
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const [department, setDepertment] = useState([]);
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(10);
   const [total, setTotal] = useState();
   const [next, setNext] = useState();
   const [prev, setPrev] = useState();
@@ -77,7 +77,7 @@ function ListJobs() {
     setSearch("");
     setStatus("");
     setPage(1);
-    setLimit(3);
+    setLimit(10);
   };
 
   return (
@@ -97,11 +97,11 @@ function ListJobs() {
             onChange={(e) => handleLimitChange(e)}
             className="limit_select ms-0"
           >
-            <option value="3" defaultChecked>
-              showing first 3 datas
+            <option value="10" defaultChecked>
+              showing first 10 datas
             </option>
-            <option value="5">Show 5</option>
-            <option value="10">Show 10</option>
+            <option value="20">Show 20</option>
+            <option value="30">Show 30</option>
           </Form.Select>
         </div>
         <div className="filter_div my-3">

@@ -66,10 +66,10 @@ function EditCertification({id}) {
         if (data.status) {
           dispatch(setUserDetails(data.user));
           setShow(false);
-          toast.success("Successfully Updated");
+          toast.success("Successfully Updated", {autoClose: 1000});
         } else {
           setShow(false);
-          toast.error("Something went Wrong");
+          toast.error("Something went Wrong", {autoClose: 1000});
         }
         setLoading(false);
       });

@@ -61,14 +61,13 @@ function Jobs() {
         setLoading(false);
         toast.error("Something Went Wrong");
       });
-
   }, [page, navigate, search, filter]);
- // handling reseting the filterations
- const handleReset = () => {
-  setFilter("");
-  setSearch("");
-  setPage(1);
-};
+  // handling reseting the filterations
+  const handleReset = () => {
+    setFilter("");
+    setSearch("");
+    setPage(1);
+  };
   return (
     <div className="jobs_parent_div my-3 p-3">
       <div className="mb-4">
@@ -80,13 +79,13 @@ function Jobs() {
         </h6>
       </div>
       <SearchBar
-      placeholder={"Search by Skill , Job type ,Department or Role"}
-      value={search}
+        placeholder={"Search by Skill , Job type ,Department or Role"}
+        value={search}
         setSearch={setSearch}
       />
-        <div className="d-flex justify-content-between align-items-center mb-4 px-4">
+      <div className="d-flex justify-content-between align-items-center mb-4 px-4">
         <Form.Select
-        size="sm"
+          size="sm"
           className=" m"
           value={filter}
           onChange={(e) => {
@@ -96,18 +95,17 @@ function Jobs() {
         >
           <option value="" defaultChecked disabled>
             &#xE16E; Filter By Department
-            </option>
+          </option>
 
-            {department.map((item, index) => (
+          {department.map((item, index) => (
             <option value={item} key={index}>
-            {item}
+              {item}
             </option>
-            ))}
-            </Form.Select>
-            <Button onClick={handleReset}>reset</Button>
+          ))}
+        </Form.Select>
+        <Button onClick={handleReset}>reset</Button>
+      </div>
 
-            </div>
-         
       <div className="JobsDiv m-3 ">
         {loading ? (
           <div className="d-flex justify-content-center mx-auto my-5">
@@ -117,21 +115,19 @@ function Jobs() {
           jobs.map((item) => {
             const handleApply = () => {
               try {
-                toast.success("data.message", { autoClose: 1000 });
-
                 const newJobs = [...jobs];
                 // // finding the current row
                 const jobsIndex = newJobs.findIndex((u) => u._id === item._id);
                 // // setting the loading animation
                 newJobs[jobsIndex].apply = true;
-                    setJobs(newJobs);
+                setJobs(newJobs);
 
                 // applying for the job
                 applyJob(item._id).then((data) => {
                   if (data.status) {
                     newJobs[jobsIndex].isApplied = true;
                     setJobs(newJobs);
-                    toast.success(data.message, { autoClose: 1000 });
+                    toast.success("Successfully Updated", { autoClose: 1000 });
                   }
                 });
               } catch (err) {
@@ -154,13 +150,15 @@ function Jobs() {
                 newJobs[jobsIndex].apply = true;
 
                 setJobs(newJobs);
-                
+
                 // applying for the job
                 cancelJobApplication(item._id).then((data) => {
                   if (data.status) {
                     newJobs[jobsIndex].isApplied = false;
                     setJobs(newJobs);
-                    toast("Job Applicaton Cancelled", { autoClose: 1000 });
+                    toast.success("Job Applicaton Cancelled", {
+                      autoClose: 1000,
+                    });
                   }
                 });
               } catch (err) {
@@ -204,7 +202,7 @@ function Jobs() {
                         size="sm"
                         className="apply_btn text-white py-1 px-5"
                       />
-                    ) :item.isApplied ? (
+                    ) : item.isApplied ? (
                       <button
                         onClick={handleCancel}
                         className="apply_btn text-white py-1 px-4"

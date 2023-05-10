@@ -41,18 +41,18 @@ function EditCoverPhoto({
           setCover(null);
           setCoverPic(URL.createObjectURL(cover));
           setOldCoverImg(data.user.profilePicUrl);
-          toast.success("Successfully Updated");
+          toast.success("Successfully Updated", {autoClose: 1000});
         } else {
           setShow(false);
           setCover(null);
-          toast.error("Something went Wrong");
+          toast.error("Something went Wrong", {autoClose: 1000});
         }
         setLoading(false);
       });
     } catch (error) {
       setLoading(false);
       setShow(false);
-      toast.error("Something went Wrong");
+      toast.error("Something went Wrong", {autoClose: 1000});
     }
   };
   return (

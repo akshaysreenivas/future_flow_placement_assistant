@@ -66,7 +66,7 @@ function AddProject() {
         if (data.status) {
           dispatch(setUserDetails(data.user));
           setShow(false);
-          toast.success("Successfully Updated");
+          toast.success("Successfully Updated", {autoClose: 1000});
           setState({
             name: "",
             url: "",
@@ -76,7 +76,7 @@ function AddProject() {
           });
         } else {
           setShow(false);
-          toast.error("Something went Wrong");
+          toast.error("Something went Wrong", {autoClose: 1500});
         }
         setLoading(false);
       });

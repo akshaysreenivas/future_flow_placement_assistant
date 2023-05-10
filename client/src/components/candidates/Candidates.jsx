@@ -105,11 +105,11 @@ function Candidates() {
                         if (data.status) {
                           newUsers[userIndex].progress.status = status;
                           setUsers(newUsers);
-                          toast.success(`Successfully ${status} candidate`);
+                          toast.success(`Successfully ${status} candidate`, {autoClose: 1000});
                         }
                       })
                       .catch((err) => {
-                        toast.error("Something Went Wrong");
+                        toast.error("Something Went Wrong", {autoClose: 1000});
                       })
                       .finally(() => {
                         const updatedUsers = [...users];

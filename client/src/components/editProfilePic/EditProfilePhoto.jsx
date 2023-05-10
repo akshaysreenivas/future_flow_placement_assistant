@@ -40,19 +40,19 @@ function EditProfilePhoto({
           setShow(false);
           setProfilePic(URL.createObjectURL(profile));
           setOldProfileImg(data.user.profilePicUrl);
-          toast.success("Successfully Updated");
+          toast.success("Successfully Updated", {autoClose: 1000});
           setProfile(null);
         } else {
           setProfile(null);
           setShow(false);
-          toast.error("Something went Wrong");
+          toast.error("Something went Wrong", {autoClose: 1000});
         }
         setLoading(false);
       });
     } catch (error) {
       setLoading(false);
       setShow(false);
-      toast.error("Something went Wrong");
+      toast.error("Something went Wrong", {autoClose: 1000});
     }
   };
   return (

@@ -51,21 +51,21 @@ function AddSkill() {
         if (data.status) {
           dispatch(setUserDetails(data.user));
           setShow(false);
-          toast.success("Successfully Updated");
+          toast.success("Successfully Updated", {autoClose: 1000});
           setState({
             name: "",
             level: "",
           });
         } else {
           setShow(false);
-          toast.error("Something went Wrong");
+          toast.error("Something went Wrong", {autoClose: 1000});
         }
         setLoading(false);
       });
     } catch (error) {
       setLoading(false);
       setShow(false);
-      toast.error("Something went Wrong");
+      toast.error("Something went Wrong", {autoClose: 1000});
     }
   };
   return (
@@ -87,7 +87,7 @@ function AddSkill() {
             <Form.Control
               type="text"
               name="name"
-              placeholder="Enter the name of the skill"
+              placeholder="Enter the skill"
               value={state.name}
               onChange={handleInputChange}
             />

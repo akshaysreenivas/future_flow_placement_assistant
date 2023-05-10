@@ -43,18 +43,18 @@
 //     });
 //   };
 //   return (
-//     <div className="noti_parent_div">
-//       <div
-//         onClick={handleShow}
-//         className="notfication_icon_div me-auto pointer"
-//       >
-//         <MdNotifications color="blue" size={23} />
-//         {unread > 0 && (
-//           <span className="badge notfication_pill rounded-pill badge-notification bg-danger">
-//             <small>{unread}</small>
-//           </span>
-//         )}
-//       </div>
+    // <div className="noti_parent_div">
+    //   <div
+    //     onClick={handleShow}
+    //     className="notfication_icon_div me-auto pointer"
+    //   >
+    //     <MdNotifications color="blue" size={23} />
+    //     {unread > 0 && (
+    //       <span className="badge notfication_pill rounded-pill badge-notification bg-danger">
+    //         <small>{unread}</small>
+    //       </span>
+    //     )}
+    //   </div>
 //       <div className={show ? " notifi-box" : "d-none"}>
 //         <div className="notify_box_contents border-3 border-top border-warning mt-2">
 //           <div className="d-flex  align-items-center bg-white noti-heading px-3 mb-1 justify-content-between py-2">

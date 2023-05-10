@@ -59,7 +59,7 @@ function AddCertification() {
         if (data.status) {
           dispatch(setUserDetails(data.user));
           setShow(false);
-          toast.success("Successfully Updated");
+          toast.success("Successfully Updated", {autoClose: 1000});
           setState({
             name: "",
             issuingOrganization: "",

@@ -46,13 +46,13 @@ function Attachments() {
                   deleteAttachments(item._id).then((data) => {
                     if (data.status) {
                       dispatch(setUserDetails(data.user));
-                      toast.success("Successfully deleted");
+                      toast.success("Successfully deleted", {autoClose: 1000});
                     } else {
-                      toast.error("Something went Wrong");
+                      toast.error("Something went Wrong", {autoClose: 1000});
                     }
                   });
                 } catch (error) {
-                  toast.error("Something went Wrong");
+                  toast.error("Something went Wrong", {autoClose: 1000});
                 }
               }
             });
@@ -89,11 +89,11 @@ function Attachments() {
           <img
             className="add_exp_img"
             width={300}
-            src="add_certifications.avif"
+            src="add_resume.avif"
             alt=""
           />
           <p className="text-center text-muted">
-            Stand out from the crowd by adding your certifications!
+            Add your resume and other attachements here !
           </p>
         </div>
       )}

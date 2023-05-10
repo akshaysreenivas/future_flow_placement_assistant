@@ -66,7 +66,7 @@ function AddEducation() {
         if (data.status) {
           dispatch(setUserDetails(data.user));
           setShow(false);
-          toast.success("Successfully Updated");
+          toast.success("Successfully Updated", {autoClose: 1000});
           setState({
             institution: "",
             fieldofStudy: "",

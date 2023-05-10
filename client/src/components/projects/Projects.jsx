@@ -53,13 +53,13 @@ function Projects() {
                   deleteProject(item._id).then((data) => {
                     if (data.status) {
                       dispatch(setUserDetails(data.user));
-                      toast.success("Successfully deleted");
+                      toast.success("Successfully deleted", {autoClose: 1000});
                     } else {
-                      toast.error(data.message);
+                      toast.error("Something went wrong", {autoClose: 1000});
                     }
                   });
                 } catch (error) {
-                  toast.error("Something went Wrong");
+                  toast.error("Something went Wrong", {autoClose: 1000});
                 }
               }
             });

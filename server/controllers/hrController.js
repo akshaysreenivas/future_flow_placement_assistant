@@ -268,9 +268,9 @@ module.exports.changeCandidateStatus = async (req, res, next) => {
         if (status === "Rejected") {
             message = `oops! your job application as a ${job.job_role}  was rejected !,Its time to sharpen your skills`;
         } else if (status === "Short Listed") {
-            message = `Congratulations! You have been shortlisted for the position of ${job.job_role}. Our recruitment team will be in touch with you shortly to discuss the next steps.`;
+            message = `Congratulations! We are pleased to inform you that you have been shortlisted for the position of ${job.job_role} at ${job.company}.`;
         } else if (status === "Placed") {
-            message = `We are pleased to inform you that you have been selected for the position of ${job.job_role}. Congratulations on your new job! `;
+            message = `We are delighted to inform you that you have been selected for the position of ${job.job_role} at ${job.company}. Congratulations on your new job! `;
         }
         const newNotification = {
             notification_type: "Job Status",

@@ -49,3 +49,9 @@
     max-width: 650px;
   }
 }
+
+@media only screen and (max-width: 326px) {
+  .jobs_parent_div {
+    max-width: 338px;
+  }
+}
