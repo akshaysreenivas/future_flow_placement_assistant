@@ -86,48 +86,35 @@ function EditJob() {
       state.image &&
       !/^image\/(jpe?g|png|gif|webp|avif)$/.test(state.image.type)
     ) {
-      return toast.error("Please Provide a valid image extension", {
-        position: "top-center",
-      });
+      return toast.error("Please Provide a valid image extension");
     }
 
     if (!state.department || state.department.match(/^\s*$/))
-      return toast.error("Department field required", {
-        position: "top-center",
-      });
+      return toast.error("Department field required");
 
     if (!state.job_type || state.job_type.match(/^\s*$/))
-      return toast.error("Job Type field required", {
-        position: "top-center",
-      });
+      return toast.error("Job Type field required");
+
     if (!state.job_role || state.job_role.match(/^\s*$/))
-      return toast.error("Job Type field required", {
-        position: "top-center",
-      });
+      return toast.error("Job Role field required");
+
     if (!state.location || state.location.match(/^\s*$/))
-      return toast.error("Location field required", {
-        position: "top-center",
-      });
+      return toast.error("Location field required");
 
     if (!state.max_salary)
-      return toast.error("Please Provide a Maximum Salary", {
-        position: "top-center",
-      });
+      return toast.error("Please Provide a Maximum Salary");
+
     if (parseInt(state.max_salary) < 0 || parseInt(state.min_salary) < 0) {
-      return toast.error("oops! Salary Cannot be negative number", {
-        position: "top-center",
-      });
+      return toast.error("oops! Salary Cannot be negative number");
     }
+
     if (parseInt(state.max_salary) < parseInt(state.min_salary)) {
-      return toast.error("oops! Maximum Salary is less than minimum salary", {
-        position: "top-center",
-      });
+      return toast.error("oops! Maximum Salary is less than minimum salary");
     }
 
     if (!state.description || state.description.match(/^\s*$/))
-      return toast.error("Please Provide a job Description", {
-        position: "top-center",
-      });
+      return toast.error("Please Provide a job Description");
+      
 
     setLoading(true);
 
