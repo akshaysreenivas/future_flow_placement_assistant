@@ -63,7 +63,7 @@ module.exports.login = async (req, res, next) => {
                 notification_type: "Security Alert",
                 message: `hey ${user.name},Welcome to Futureflow! To help keep your account and personal data secure, we kindly ask all new users to choose a strong, unique password on their first login`
             };
-            await userModel.updateOne({ email: email }, { $push: { notification: newNotification },$set:{status:"Active"} });
+            await userModel.updateOne({ email: email }, { $push: { notification: newNotification }, $set: { status: "Active" } });
         }
         // calling function to create jwt token 
         const token = createToken(user._id);
@@ -90,7 +90,7 @@ module.exports.Jobs = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1;
         const limit = req.query.limit || 4;
         const search = req.query.search | "";
-        const department = req.query.department|| "";
+        const department = req.query.department || "";
         const order = parseInt(req.query.order) || -1;
         const sort = req.query.sort || "date";
 
@@ -396,6 +396,7 @@ module.exports.editExperience = async (req, res, next) => {
         next(error);
     }
 };
+
 // deleting experience 
 module.exports.deleteExperience = async (req, res, next) => {
     try {
