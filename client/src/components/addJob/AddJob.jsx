@@ -57,7 +57,7 @@ function AddJob() {
     if (!state.image) return toast.error("Poster image required");
 
     // checking for the correct image type
-    if (!/^image\/(jpe?g|png|gif|webp)$/.test(state.image.type)) {
+    if (!/^image\/(jpe?g|png|gif|webp|avif)$/.test(state.image.type)) {
       return toast.error("Please Provide a valid image extension");
     }
 

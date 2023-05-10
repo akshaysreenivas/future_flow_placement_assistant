@@ -84,7 +84,7 @@ function EditJob() {
 
     if (
       state.image &&
-      !/^image\/(jpe?g|png|gif|webp)$/.test(state.image.type)
+      !/^image\/(jpe?g|png|gif|webp|avif)$/.test(state.image.type)
     ) {
       return toast.error("Please Provide a valid image extension", {
         position: "top-center",
