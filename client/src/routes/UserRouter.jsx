@@ -8,6 +8,7 @@ import UserLogin from "../pages/users/UserLogin";
 import ProfilePage from "../pages/users/ProfilePage";
 import AppliedJobsPage from "../pages/users/AppliedJobs";
 import NotificationsPage from "../pages/users/NotificationsPage";
+import MessagesPage from "../pages/users/MessagesPage";
 
 function UserRouter() {
   return (
@@ -21,6 +22,7 @@ function UserRouter() {
         <Route path="/profile" element={<ProfilePage/>} />
         <Route path="/appliedJobs" element={<AppliedJobsPage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/messages" element={<MessagesPage />} />
       </Routes>
  
   );

@@ -128,7 +128,7 @@ module.exports.getAllJobPosts = async (req, res, next) => {
         const hrID = req.user.id;
         const page = parseInt(req.query.page);
         const limit = parseInt(req.query.limit);
-        const search = req.query.search;
+        const search = req.query.search.replace(/[^a-zA-Z ]/g, "");
         const department = req.query.department;
         const order = parseInt(req.query.order) || -1;
         const sort = req.query.sort || "date";

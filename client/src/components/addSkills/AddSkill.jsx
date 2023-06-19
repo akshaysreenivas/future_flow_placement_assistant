@@ -39,10 +39,10 @@ function AddSkill() {
   const handleSubmit = () => {
     // password validation
     if (!state.name || state.name.match(/^\s*$/)) {
-      return toast.error("Company Name field required");
+      return toast.error("Skill field required");
     }
     if (!state.level || state.level.match(/^\s*$/)) {
-      return toast.error("Role field required");
+      return toast.error("Level field required");
     }
 
     try {
@@ -94,8 +94,8 @@ function AddSkill() {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Level</Form.Label>
-            <Form.Select onChange={handleInputChange} name="level" size="sm">
-              <option value="Beginner">Beginner</option>
+            <Form.Select onChange={handleInputChange} defaultChecked name="level" size="sm">
+              <option  value="Beginner">Beginner</option>
               <option value="Intermediate">Intermediate</option>
               <option value="Advanced">Advanced</option>
               <option value="Expert">Expert</option>

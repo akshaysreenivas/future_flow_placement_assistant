@@ -133,7 +133,7 @@ module.exports.getAllStudents = async (req, res, next) => {
         // taking the values from the request  
         const page = parseInt(req.query.page);
         const limit = req.query.limit || 10;
-        const search = req.query.search;
+        const search = req.query.search.replace(/[^a-zA-Z ]/g, "");
         const department = req.query.department;
 
 
@@ -229,7 +229,7 @@ module.exports.getHRManagers = async (req, res, next) => {
 
         const hrManagers = await hrModel.find(query, { password: 0 }).skip(startIndex).limit(limit);
 
-        //         // constructing the response   
+        // constructing the response   
         const response = { status: true, total, limit, page, result: hrManagers };
 
         // finding if a next page is available  

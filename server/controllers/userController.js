@@ -89,7 +89,7 @@ module.exports.Jobs = async (req, res, next) => {
         // taking the values from the request  
         const page = parseInt(req.query.page) || 1;
         const limit = req.query.limit || 4;
-        const search = req.query.search | "";
+        const search = req.query.search.replace(/[^a-zA-Z ]/g, "") | "";
         const department = req.query.department || "";
         const order = parseInt(req.query.order) || -1;
         const sort = req.query.sort || "date";
@@ -216,7 +216,7 @@ module.exports.appliedJobs = async (req, res, next) => {
         // taking the values from the request  
         const page = parseInt(req.query.page) || 1;
         const limit = req.query.limit || 4;
-        const search = req.query.search || "";
+        const search = req.query.search.replace(/[^a-zA-Z ]/g, "") || "";
         const department = req.query.department || "";
         const order = parseInt(req.query.order) || -1;
         const sort = req.query.sort || "date";
@@ -889,7 +889,6 @@ module.exports.getNotifications = async (req, res, next) => {
         let notifications = { count: 0 };
 
         const data = notification[0]?.notification;
-        // notifications.notification = convertAllDatesToYMDFormat(notifications.notification);
         notifications.notification = data;
         notifications.count = data?.reduce((count, item) => {
             if (!item.isRead) {
@@ -927,11 +926,3 @@ module.exports.markAsRead = async (req, res, next) => {
     }
 };
 
-
-
-
-// let newNotification = {
-//             notification_type: "Profile Visit",
-//             message: `Guess what? HR manager ${visitor.name} from ${visitor.company} just viewed your profile! Looks like you're making an impression!`
-//         };
-//         await userModel.updateOne({ _id: req.params.id }, { $push: { notification: newNotification } });

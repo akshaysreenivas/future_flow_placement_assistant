@@ -8,6 +8,7 @@ import HRListJobs from "../pages/hrManager/HRListJobs";
 import HrLogin from "../pages/hrManager/HrLogin";
 import HRCandidates from "../pages/hrManager/HRCandidates";
 import CandidateProfileView from "../pages/hrManager/CandidateProfileView";
+import HRMessagesPage from "../pages/hrManager/HRMessagesPage";
 
 function HrRoutes() {
   return (
@@ -17,6 +18,7 @@ function HrRoutes() {
       <Route path="/dashboard" element={<HrDashboard />} />
       <Route path="/addJobs" element={<HRAddJobPost />} />
       <Route path="/jobs" element={<HRListJobs />} />
+      <Route path="/messages" element={<HRMessagesPage />} />
       <Route path="/jobs/JobDetails/:id" element={<HrJobDetails />} />
       <Route path="/jobs/getCandidates/:id" element={<HRCandidates />} />
       <Route
