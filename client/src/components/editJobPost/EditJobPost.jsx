@@ -38,12 +38,12 @@ function EditJob() {
           setRequiredSkills(skills);
           return;
         }
-        toast.error(data.message, { position: "top-left" });
+        navigate("/*")
       })
       .catch((error) => {
         toast.error("Something Went Wrong", { position: "top-center" });
       });
-  }, [params]);
+  }, [params,navigate]);
 
   const handleAddSkill = () => {
     setRequiredSkills([...requiredSkills, ""]);

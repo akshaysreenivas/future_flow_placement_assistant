@@ -4,7 +4,7 @@ import { Button, Form, Table } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import LoadingButton from "../loadingButton/LoadingButton";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   changeCandidateStatus,
   getCandidates,
@@ -13,6 +13,8 @@ import "./Candidates.css";
 function Candidates() {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
+  const navigate=useNavigate()
+
   const { id } = useParams();
   useEffect(() => {
     getCandidates(id, filter)
@@ -27,6 +29,9 @@ function Candidates() {
             }))
           );
         }
+        
+        navigate("/*")
+
       })
       .catch((error) => {
         console.log(error);

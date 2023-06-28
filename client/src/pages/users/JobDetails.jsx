@@ -16,9 +16,7 @@ function JobDetails() {
     <div className="user_page">
     <UserNavBar user={true}/>
       <div className="  d-flex  justify-content-center">
-      <Suspense fallback={<Loading/>} >
       <JobVIew />
-      </Suspense>
       </div>
     </div>
   );

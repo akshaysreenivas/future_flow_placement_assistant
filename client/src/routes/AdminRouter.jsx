@@ -6,6 +6,7 @@ import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminHrList from "../pages/admin/AdminHrList";
 import AdminLogin from "../pages/admin/AdminLogin";
 import AdminUsersList from "../pages/admin/AdminUsersList";
+import ErrorPage from "../pages/ErrorPage";
 
 function AdminRouter() {
   return (
@@ -17,6 +18,8 @@ function AdminRouter() {
         <Route path="/addStudents" element={<AdminAddUsers />} />
         <Route path="/hrList" element={<AdminHrList />} />
         <Route path="/addHrManagers" element={<AdminAddHrManagers />} />
+        {/* Showing error page */}
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
    
   );

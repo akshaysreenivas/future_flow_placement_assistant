@@ -9,6 +9,7 @@ import HrLogin from "../pages/hrManager/HrLogin";
 import HRCandidates from "../pages/hrManager/HRCandidates";
 import CandidateProfileView from "../pages/hrManager/CandidateProfileView";
 import HRMessagesPage from "../pages/hrManager/HRMessagesPage";
+import ErrorPage from "../pages/ErrorPage";
 
 function HrRoutes() {
   return (
@@ -26,6 +27,8 @@ function HrRoutes() {
         element={<CandidateProfileView />}
       />
       <Route path="/jobs/editJobDetails/:id" element={<HREditJobPost />} />
+      {/* Showing error page */}
+      <Route path="/*" element={<ErrorPage />} />
     </Routes>
   );
 }

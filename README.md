@@ -9,10 +9,8 @@ This project is a Student Placements Assistant application built using the MERN 
 - [Project Description](#project-description)
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
+
+
 
 ## Project Description
 
@@ -21,9 +19,9 @@ The Student Placements Assistant is designed to streamline the process of job hu
 - User registration and authentication
 - Profile management for students
 - Job listings and search functionality
-- Application tracking for submitted job applications
+- Application tracking for receiver job applications for hr
 - Communication with employers
-- Interview scheduling and reminders
+- Interview scheduling
 - Placement history and statistics
 
 ## Features
@@ -31,12 +29,11 @@ The Student Placements Assistant is designed to streamline the process of job hu
 - User registration and authentication using JWT (JSON Web Tokens)
 - Secure password hashing using bcrypt
 - Profile creation and management for students
-- Job listing creation, editing, and deletion by administrators
-- Job search and filtering by location, industry, or other criteria
-- Application submission and tracking for students
-- Messaging functionality for students to communicate with employers
-- Interview scheduling with calendar integration
-- Dashboard with placement history and statistics for students
+- Job listing creation, editing, and deletion by hr managers
+- Job search and filtering by skills, department,role or other criteria
+- Application submission for students
+<!-- - Messaging functionality for students to communicate with employers -->
+- Dashboard with placement history and statistics for admin and hr managers
 - Responsive user interface using React.js
 
 ## Installation
@@ -62,35 +59,4 @@ To run the Student Placements Assistant locally on your machine, follow these st
    - For running the frontend: `$ npm run client`
    - For running both concurrently: `$ npm run dev`
 
-## Usage
-
-Once the development server is running, open your web browser and navigate to `http://localhost:3000` to access the Student Placements Assistant application.
-
-Here are some example login credentials for testing:
-
-- Student account:
-  - Email: student@example.com
-  - Password: password123
-- Admin account:
-  - Email: admin@example.com
-  - Password: admin123
-
-Feel free to create your own accounts and explore the features of the application.
-
-## API Endpoints
-
-The following API endpoints are available:
-
-- `POST /api/auth/register`: Register a new user
-- `POST /api/auth/login`: Log in and get an access token
-- `GET /api/auth/user`: Get the current user's details
-- `PUT /api/auth/user`: Update the current user's profile
-- `GET /api/jobs`: Get a list of available jobs
-- `POST /api/jobs`: Create a new job listing
-- `GET /api/jobs/:id`: Get details of a specific job listing
-- `PUT /api/jobs/:id`: Update a job listing
-- `DELETE /api/jobs/:id`: Delete a job listing
-- ...
-
-For
 

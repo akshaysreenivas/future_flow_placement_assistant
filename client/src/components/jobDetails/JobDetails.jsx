@@ -35,7 +35,7 @@ function JobDetails() {
           setLoadingData(false)
           return;
         }
-        toast.error(data.message, { position: "top-left" });
+        navigate("/*")
       })
       .catch((error) => {
         setLoadingData(false)

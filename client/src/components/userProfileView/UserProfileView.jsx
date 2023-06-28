@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getCandidateProfile } from "../../services/hrServices";
 import { toast } from "react-toastify";
 import "./UserProfileView.css";
@@ -16,6 +16,8 @@ function UserProfileView() {
   const [profilePic, setProfilePic] = useState();
   const [coverPic, setCoverPic] = useState();
   const { userid } = useParams();
+  const navigate= useNavigate()
+
   useEffect(() => {
     getCandidateProfile(userid)
       .then((data) => {
@@ -31,13 +33,13 @@ function UserProfileView() {
             : "/default_cover_photo.png";
           setCoverPic(coverPhoto);
         } else {
-          toast.error("Something Went Wrong");
+          navigate("/*")
         }
       })
       .catch((error) => {
         toast.error("Something Went Wrong");
       });
-  }, [userid]);
+  }, [userid,navigate]);
   return (
     <React.Fragment>
       {state ? (

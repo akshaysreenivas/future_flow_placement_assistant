@@ -43,11 +43,12 @@ function JobVIew() {
           setLoadingData(false)
           return;
         }
-        toast.error(data.message);
+        navigate("/*")
       })
       .catch((error) => {
-        console.log(error);
+        setLoadingData(false)
         toast.error("Something Went Wrong");
+        navigate("/*")
       });
   }, [navigate, id]);
 
@@ -165,10 +166,10 @@ function JobVIew() {
         </div>
       </div>
       </>
-      :<div className="d-flex align-items-center justify-content-center p-5">
+      : <div className="d-flex align-items-center justify-content-center p-5">
       <Loading/>
       </div>
-    }
+          }
     </div>
   );
 }

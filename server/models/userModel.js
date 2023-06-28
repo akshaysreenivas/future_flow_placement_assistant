@@ -99,8 +99,8 @@ const userSchema = new mongoose.Schema({
         notification_type: String,
         message: String,
         date: { type: Date, default: Date.now }, // date when the notification was created
-        isRead: { type: Boolean, default: false },
-        visitor_id: { type: mongoose.Types.ObjectId }
+        isRead: { type: Boolean, default: false },  // whether the notification is viewed or not
+        visitor_id: { type: mongoose.Types.ObjectId }  // if it s a profile visited notification
     }]
 
 });
