@@ -1,9 +1,8 @@
-import { Suspense, useEffect } from "react";
+import {  useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import UserNavBar from "../../components/userNavbar/UserNavBar";
 import JobVIew from "../../components/jobView/JobVIew";
-import Loading from "../../components/loading/Loading";
 function JobDetails() {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);

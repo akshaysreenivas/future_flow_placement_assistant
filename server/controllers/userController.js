@@ -89,7 +89,7 @@ module.exports.Jobs = async (req, res, next) => {
         // taking the values from the request  
         const page = parseInt(req.query.page) || 1;
         const limit = req.query.limit || 4;
-        const search = req.query.search.replace(/[^a-zA-Z ]/g, "") | "";
+        const search = req.query.search.replace(/[^@#$^*123456789 ]/g, "");
         const department = req.query.department || "";
         const order = parseInt(req.query.order) || -1;
         const sort = req.query.sort || "date";

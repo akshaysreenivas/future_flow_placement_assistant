@@ -7,26 +7,25 @@ import AdminRouter from "./routes/AdminRouter";
 import HrRoutes from "./routes/HrRoutes";
 import { Route, Routes } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage";
-import io from "socket.io-client"
+import io from "socket.io-client";
 
-const socket= io.connect(process.env.REACT_APP_BASE_URL)
+const socket = io.connect(process.env.REACT_APP_BASE_URL);
 function App() {
-
   return (
     <>
       <Routes>
         {/* user routes */}
         <Route path="/*" element={<UserRouter />} />
 
+        {/*  Hr Manager routes */}
+        <Route path="/hr/*" element={<HrRoutes />} />
+
         {/*  admin routes */}
         <Route path="/admin/*" element={<AdminRouter />} />
 
-        {/*  Hr Manager routes */}
-        <Route path="/hr/*" element={<HrRoutes />} />
-        
         {/* Showing error page */}
         <Route path="*" element={<ErrorPage />} />
-        </Routes>
+      </Routes>
       {/* Toast container */}
 
       <ToastContainer newestOnTop limit={3} position="top-center" />
