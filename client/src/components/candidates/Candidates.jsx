@@ -28,9 +28,10 @@ function Candidates() {
               loading: false,
             }))
           );
+        }else{
+          navigate("/*")
         }
         
-        navigate("/*")
 
       })
       .catch((error) => {

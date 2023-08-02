@@ -2,7 +2,7 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jobModel = require("../models/jobModel");
-const Fs = require("fs");
+const cloudinary = require("../utils/cloudinary");
 
 
 
@@ -17,26 +17,29 @@ const createToken = (id) => {
 // converting date object   to "yyyy-mm-dd"
 
 function convertAllDatesToYMDFormat(datas) {
+    console.log("datassss", datas);
     function convertAllDatesToYMDFormat(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const day = String(date.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
     }
+    if (datas) {
 
-    return datas.map(exp => {
-        if (exp.date) {
-            exp.date = convertAllDatesToYMDFormat(new Date(exp.date));
-        }
-        if (exp.startDate && exp.endDate) {
-            exp.startDate = convertAllDatesToYMDFormat(new Date(exp.startDate));
-            exp.endDate = convertAllDatesToYMDFormat(new Date(exp.endDate));
-        } else if (exp.startDate) {
-            exp.startDate = convertAllDatesToYMDFormat(new Date(exp.startDate));
-        }
+        return datas.map(exp => {
+            if (exp.date) {
+                exp.date = convertAllDatesToYMDFormat(new Date(exp.date));
+            }
+            if (exp.startDate && exp.endDate) {
+                exp.startDate = convertAllDatesToYMDFormat(new Date(exp.startDate));
+                exp.endDate = convertAllDatesToYMDFormat(new Date(exp.endDate));
+            } else if (exp.startDate) {
+                exp.startDate = convertAllDatesToYMDFormat(new Date(exp.startDate));
+            }
 
-        return exp;
-    });
+            return exp;
+        });
+    }
 }
 
 
@@ -281,7 +284,7 @@ module.exports.appliedJobs = async (req, res, next) => {
 };
 
 
-//       profile building 
+//  profile building 
 
 
 // adding basic info
@@ -510,6 +513,7 @@ module.exports.addEducation = async (req, res, next) => {
         next(error);
     }
 };
+
 // editing education   
 module.exports.editEducation = async (req, res, next) => {
     try {
@@ -710,10 +714,10 @@ module.exports.addAttachments = async (req, res, next) => {
     try {
         // getting id of the user         
         const { _id } = req.user;
-        const url = "/images/" + req.file.filename;
-        if (!url) throw new Error("can't upload image");
+        if (!req.file) throw new Error("can't upload file");
+        const response = await cloudinary.uploader.upload(req.file.path);
         const { name } = req.body;
-        const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $push: { attachments: { name, url } } },
+        const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $push: { attachments: { name, url:response.secure_url,cloudinary_id:response.public_id } } },
             { new: true, projection: { password: 0 } }).lean();
         updatedUser.experiences = convertAllDatesToYMDFormat(updatedUser.experiences);
         updatedUser.projects = convertAllDatesToYMDFormat(updatedUser.projects);
@@ -733,10 +737,8 @@ module.exports.deleteAttachment = async (req, res, next) => {
         const { _id } = req.user;
         const attachment = await userModel.findOne({ _id: _id, "attachments._id": req.params.id }, { "attachments.$": 1 }).lean();
         if (!attachment) throw new Error("Attachment not found");
-        const url = attachment.attachments[0].url;
-        Fs.unlink("public" + url, (err) => {
-            if (err) throw err;
-        });
+        const cloudinaryId = attachment.attachments[0].cloudinary_id;
+        await cloudinary.uploader.destroy(cloudinaryId);       
         const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $pull: { attachments: { _id: req.params.id } } },
             { new: true, projection: { password: 0 } }).lean();
         updatedUser.experiences = convertAllDatesToYMDFormat(updatedUser.experiences);
@@ -757,14 +759,15 @@ module.exports.updateProfilePhoto = async (req, res, next) => {
         const { _id } = req.user;
 
         if (!req.file) throw new Error("Can't Upload Profile Photo");
+        // uploading profile photo to cloudinary
+        const response = await cloudinary.uploader.upload(req.file.path);
 
-        const url = "/images/" + req.file.filename;
-        const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $set: { profilePicUrl: url } },
+        const user = await userModel.findOne({ _id: _id });
+        const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $set: { profilePicUrl: response.secure_url, profile_cloudinary_id: response.public_id } },
             { new: true, projection: { password: 0 } }).lean();
         if (req.body.oldProfileImg && updatedUser) {
-            Fs.unlink("public" + req.body.oldProfileImg, (err => {
-                if (err) throw Error(err);
-            }));
+            // deleting old photo
+            await cloudinary.uploader.destroy(user.profile_cloudinary_id);
         }
         updatedUser.experiences = convertAllDatesToYMDFormat(updatedUser.experiences);
         updatedUser.projects = convertAllDatesToYMDFormat(updatedUser.projects);
@@ -784,14 +787,16 @@ module.exports.updateCoverPhoto = async (req, res, next) => {
         // getting id of the user         
         const { _id } = req.user;
         if (!req.file) throw new Error("Can't Upload Cover Photo");
-        const url = "/images/" + req.file.filename;
-        const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $set: { coverPicUrl: url } },
+        // uploading cover photo to cloudinary
+        const response = await cloudinary.uploader.upload(req.file.path);
+        const user = await userModel.findOne({ _id: _id });
+
+        const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $set: { coverPicUrl: response.secure_url, cover_cloudinary_id: response.public_id } },
             { new: true, projection: { password: 0 } }).lean();
         // deleting the old pic 
         if (req.body.oldCoverImg && updatedUser) {
-            Fs.unlinkSync("public" + req.body.oldCoverImg, (err => {
-                if (err) throw Error(err);
-            }));
+            // deleting old photo  
+            await cloudinary.uploader.destroy(user.cover_cloudinary_id);
         }
         updatedUser.experiences = convertAllDatesToYMDFormat(updatedUser.experiences);
         updatedUser.projects = convertAllDatesToYMDFormat(updatedUser.projects);
@@ -818,9 +823,9 @@ module.exports.getUserProfile = async (req, res, next) => {
 
         const user = await userModel.findOne({ _id: _id }, { password: 0 }).lean();
         user.experiences = convertAllDatesToYMDFormat(user.experiences);
-        user.projects = convertAllDatesToYMDFormat(user.projects);
-        user.certifications = convertAllDatesToYMDFormat(user.certifications);
-        user.education = convertAllDatesToYMDFormat(user.education);
+        // user.projects = convertAllDatesToYMDFormat(user.projects);
+        // user.certifications = convertAllDatesToYMDFormat(user.certifications);
+        // user.education = convertAllDatesToYMDFormat(user.education);
         res.status(200).json({ status: true, message: "success", user });
     } catch (error) {
         next(error);

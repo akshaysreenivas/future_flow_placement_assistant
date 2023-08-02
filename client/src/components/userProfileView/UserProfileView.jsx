@@ -25,11 +25,11 @@ function UserProfileView() {
           const result=data.result
           setState(result);
           const pic = result?.profilePicUrl
-            ? process.env.REACT_APP_BASE_URL + result.profilePicUrl
+            ? result.profilePicUrl
             : "/default_profile_pic.avif";
           setProfilePic(pic);
           const coverPhoto = result?.coverPicUrl
-            ? process.env.REACT_APP_BASE_URL + result.coverPicUrl
+            ? result.coverPicUrl
             : "/default_cover_photo.png";
           setCoverPic(coverPhoto);
         } else {

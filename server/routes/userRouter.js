@@ -5,7 +5,7 @@ const { JobDetails } = require("../controllers/jobsController");
 const { login, Jobs, appliedJobs, applyJob, cancelJobApplication, addBasicInfo, changePassword,
     addCertifications, addEducation, addSkills, addProjects, addAttachments, addExperiences, updateProfilePhoto,
     updateCoverPhoto, getUserProfile, deleteExperience, deleteCertification, deleteSkill, deleteProject, deleteAttachment, deleteEducation, editExperience, editSkill, editCertification, editEducation, editProject, getNotifications, ClearNotification, markAsRead } = require("../controllers/userController");
-const upload = require("../middlewares/multer");
+const {imageUpload,documentUpload} = require("../middlewares/multer");
 
 
 //  MIDDLEWARES..
@@ -85,16 +85,16 @@ router.delete("/deleteExperience/:id", userAuth, deleteExperience);
 router.patch("/editExperience/:id", userAuth, editExperience);
 
 // adding attachments like resume and othey certificates 
-router.post("/addAttachments", userAuth, upload.documentUpload, addAttachments);
+router.post("/addAttachments", userAuth,documentUpload.single("file"), addAttachments);
 
 // deleting attachments
 router.delete("/deleteAttachment/:id", userAuth, deleteAttachment);
 
 // adding profile pic  
-router.post("/addProfilePhoto", userAuth, upload.imageUpload, updateProfilePhoto);
+router.post("/addProfilePhoto", userAuth, imageUpload.single("image"), updateProfilePhoto);
 
 // adding cover pic 
-router.post("/addCoverPhoto", userAuth, upload.imageUpload, updateCoverPhoto);
+router.post("/addCoverPhoto", userAuth, imageUpload.single("image"), updateCoverPhoto);
 
 // fetching notifications 
 router.get("/getNotifications", userAuth,  getNotifications);

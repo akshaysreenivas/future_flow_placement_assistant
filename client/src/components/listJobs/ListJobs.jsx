@@ -232,7 +232,7 @@ function ListJobs() {
                 <tr key={item._id}>
                   <td>
                     <img
-                      src={process.env.REACT_APP_BASE_URL + item.poster}
+                      src={item.poster.path}
                       width={60}
                       alt=""
                     />

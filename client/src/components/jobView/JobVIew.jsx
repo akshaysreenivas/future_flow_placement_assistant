@@ -42,8 +42,9 @@ function JobVIew() {
           setJob(d);
           setLoadingData(false)
           return;
+        }else{
+          navigate("/*")
         }
-        navigate("/*")
       })
       .catch((error) => {
         setLoadingData(false)
@@ -107,7 +108,7 @@ function JobVIew() {
           </p>
           <p className="text-secondary m-0">
             Department :
-            <span className="text-secondary">{job.department}</span>
+            <span className="text-secondary"> {job.department}</span>
           </p>
           <p className="text-secondary">
             Salary : <span>₹ {job.min_salary + " - " + job.max_salary}</span>
@@ -140,7 +141,7 @@ function JobVIew() {
 
         <div className="posterimgdiv">
           <img
-            src={process.env.REACT_APP_BASE_URL + job.poster}
+            src={job.poster.path}
             className="card-img"
             alt="job poster"
           />

@@ -74,7 +74,7 @@ function Attachments() {
                   >
                     Delete
                   </button>
-                  <a href={process.env.REACT_APP_BASE_URL+"/"+item.url} target="_blank" rel="noopener noreferrer">
+                  <a href={item.url} target="_blank" rel="noopener noreferrer">
                     <button className="rounded px-2 bg-info  border-0 text-white ">
                       view
                     </button>

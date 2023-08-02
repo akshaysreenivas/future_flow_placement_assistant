@@ -13,6 +13,7 @@ function EditJob() {
   const [loading, setLoading] = useState();
   const [requiredSkills, setRequiredSkills] = useState([]);
   const [poster, setPoster] = useState();
+  const [oldPoster, setOldPoster] = useState();
   const [state, setState] = useState({
     department: "",
     job_type: "",
@@ -31,14 +32,18 @@ function EditJob() {
       .then((data) => {
         if (data.status) {
           const d = data.result;
+          const old_Poster=d.poster.path
+          setOldPoster(old_Poster)
+          console.log(data.result)
           setState(d);
           let { company } = d.hrID;
           d.company = company;
           const { skills } = d;
           setRequiredSkills(skills);
           return;
+        }else{
+          navigate("/*")
         }
-        navigate("/*")
       })
       .catch((error) => {
         toast.error("Something Went Wrong", { position: "top-center" });
@@ -144,7 +149,7 @@ function EditJob() {
     <>
       <div className="form_div">
         <h2 className="pb-3 mt-0">Edit Job Details</h2>
-        <Form onSubmit={handlesubmit}>
+       {state ?  <Form onSubmit={handlesubmit}>
           <Row>
             <Form.Group as={Col} className="mb-3">
               <Form.Label>Department</Form.Label>
@@ -286,8 +291,8 @@ function EditJob() {
           <h5>Current Poster</h5>
           <div className="img_div">
             <div className="oldimgdiv">
-              <img
-                src={process.env.REACT_APP_BASE_URL + state.poster}
+            <img
+                src={oldPoster}
                 width={200}
                 alt=""
               />
@@ -347,7 +352,7 @@ function EditJob() {
               Submit
             </Button>
           )}
-        </Form>
+        </Form> : <div>no data Available </div>}
       </div>
     </>
   );

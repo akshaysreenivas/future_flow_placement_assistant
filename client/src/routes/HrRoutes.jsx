@@ -28,7 +28,7 @@ function HrRoutes() {
       />
       <Route path="/jobs/editJobDetails/:id" element={<HREditJobPost />} />
       {/* Showing error page */}
-      <Route path="/*" element={<ErrorPage />} />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 }

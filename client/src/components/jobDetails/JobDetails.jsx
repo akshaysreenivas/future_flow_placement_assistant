@@ -34,8 +34,9 @@ function JobDetails() {
           setJob(d);
           setLoadingData(false)
           return;
+        }else{
+          navigate("/*")
         }
-        navigate("/*")
       })
       .catch((error) => {
         setLoadingData(false)
@@ -85,7 +86,7 @@ function JobDetails() {
 
         <div className="posterimgdiv">
           <img
-            src={process.env.REACT_APP_BASE_URL + jobs.poster}
+            src={jobs.poster.path}
             className="card-img"
             alt="job poster"
           />

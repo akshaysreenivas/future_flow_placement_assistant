@@ -176,7 +176,7 @@ function Jobs() {
               <div key={item._id} className="job_div gap-2 p-3  my-3">
                 <div>
                   <img
-                    src={process.env.REACT_APP_BASE_URL + item.poster}
+                    src={item.poster.path}
                     width={60}
                     alt=""
                   />

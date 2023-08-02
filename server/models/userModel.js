@@ -93,8 +93,10 @@ const userSchema = new mongoose.Schema({
     attachments: [{
         name: String,
         url: String,
-        file: String,
+        cloudinary_id: String,
     }],
+    cover_cloudinary_id:{type:String},
+    profile_cloudinary_id:{type:String},
     notification: [{
         notification_type: String,
         message: String,

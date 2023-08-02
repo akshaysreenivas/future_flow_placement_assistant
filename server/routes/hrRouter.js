@@ -7,7 +7,7 @@ const { getUserProfileDetails } = require("../controllers/userController");
 
 // import middlewares 
 const hrAuth = require("../middlewares/hrAuth");
-const upload = require("../middlewares/multer");
+const {imageUpload} = require("../middlewares/multer");
 
 // API MIDDLEWARES..
 
@@ -15,7 +15,7 @@ const upload = require("../middlewares/multer");
 router.post("/login", login);
 
 // adding jobs 
-router.post("/addJob", hrAuth, upload.imageUpload, addjob);
+router.post("/addJob", hrAuth,imageUpload.single("image"), addjob);
 
 // fetch all jobs 
 router.get("/getJobs", hrAuth, getAllJobPosts);
@@ -24,7 +24,7 @@ router.get("/getJobs", hrAuth, getAllJobPosts);
 router.get("/getJobs/getdetails/:id", hrAuth, JobDetails);
 
 // edit job details 
-router.put("/editJobdetails/:id", hrAuth, upload.imageUpload, editJob);
+router.put("/editJobdetails/:id", hrAuth, imageUpload.single("image"), editJob);
 
 // changing job status 
 router.patch("/changeJobStatus", hrAuth, changeJobStatus);

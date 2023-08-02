@@ -31,11 +31,11 @@ function ProfilePage() {
           dispatch(setUserDetails(userDetails));
           setUser(userDetails);
           const pic = userDetails?.profilePicUrl
-            ? process.env.REACT_APP_BASE_URL + userDetails.profilePicUrl
+            ? userDetails.profilePicUrl
             : "default_profile_pic.avif";
 
           const coverPhoto = userDetails?.coverPicUrl
-            ? process.env.REACT_APP_BASE_URL + userDetails.coverPicUrl
+            ?  userDetails.coverPicUrl
             : "default_cover_photo.png";
           setProfilePic(pic);
           setCoverPic(coverPhoto);

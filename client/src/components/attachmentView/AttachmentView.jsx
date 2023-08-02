@@ -20,7 +20,7 @@ function AttachmentView({ attachments }) {
                     {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
                   </h5>
                   <a
-                    href={process.env.REACT_APP_BASE_URL + "/" + item.url}
+                    href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

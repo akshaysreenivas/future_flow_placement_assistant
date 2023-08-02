@@ -1,4 +1,5 @@
 function BasicinfoView({ user }) {
+  console.log(user);
   return (
     <div>
       <div className=" px-5 d-flex align-items-center gap-2">
@@ -33,9 +34,8 @@ function BasicinfoView({ user }) {
           <div className="info">
             <span>Address</span>
             <p>
-              {" "}
               {user.location
-                ? user.location?.district + "," + user.location?.state
+                ? <> {user.location.district ?? ""}  { user.location.state ?? "" }</>
                 : ""}
             </p>
           </div>

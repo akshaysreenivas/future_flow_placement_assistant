@@ -3,9 +3,9 @@ const hrModel = require("../models/hrModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jobModel = require("../models/jobModel");
-const Fs = require("fs");
 const userModel = require("../models/userModel");
-const ExcelJS = require("exceljs");
+const excelJS = require("exceljs");
+const cloudinary = require("../utils/cloudinary");
 
 
 // creating jwt token
@@ -45,15 +45,19 @@ module.exports.login = async (req, res, next) => {
 // adding jobs
 module.exports.addjob = async (req, res, next) => {
     try {
+        console.log(req.file);
         if (!req.file) throw new Error("can't upload image");
+        // uploading job poster to cloudinary     
+        const response = await cloudinary.uploader.upload(req.file.path);
+        if (!response) throw new Error("image upload failed");
+
         const hrID = req.user.id;
         let { department, job_type, location, skills, experience, min_salary, max_salary, job_role, description } = req.body;
         // checking if the values are null
         if (!experience) {
             experience = "No Prior Experience Needed";
         }
-        if (!department || !req.file || !job_type || !job_role || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
-        const imgUrl = "/images/" + req.file.filename;
+        if (!department || !job_type || !job_role || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
         const company = await hrModel.findOne({ _id: hrID }, { company: 1 });
         const newJob = new jobModel({
             department: department,
@@ -67,7 +71,10 @@ module.exports.addjob = async (req, res, next) => {
             location: location,
             company: company.company,
             hrID: hrID,
-            poster: imgUrl
+            poster: {
+                cloudinary_id: response.public_id,
+                path: response.secure_url
+            }
         });
         await newJob.save();
         // await hrModel.
@@ -91,15 +98,21 @@ module.exports.editJob = async (req, res, next) => {
         }
 
         if (!department || !job_type || !job_role || !location || !experience || !min_salary || !max_salary || !description) throw Error("All fields required");
-        let imgUrl;
-        if (req.file) {
-            imgUrl = "/images/" + req.file.filename;
-            Fs.unlinkSync("public" + req.body.poster, (err => {
-                if (err) throw Error(err);
-            }));
+
+        let imgpath;
+        let cloudinaryId;
+        // fetching details to delete image      
+        const job = await jobModel.findOne({ _id: id });
+        if (req.file != null) {
+            await cloudinary.uploader.destroy(job.poster.cloudinary_id);
+            const result = await cloudinary.uploader.upload(req.file.path);
+            cloudinaryId = result.public_id;
+            imgpath = result.secure_url;
         } else {
-            imgUrl = req.body.poster;
+            imgpath = job.poster.path;
+            cloudinaryId = job.poster.cloudinary_id;
         }
+
 
 
         await jobModel.findByIdAndUpdate({ _id: id }, {
@@ -113,7 +126,7 @@ module.exports.editJob = async (req, res, next) => {
                 min_salary: min_salary,
                 max_salary: max_salary,
                 description: description,
-                poster: imgUrl
+                poster: {path:imgpath,cloudinary_id:cloudinaryId}
             }
         });
         res.status(200).json({ status: true, message: "Successfully edited Job" });
@@ -477,7 +490,7 @@ module.exports.downloadHrDashboardDatas = async (req, res, next) => {
         ]);
 
 
-        const workbook = new ExcelJS.Workbook();
+        const workbook = new excelJS.Workbook();
         const worksheet = workbook.addWorksheet("Placements");
 
         worksheet.columns = [
