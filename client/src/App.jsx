@@ -7,9 +7,7 @@ import AdminRouter from "./routes/AdminRouter";
 import HrRoutes from "./routes/HrRoutes";
 import { Route, Routes } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage";
-import io from "socket.io-client";
 
-const socket = io.connect(process.env.REACT_APP_BASE_URL);
 function App() {
   return (
     <>

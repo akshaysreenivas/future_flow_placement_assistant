@@ -13,8 +13,6 @@ const adminRouter = require("./routes/adminRouter");
 const hrRouter = require("./routes/hrRouter");
 const session = require("express-session");
 
-//socket.io
-const { Server } = require("socket.io");
 
 const server = http.createServer(app);
 // DB
@@ -47,38 +45,6 @@ app.use("/hr", hrRouter);
 
 // ERROR HANDLER MIDDLEWARE 
 app.use(errorHandler);
-
-
-const io = new Server(server, {
-    cors: { origin: [process.env.CORS_ORIGIN_URL], methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], credentials: true, }
-});
-
-io.on("connection", (socket) => {
-    console.log("Client connected");
-
-    // Example: HR accepts a job application
-    socket.on("jobApplicationAccepted", (userId) => {
-    // Emit a notification event to the appropriate client
-        socket.emit("notification", {
-            type: "jobApplicationAccepted",
-            userId: userId,
-        });
-    });
-
-    // Example: HR visits a profile
-    socket.on("hrVisitedProfile", (userId) => {
-    // Emit a notification event to the appropriate client
-        socket.emit("notification", {
-            type: "hrVisitedProfile",
-            userId: userId,
-        });
-    });
-
-    socket.on("disconnect", () => {
-        console.log("Client disconnected");
-    });
-});
-
 
 
 // port
