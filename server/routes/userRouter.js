@@ -4,8 +4,8 @@ const router = require("express").Router();
 const { JobDetails } = require("../controllers/jobsController");
 const { login, Jobs, appliedJobs, applyJob, cancelJobApplication, addBasicInfo, changePassword,
     addCertifications, addEducation, addSkills, addProjects, addAttachments, addExperiences, updateProfilePhoto,
-    updateCoverPhoto, getUserProfile, deleteExperience, deleteCertification, deleteSkill, deleteProject, deleteAttachment, deleteEducation, editExperience, editSkill, editCertification, editEducation, editProject, getNotifications, ClearNotification, markAsRead } = require("../controllers/userController");
-const {imageUpload,documentUpload} = require("../middlewares/multer");
+    updateCoverPhoto, getUserProfile, deleteExperience, deleteCertification, deleteSkill, deleteProject, deleteAttachment, deleteEducation, editExperience, editSkill, editCertification, editEducation, editProject, getNotifications, ClearNotification, markAsRead, signup, otpSubmit } = require("../controllers/userController");
+const { imageUpload, documentUpload } = require("../middlewares/multer");
 
 
 //  MIDDLEWARES..
@@ -13,7 +13,13 @@ const userAuth = require("../middlewares/userAuth");
 
 
 // Login 
-router.post("/login", login);
+router.post("/login",login );
+
+// Login 
+router.post("/signup",signup);
+
+// Login 
+router.post("/submitOtp",otpSubmit);
 
 // fetching all jobs   
 router.get("/getJobs", userAuth, Jobs);
@@ -64,7 +70,7 @@ router.post("/addSkills", userAuth, addSkills);
 router.delete("/deleteSkill/:id", userAuth, deleteSkill);
 
 // editing users skills 
-router.patch("/editSkill/:id", userAuth,editSkill);
+router.patch("/editSkill/:id", userAuth, editSkill);
 
 // adding projects by user 
 router.post("/addProjects", userAuth, addProjects);
@@ -85,7 +91,7 @@ router.delete("/deleteExperience/:id", userAuth, deleteExperience);
 router.patch("/editExperience/:id", userAuth, editExperience);
 
 // adding attachments like resume and othey certificates 
-router.post("/addAttachments", userAuth,documentUpload.single("file"), addAttachments);
+router.post("/addAttachments", userAuth, documentUpload.single("file"), addAttachments);
 
 // deleting attachments
 router.delete("/deleteAttachment/:id", userAuth, deleteAttachment);
@@ -97,13 +103,13 @@ router.post("/addProfilePhoto", userAuth, imageUpload.single("image"), updatePro
 router.post("/addCoverPhoto", userAuth, imageUpload.single("image"), updateCoverPhoto);
 
 // fetching notifications 
-router.get("/getNotifications", userAuth,  getNotifications);
+router.get("/getNotifications", userAuth, getNotifications);
 
 // fetching notifications 
-router.delete("/clearNotification/:id", userAuth,  ClearNotification);
+router.delete("/clearNotification/:id", userAuth, ClearNotification);
 
 // marking as read 
-router.patch("/markAsRead", userAuth,  markAsRead);
+router.patch("/markAsRead", userAuth, markAsRead);
 
 
 module.exports = router;

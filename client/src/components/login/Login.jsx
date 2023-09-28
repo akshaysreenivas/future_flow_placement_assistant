@@ -125,7 +125,7 @@ function Login({ role, url }) {
   };
   return (
     <div className="loginParentDiv">
-      <div className="loginDiv">
+      <div className="loginDiv rounded">
         <div>
           <img
             className="img-fluid"
@@ -138,11 +138,12 @@ function Login({ role, url }) {
         <div className="loginformDiv">
           <h1 className="text-center">{role} Login</h1>
           <form onSubmit={handlesubmit}>
-            <label htmlFor="fname">User Name</label>
+            <label htmlFor="fname">Email Adddress</label>
             <input
               className="input"
               type="email"
               id="fname"
+              placeholder="Enter Your Email"
               name="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -153,6 +154,7 @@ function Login({ role, url }) {
                 className="input "
                 type={passwordType ? "password" : "text"}
                 id="password"
+                placeholder="Enter Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 name="password"

@@ -3,6 +3,7 @@ import axios from 'axios'
 // instance for user making apis
 const userInstance = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
+    withCredentials:true
     
 })
 

@@ -13,6 +13,7 @@ const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_KEY, { expiresIn: maxAge });
 };
+
 // generating Password
 function generatePassword() {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$&";
@@ -23,8 +24,6 @@ function generatePassword() {
     return password;
 }
 
-
-// handling errors      
 
 
 //  Admin login
@@ -37,8 +36,9 @@ module.exports.login = async (req, res, next) => {
         const admin = await adminModel.findOne({ email: email });
         // checking if the account  exists
         if (!admin) throw new Error("incorrect email");
-        //   return res.status(401).json({ status: false, message: "incorrect email or password" });
+
         const auth = await bcrypt.compare(password, admin.password);
+        
         if (!auth) return res.status(401).json({ status: false, message: "incorrect email or password" });
         // creating the jwt token 
         const token = createToken(admin._id);

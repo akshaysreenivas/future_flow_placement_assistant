@@ -9,6 +9,17 @@ export function userLogin(email, password) {
     });
 }
 
+// otp submit service  
+export function submitOtp(otp) {
+    //   calling api
+    return userInstance.post("/submitOtp",{otp});
+}
+
+// signup service  
+export function userSignup(data) {
+    //   calling api
+    return userInstance.post("/signup", data);
+}
 
 // fetch all jobs  
 export function getAllJobs(page,search,filter) {

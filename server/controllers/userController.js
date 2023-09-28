@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jobModel = require("../models/jobModel");
 const cloudinary = require("../utils/cloudinary");
+const sendEmail = require("../config/mailer");
 
 
 
@@ -12,7 +13,25 @@ const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_KEY, { expiresIn: maxAge });
 };
 
+async function sendOtp(name,email,OTP) {
+    // // sending otp to email  
+    const Subject = "FutureFlow Your One-Time Password (OTP)";
+    const mailOptions = `<p>Dear ${name},</p><br/>
+    <p>We're excited to help you with your request. To proceed, please use the following One-Time Password (OTP) </p>
+    <p>OTP: ${OTP}</p><br/>
+    <p>Please enter this OTP in the designated field </p>
+    <p>Best regards,</p><br/>
+    <p>FutureFlow team</p><br/>`;
+    const MailSend = await sendEmail(email, Subject, mailOptions);
+    if (!MailSend.status) throw new Error("server error");
+}
 
+
+function generateOTP() {
+    let otp = Math.floor(1000 + Math.random() * 8999);
+    otp = otp.toString().padStart(6, "0");
+    return otp;
+}
 
 // converting date object   to "yyyy-mm-dd"
 
@@ -43,9 +62,6 @@ function convertAllDatesToYMDFormat(datas) {
 }
 
 
-
-
-
 module.exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -61,13 +77,7 @@ module.exports.login = async (req, res, next) => {
         // checking whether the user is bolcked or not 
         if (user.blocked) return res.status(200).json({ status: false, message: "Your Account is Temporarly Suspended" });
         // if login success and the if the user is inactive  changing the status to active 
-        if (user.firstLogin) {
-            let newNotification = {
-                notification_type: "Security Alert",
-                message: `hey ${user.name},Welcome to Futureflow! To help keep your account and personal data secure, we kindly ask all new users to choose a strong, unique password on their first login`
-            };
-            await userModel.updateOne({ email: email }, { $push: { notification: newNotification }, $set: { status: "Active" } });
-        }
+
         // calling function to create jwt token 
         const token = createToken(user._id);
         user.password = null;
@@ -78,6 +88,64 @@ module.exports.login = async (req, res, next) => {
         res
             .status(200)
             .json({ status: true, message: "success login", user: user, token: token });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.signup = async (req, res, next) => {
+    try {
+        const { name, studentID, email,password } = req.body;
+        // throwing error if values are not provided
+        if (!name || !studentID || !email || !password ) throw Error("All fields required");
+        // checking if the student  already has account
+        const alreadyExist = await userModel.findOne({
+            $or: [{ studentID }, { email }]
+        });
+        if (alreadyExist?.studentID === studentID) {
+            throw new Error("Student ID already exists");
+        } else if (alreadyExist?.email === email) {
+            throw new Error("Email ID already exists");
+        }
+
+        const OTP = generateOTP();
+        await sendOtp(name,email,OTP);
+        const newStudent = {    
+            name: name,
+            studentID: studentID,
+            email: email,
+            password
+        };
+        req.session.tempUser=newStudent;
+        req.session.Otp=OTP;
+        res.status(200).json({ status: true, message: "Email with otp send to "+email });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports.otpSubmit = async (req, res, next) => {
+    try {
+        const { otp } = req.body;
+
+        // throwing error if values are not provided
+        if (!otp) throw Error("otp field required");
+
+        if(otp!==req.session.Otp) return res.json({ status: false, message: "Invalid OTP"});
+        const newStudent=new userModel(req.session.tempUser);
+        await newStudent.save();
+        const user = await userModel.findOne({ email: req.session.tempUser.email });
+        // calling function to create jwt token 
+        const token = createToken(user._id);
+        user.password = null;
+        user.experiences = convertAllDatesToYMDFormat(user.experiences);
+        user.projects = convertAllDatesToYMDFormat(user.projects);
+        user.certifications = convertAllDatesToYMDFormat(user.certifications);
+        user.education = convertAllDatesToYMDFormat(user.education);
+        req.session.destroy();
+        res
+            .status(200)
+            .json({ status: true, message: "signup successfull", user: user, token: token});
     } catch (error) {
         next(error);
     }
@@ -717,7 +785,7 @@ module.exports.addAttachments = async (req, res, next) => {
         if (!req.file) throw new Error("can't upload file");
         const response = await cloudinary.uploader.upload(req.file.path);
         const { name } = req.body;
-        const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $push: { attachments: { name, url:response.secure_url,cloudinary_id:response.public_id } } },
+        const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $push: { attachments: { name, url: response.secure_url, cloudinary_id: response.public_id } } },
             { new: true, projection: { password: 0 } }).lean();
         updatedUser.experiences = convertAllDatesToYMDFormat(updatedUser.experiences);
         updatedUser.projects = convertAllDatesToYMDFormat(updatedUser.projects);
@@ -738,7 +806,7 @@ module.exports.deleteAttachment = async (req, res, next) => {
         const attachment = await userModel.findOne({ _id: _id, "attachments._id": req.params.id }, { "attachments.$": 1 }).lean();
         if (!attachment) throw new Error("Attachment not found");
         const cloudinaryId = attachment.attachments[0].cloudinary_id;
-        await cloudinary.uploader.destroy(cloudinaryId);       
+        await cloudinary.uploader.destroy(cloudinaryId);
         const updatedUser = await userModel.findOneAndUpdate({ _id: _id }, { $pull: { attachments: { _id: req.params.id } } },
             { new: true, projection: { password: 0 } }).lean();
         updatedUser.experiences = convertAllDatesToYMDFormat(updatedUser.experiences);

@@ -8,12 +8,9 @@ import 'aos/dist/aos.css';
 import UserNavBar from "../components/userNavbar/UserNavBar";
 
 function LandingPage() {
-  const navigate = useNavigate();
   useEffect(() => {
-    const token = localStorage.getItem("userAuthToken");
-    if (token  && token !=="undefined") return navigate("/home");
     AOS.init();
-  }, [navigate])
+  }, [])
   return (
     <>
      <UserNavBar/>

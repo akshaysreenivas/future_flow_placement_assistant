@@ -12,7 +12,7 @@ const userRouter = require("./routes/userRouter");
 const adminRouter = require("./routes/adminRouter");
 const hrRouter = require("./routes/hrRouter");
 const session = require("express-session");
-
+const cookieParser = require("cookie-parser");
 
 const server = http.createServer(app);
 // DB
@@ -22,16 +22,19 @@ database();
 // MIDDLEWARES ...
 app.use(morgan("dev"));
 // cors setup 
-app.use(cors());
+app.use(cors({origin: process.env.CORS_ORIGIN_URL ,credentials: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // creating session 
+app.use(cookieParser());
 app.use(session({
     secret: "keyboard cat",
     resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 60 * 60 * 24 * 1 * 1000 },
+    saveUninitialized: true,
+    cookie: {
+        maxAge  : 1000 * 60 * 60 * 24 
+    }
 }));
 
 // static files

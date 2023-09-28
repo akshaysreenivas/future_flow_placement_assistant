@@ -1,10 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router";
 import "./WelcomeBanner.css";
 import { Link } from 'react-router-dom';
 
 function WelcomeBanner() {
-  const navigate = useNavigate()
   return (
     <>
       <div className="bannerDiv">

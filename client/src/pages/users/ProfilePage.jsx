@@ -16,20 +16,17 @@ function ProfilePage() {
   const [coverPic, setCoverPic] = useState("");
   const [oldProfileImg, setOldProfileImg] = useState();
   const [oldCoverImg, setOldCoverImg] = useState();
-  const [user, setUser] = useState();
   const dispatch = useDispatch();
 
   const User = useSelector((state) => state.user.user);
 
   useEffect(() => {
-    const token = localStorage.getItem("userAuthToken");
-    if (!token || token === "undefined") return navigate("/");
+
     try {
       getUserDetails().then((data) => {
         if (data.status) {
           const userDetails = data.user;
           dispatch(setUserDetails(userDetails));
-          setUser(userDetails);
           const pic = userDetails?.profilePicUrl
             ? userDetails.profilePicUrl
             : "default_profile_pic.avif";

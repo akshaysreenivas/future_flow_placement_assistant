@@ -10,12 +10,12 @@ import { MdNotifications } from "react-icons/md";
 import { getNotifications } from "../../services/userServices";
 function UserNavBar({ user }) {
   const [unread, setUnread] = useState(0);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getNotifications()
+    if(user){
+      getNotifications()
       .then((data) => {
         if (data.status) {
           setUnread(data.result.count);
@@ -24,7 +24,8 @@ function UserNavBar({ user }) {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+    }
+  }, [user]);
 
   const handleLogout = () => {
     localStorage.removeItem("userAuthToken");
@@ -78,10 +79,16 @@ function UserNavBar({ user }) {
                 Profile
               </Link>
             ) : (
-              <Link to={"/login"} className="Link">
-                login
-              </Link>
+              <>
+                <Link to={"/login"} className="Link">
+                  Login
+                </Link>
+                <Link to={"/signup"} className="Link">
+                  Signup
+                </Link>
+              </>
             )}
+            
             {user && (
               <Link to={"/appliedJobs"} className="Link">
                 Applied Jobs

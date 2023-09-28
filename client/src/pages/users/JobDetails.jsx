@@ -1,15 +1,6 @@
-import {  useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import UserNavBar from "../../components/userNavbar/UserNavBar";
 import JobVIew from "../../components/jobView/JobVIew";
 function JobDetails() {
-  const navigate = useNavigate();
-  const { user } = useSelector((state) => state.user);
-  useEffect(() => {
-    const token = localStorage.getItem("userAuthToken");
-    if (!token || token === "undefined") return navigate("/login");
-  }, [navigate, user]);
 
   return (
     <div className="user_page">

@@ -45,7 +45,6 @@ module.exports.login = async (req, res, next) => {
 // adding jobs
 module.exports.addjob = async (req, res, next) => {
     try {
-        console.log(req.file);
         if (!req.file) throw new Error("can't upload image");
         // uploading job poster to cloudinary     
         const response = await cloudinary.uploader.upload(req.file.path);
