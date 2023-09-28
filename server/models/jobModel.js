@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 
-
 // Declare the Schema of the Mongo model
 const jobSchema = new mongoose.Schema({
     department: { type: String },

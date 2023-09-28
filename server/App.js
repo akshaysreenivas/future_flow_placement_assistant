@@ -22,7 +22,7 @@ database();
 // MIDDLEWARES ...
 app.use(morgan("dev"));
 // cors setup 
-app.use(cors({origin: process.env.CORS_ORIGIN_URL ,credentials: true}));
+app.use(cors({credentials: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
