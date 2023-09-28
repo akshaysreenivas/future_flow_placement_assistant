@@ -22,7 +22,26 @@ database();
 // MIDDLEWARES ...
 app.use(morgan("dev"));
 // cors setup 
-app.use(cors({credentials: true}));
+// Define an array of allowed origins
+const allowedOrigins = [process.env.CORS_ORIGIN_URL_A, process.env.CORS_ORIGIN_URL_B];
+
+// Configure CORS middleware with options
+const corsOptions = {
+    origin: function (origin, callback) {
+    // Check if the origin is in the allowedOrigins array or if it's undefined (e.g., for same-origin requests)
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true); // Allow the request
+        } else {
+            callback(new Error("Not allowed by CORS")); // Block the request
+        }
+    },
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allowed HTTP methods
+    credentials: true, // Enable credentials
+    optionsSuccessStatus: 204, // HTTP status code for successful OPTIONS requests
+};
+
+// Use the cors middleware with the defined options
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
