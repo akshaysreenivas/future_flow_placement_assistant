@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoadingButton from "../loadingButton/LoadingButton";
-import { Button } from "react-bootstrap";
 import { userSignup } from "../../services/userServices";
 import "./signup.css";
 
@@ -165,6 +164,8 @@ function Signup() {
               <button type="submit">Signup</button>
             )}
           </form>
+          <p>Already have an account? <Link to="/login">Login Here</Link> </p>
+
         </div>
       </div>
     </div>

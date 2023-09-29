@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoadingButton from "../loadingButton/LoadingButton";
 import { Button } from "react-bootstrap";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
@@ -173,7 +173,8 @@ function Login({ role, url }) {
             ) : (
               <Button type="submit">login</Button>
             )}
-          </form>
+            </form>
+            <p>Don't have an account? <Link to="/signup">Signup Here</Link> </p>
         </div>
       </div>
     </div>
